@@ -201,7 +201,7 @@ export async function reinforce(dir, who, { addrs, question = '', evt }) {
 // ---- promotion: write derived entries only after the held-out check; retract those that no longer pass -----------------------------
 async function sync(dir, who, kind, want, basis) {
   if (want === null) return { written: 0, retracted: 0 };         // undecided: change nothing
-  const h = await openStore({ dir: derivedDir(dir), writer: `derive-${safe(who)}` }), sig = derivedSig(dir);
+  const h = await openStore({ dir: derivedDir(dir), writer: `derive-${safe(who)}`, store: 'lazy' }), sig = derivedSig(dir);   // a cache, read by the .jsonl index: always the lazy store
   const have = new Map(); sig.advance();
   for (const id of (sig.byKind.get(kind) || [])) if (!sig.retracted.has(id)) { const e = sig.readAt(id); have.set(e.addr, e); }
   let written = 0, retracted = 0;

@@ -17,18 +17,19 @@ import crypto from 'node:crypto';
 const sha = (b) => crypto.createHash('sha256').update(b).digest('hex');
 const safe = (s) => String(s).replace(/[^A-Za-z0-9._-]/g, '-');
 
-function listFiles(dir) {
+function listFiles(dir, exts = ['.jsonl']) {
   const out = [];
   const walk = (d, rel) => {
     for (const e of fs.readdirSync(d, { withFileTypes: true })) {
       const r = rel ? `${rel}/${e.name}` : e.name;
-      if (e.isDirectory()) walk(path.join(d, e.name), r); else if (e.name.endsWith('.jsonl')) out.push(r);
+      if (e.isDirectory()) walk(path.join(d, e.name), r); else if (exts.some((x) => e.name.endsWith(x))) out.push(r);
     }
   };
   if (fs.existsSync(dir)) walk(dir, '');
   return out.sort();
 }
-export const position = (dir) => sha(listFiles(dir).map((r) => `${r}:${fs.statSync(path.join(dir, r)).size}`).join('\n'));
+// position covers pharos's binary .phr streams too: it must change whenever the log does, whatever its format. The index itself reads only .jsonl shards.
+export const position = (dir) => sha(listFiles(dir, ['.jsonl', '.phr']).map((r) => `${r}:${fs.statSync(path.join(dir, r)).size}`).join('\n'));
 
 export class Sig {
   constructor(dir, who) {

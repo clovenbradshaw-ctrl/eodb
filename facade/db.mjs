@@ -8,7 +8,7 @@ import fs from 'node:fs';
 import crypto from 'node:crypto';
 import { pathToFileURL, fileURLToPath } from 'node:url';
 import * as V from './vault.mjs';
-import { openStore, uriFor, libs } from './store.mjs';
+import { openStore, uriFor, libs, openRead, detect } from './store.mjs';
 import { Sig, position } from './sig.mjs';
 import * as SG from './sign.mjs';
 import * as MK from './marks.mjs';
@@ -136,7 +136,7 @@ export async function ask(dir, query, { params = {}, now, as, horizon, keysDir, 
     const m = sig.memoGet(key); if (m) { env = m.value; cache = 'hit'; } else cache = 'miss';
   }
   if (!env) {
-    const h = E.open(uriFor(dir), { mode: 'read' });
+    const h = openRead(dir);
     try {
       const opts = { params: used };
       if (Object.keys(perceiver).length) opts.frame = { perceiver };
@@ -166,7 +166,7 @@ export async function readKind(dir, kind, { strategy = 'auto', margin = 0.7, who
   if (!sig.calib && N >= 50) await calibrate(dir, sig);
   const c = sig.calib || { scanUs: 25, readUs: 20 };
   const estimate = { scanMs: Math.round(N * c.scanUs) / 1000, directMs: Math.round((k * c.readUs / 1000 + loadMs) * 1000) / 1000 };
-  const noDirect = sig.hasDoubleRetraction();
+  const noDirect = detect(dir) === 'plain' || sig.hasDoubleRetraction();   // a plain (pharos) log has no .jsonl index to read directly: always scan
   const marking = MK.enabled(dir);
   let chosen = strategy, basis = strategy === 'auto' ? 'estimate' : 'forced';
   if (strategy === 'auto') {
@@ -176,7 +176,7 @@ export async function readKind(dir, kind, { strategy = 'auto', margin = 0.7, who
     else chosen = !noDirect && estimate.directMs < estimate.scanMs * margin ? 'direct' : 'scan';
   }
   if (chosen === 'direct' && noDirect) chosen = 'scan';
-  const runScan = () => { const h = E.open(uriFor(dir), { mode: 'read' }); try { return E.run(h, `SEG(sources; kinds: [${JSON.stringify(kind)}])`, { params: {} }).rows; } finally { E.close(h); } };
+  const runScan = () => { const h = openRead(dir); try { return E.run(h, `SEG(sources; kinds: [${JSON.stringify(kind)}])`, { params: {} }).rows; } finally { E.close(h); } };
   const timeIt = (f) => { const t = process.hrtime.bigint(); const r = f(); return [r, Math.round(Number(process.hrtime.bigint() - t) / 1e4) / 100]; };
   const [rows, ms] = chosen === 'direct' ? timeIt(() => sig.readKindDirect(kind)) : timeIt(runScan);
   const trail = (sig.syn.trail = sig.syn.trail || []); trail.push({ kind, k, N, chosen, estimate, ms }); if (trail.length > 200) trail.shift();
@@ -203,7 +203,7 @@ export async function readKind(dir, kind, { strategy = 'auto', margin = 0.7, who
 }
 
 async function calibrate(dir, sig) {
-  const h = E.open(uriFor(dir), { mode: 'read' });
+  const h = openRead(dir);
   let t = process.hrtime.bigint(), n = 0;
   try { n = E.run(h, 'SEG(sources)', { params: {} }).rows.length; } finally { E.close(h); }
   const scanUs = Number(process.hrtime.bigint() - t) / 1e3 / Math.max(1, n);
@@ -223,12 +223,24 @@ export function review(dir) {
 }
 
 // trace: a wormhole (SIG·Pattern). Walks `of` links from an entry id (or the entries at an address) by positioned reads, one per hop.
+// the same walk as Sig.ancestors (breadth first along `of`), over the entries of a plain pharos held in memory
+function plainAncestors(dir, id, { max = 100000 } = {}) {
+  const all = new Map(P.entries(P.open('db', { dir: path.resolve(dir), writer: 'db-reader', frame: false })).map((e) => [e.id, e]));
+  const out = [], seen = new Set([id]), queue = [id]; let hops = 0;
+  while (queue.length && out.length < max) {
+    const cur = queue.shift(), e = all.get(cur); hops++;
+    if (!e) continue;
+    if (cur !== id) out.push(e);
+    for (const r of e.of || []) if (!seen.has(r)) { seen.add(r); queue.push(r); }
+  }
+  return { ancestors: out, hops };
+}
 export async function trace(dir, target, { max, who = 'reader' } = {}) {
   await load();
   const sig = new Sig(dir, 'reader'); sig.advance();
   let ids = [target];
   if (!/^[0-9a-f]{64}$/.test(target)) {
-    const h = E.open(uriFor(dir), { mode: 'read' });
+    const h = openRead(dir);
     try { ids = E.run(h, `SEG(sources; addr: ${JSON.stringify(target)})`, { params: {} }).rows.map((r) => r._id); } finally { E.close(h); }
     if (!ids.length) throw new Error(`nothing at ${target}`);
   }
@@ -236,7 +248,7 @@ export async function trace(dir, target, { max, who = 'reader' } = {}) {
   for (const id of ids) {
     // live expressway entries (derived skip links) are used when they exist; the answer is identical, only the reads differ
     const links = max === undefined ? SC.expresswayLinks(dir) : new Map();
-    const r = links.size ? (() => { const t = SC.traceWith(sig, id, links); return { hops: t.cost, ancestors: t.ancestors }; })() : (() => { const x = sig.ancestors(id, { max }); return { hops: x.hops, ancestors: x.ancestors.map((e) => ({ id: e.id, kind: e.kind, addr: e.addr, by: e.by })) }; })();
+    const r = links.size ? (() => { const t = SC.traceWith(sig, id, links); return { hops: t.cost, ancestors: t.ancestors }; })() : (() => { const x = detect(dir) === 'plain' ? plainAncestors(dir, id, { max }) : sig.ancestors(id, { max }); return { hops: x.hops, ancestors: x.ancestors.map((e) => ({ id: e.id, kind: e.kind, addr: e.addr, by: e.by })) }; })();
     out.push({ from: id, hops: r.hops, ancestors: r.ancestors });
     const gainReads = links.size > 0 ? Math.max(0, r.ancestors.length + 1 - r.hops) : 0;     // a single-parent walk would have read ancestors + 1 entries
     await MK.noteRead(dir, who, { question: `trace ${id}`, via: 'trace', rows: r.ancestors.map((e) => ({ _id: e.id, _addr: e.addr, _kind: e.kind })), gainReads });
@@ -262,7 +274,7 @@ export async function compare(dir, query, { a, b, params = {}, now } = {}) {
 // who: the writers in a log and how many entries each has: the standpoints you can choose from.
 export async function who(dir) {
   await load();
-  const h = E.open(uriFor(dir), { mode: 'read' });
+  const h = openRead(dir);
   try { return E.run(h, 'SYN(SEG(sources); by: ["_by"]; agg: {entries: count(*)})', { params: {} }).rows.map((r) => ({ writer: r._by, entries: r.entries })); }
   finally { E.close(h); }
 }
@@ -271,7 +283,7 @@ export async function who(dir) {
 // Each move is its own entry of its own kind, so a plain read shows them separately; this merges them for a person.
 export async function get(dir, addr, { keysDir, who = 'reader' } = {}) {
   await load();
-  const h = E.open(uriFor(dir), { mode: 'read' });
+  const h = openRead(dir);
   try {
     const env = E.run(h, `DEF(SEG(sources; addr: ${JSON.stringify(addr)}); collapse: ["all"])`, { params: {} });
     const rows = env.rows.filter((r) => r._kind !== 'retract').sort((a, b) => a._pos - b._pos);
@@ -312,7 +324,12 @@ export async function defineView(dir, writer, name, expr, { params = [] } = {}) 
       E.run(h, 'WRITE DEF(declare: "view"; like: "holon")', { params: {}, write: true });
       return E.views.define(h, name, expr, { params });
     }
-  } finally { E.close(h); }
+  } finally {
+    E.close(h);
+    // EOQL's WRITE appends legacy .jsonl lines. On a plain (pharos) log the binary core ignores them, so pharos's own `migrate` moves them in
+    // (non-destructive, idempotent). A lazy log needs nothing.
+    if (detect(dir) === 'plain') P.migrate(P.open('db', { dir: path.resolve(dir), writer, frame: false }));
+  }
 }
 
 // The answer card: what a normal database hides.

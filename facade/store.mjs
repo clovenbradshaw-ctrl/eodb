@@ -21,9 +21,17 @@ export async function libs() {
 
 export const detect = (dir) => {
   if (fs.existsSync(path.join(dir, 'PLACEMENT.json'))) return 'lazy';
-  if (fs.existsSync(dir) && fs.readdirSync(dir).some((f) => f.endsWith('.jsonl') || f.endsWith('.phb'))) return 'plain';
+  if (fs.existsSync(dir) && fs.readdirSync(dir).some((f) => f.endsWith('.phr') || f.endsWith('.jsonl') || f.endsWith('.phb'))) return 'plain';   // .phr is pharos's binary core; the others are older formats
   return null;
 };
+// openRead: an EOQL handle to read a log. A lazy log is read by EOQL itself. A PLAIN (pharos) log is read through pharos's own library
+// and handed to EOQL as entries: that works whatever the file format is (the EOQL engine's own `lib:` reader lists only legacy .jsonl files,
+// so on pharos's binary core it sees an empty log). Needs libs() to have run.
+export function openRead(dir) {
+  const d = path.resolve(dir);
+  if (detect(d) === 'plain') return E.openEntries(P.entries(P.open('db', { dir: d, writer: 'db-reader', frame: false })));
+  return E.open(uriFor(d), { mode: 'read' });
+}
 export const uriFor = (dir) => `${detect(path.resolve(dir)) === 'lazy' ? 'lazy' : 'lib'}:${path.resolve(dir)}`;
 
 const canon = (v) => JSON.stringify(v, (_k, x) => (x && typeof x === 'object' && !Array.isArray(x) ? Object.fromEntries(Object.keys(x).sort().map((k) => [k, x[k]])) : x));

@@ -1,7 +1,7 @@
 From 2fbfb29fc41dbf1776461b68b80baf48b7b3806f Mon Sep 17 00:00:00 2001
 From: Michael Lacy <michaeltlacy@gmail.com>
 Date: Mon, 23 Nov 2026 22:50:29 -0600
-Subject: [PATCH 1/5] exemplar-pool: the smell in the kernel's names, portable,
+Subject: [PATCH 1/6] exemplar-pool: the smell in the kernel's names, portable,
  and loud about gaps
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -175,7 +175,7 @@ index 1bf727e..8e90d0e 100644
 From 3542c86799553d0edc346231f074e186fedd90bf Mon Sep 17 00:00:00 2001
 From: Michael Lacy <michaeltlacy@gmail.com>
 Date: Tue, 24 Nov 2026 13:53:01 -0600
-Subject: [PATCH 2/5] formicary: the user-bound pattern layer: per-user trails
+Subject: [PATCH 2/6] formicary: the user-bound pattern layer: per-user trails
  over the scholia's addresses, with the measured power-law fade
 
 organs/formicary.mjs: one colony per user (own file), trails laid only on a verified use over addresses of the corpus and the scholia (doc:<sha256>[#k], lemma:<lang>:<word>), heads are marks never text, order() is a permutation of its candidates (earned, untried as given, dead), alarms forget, the user can forgetAll, marks mirror to a caller's log with the user named.
@@ -446,7 +446,7 @@ index 40b80d3..4bfb91b 100644
 From 01a0543ea2cc45738f9783d777e963743bb899e9 Mon Sep 17 00:00:00 2001
 From: Claude <noreply@anthropic.com>
 Date: Wed, 25 Nov 2026 17:59:10 +0000
-Subject: [PATCH 3/5] trail-rules: a trail becomes a rule only past a seeded
+Subject: [PATCH 3/6] trail-rules: a trail becomes a rule only past a seeded
  null on a held-out third; the rules about rules as data
 
 Pure kernel module (promoteRoute, promoteHead, ruleEntry, META_RULES). 10 tests, including a
@@ -671,7 +671,7 @@ index 91bad73..74f900d 100644
 From 16b778d4708061bdf9108b4b0c11a2243efe84d4 Mon Sep 17 00:00:00 2001
 From: Claude <noreply@anthropic.com>
 Date: Wed, 25 Nov 2026 18:28:12 +0000
-Subject: [PATCH 4/5] chat: the document door: a text is read into the fold
+Subject: [PATCH 4/6] chat: the document door: a text is read into the fold
  paragraph by paragraph, never routed
 
 turn() sent paragraphs holding a quoted question to answering (3 of 8 read in the test text, 9 of the
@@ -813,7 +813,7 @@ index 74f900d..067764e 100644
 From 2fc331a7f1df287afd4f8fcc2788d54812008966 Mon Sep 17 00:00:00 2001
 From: Claude <noreply@anthropic.com>
 Date: Wed, 25 Nov 2026 22:23:02 +0000
-Subject: [PATCH 5/5] chat: a quotation is a frame: who holds the words, never
+Subject: [PATCH 5/6] chat: a quotation is a frame: who holds the words, never
  the narrator's assertion
 
 quote-frames.js: per-language declared boundary tables (a language with none is a typed gap), continuing and
@@ -1126,6 +1126,136 @@ index 067764e..4b0deba 100644
      "test:code": "node --test native/the-fold/code-loop.test.mjs native/the-fold/void-loop.test.mjs native/the-fold/void-spec-falsify.test.mjs native/the-fold/tool-call-physics.test.mjs native/the-fold/direct-bridge.test.mjs",
      "sync": "node scripts/sync.mjs",
      "sync:check": "node scripts/sync.mjs --check",
+-- 
+2.43.0
+
+
+From 24d1dab151093f6880031b6c106b14e507ac3b56 Mon Sep 17 00:00:00 2001
+From: Claude <noreply@anthropic.com>
+Date: Wed, 25 Nov 2026 22:30:53 +0000
+Subject: [PATCH 6/6] quote-frames: a codec registers its own table; marks the
+ table does not know are a typed gap that lists them
+
+Found by running Genesis in 65 languages: 35 editions mark no quotation at all, 25 mark them and had no table,
+and the Spanish table found 0 of 224 straight-quote spans without saying so. registerQuoteTable (a built-in cannot be
+replaced), marks_outside_table and no_quote_table now carry the marks seen; straight quotes read in fra/spa/ita/rus.
+ingestDocument reports the lang it used. 28 tests.
+
+Co-Authored-By: Claude Sonnet 5.5 <noreply@anthropic.com>
+Claude-Session: https://claude.ai/code/session_01AP2eRC5CScKTs8ZE4Wpdoe
+---
+ native/chat/ingest.mjs            |  4 +++-
+ native/chat/quote-frames.js       | 27 +++++++++++++++++++++------
+ native/chat/quote-frames.test.mjs | 19 +++++++++++++++++++
+ 3 files changed, 43 insertions(+), 7 deletions(-)
+
+diff --git a/native/chat/ingest.mjs b/native/chat/ingest.mjs
+index c1dccd9..57ea80b 100644
+--- a/native/chat/ingest.mjs
++++ b/native/chat/ingest.mjs
+@@ -23,10 +23,12 @@ const paragraphsOf = (text) => {
+ };
+ const bracketed = (p) => p.startsWith("[") && p.endsWith("]");   // a note in the source's own markup (an illustration credit), not a sentence of the text
+ 
++// `lang` is the language of the QUOTATION CONVENTIONS, and the result says which one was used (`lang`): the chat reads English only today, so its thread declares English; a caller reading another
++// language passes its own, and a language with no table is a typed gap on every frame, never an English reading.
+ export async function ingestDocument(thread, text, { onRead = null, lang = "eng" } = {}) {
+   const paras = paragraphsOf(text);
+   if (!paras.length) return { paragraphs: 0, read: 0, sentences: 0, facts: 0, setAside: [], frames: [], quoteGaps: [], gap: "empty_text" };
+-  const res = { paragraphs: paras.length, read: 0, sentences: 0, facts: 0, setAside: [], frames: [], quoteGaps: [], gap: null };
++  const res = { lang, paragraphs: paras.length, read: 0, sentences: 0, facts: 0, setAside: [], frames: [], quoteGaps: [], gap: null };
+   const store = STORE.get(thread) ?? STORE.set(thread, []).get(thread);
+   for (const [pi, p] of paras.entries()) {
+     if (bracketed(p)) { res.setAside.push({ text: p, why: "a bracketed note in the source's markup, not a sentence" }); continue; }
+diff --git a/native/chat/quote-frames.js b/native/chat/quote-frames.js
+index ddbb3ba..62b9d78 100644
+--- a/native/chat/quote-frames.js
++++ b/native/chat/quote-frames.js
+@@ -11,15 +11,29 @@
+ // NOT DONE: reported speech inside a quotation ("Mrs. Long says that…" is a second frame inside the first); a speaker named only by a pronoun; em-dash dialogue (no closing mark).
+ export const QUOTE_TABLES = Object.freeze({
+   eng: Object.freeze({ pairs: [["“", "”"]], toggle: ['"'], end: [".", "!", "?"] }),
+-  fra: Object.freeze({ pairs: [["«", "»"], ["“", "”"]], toggle: [], end: [".", "!", "?"], dash: ["—", "–", "―"] }),
+-  spa: Object.freeze({ pairs: [["«", "»"], ["“", "”"]], toggle: [], end: [".", "!", "?"], dash: ["—", "–", "―"] }),
+-  rus: Object.freeze({ pairs: [["«", "»"], ["„", "“"]], toggle: [], end: [".", "!", "?"], dash: ["—", "–", "―"] }),
+-  ita: Object.freeze({ pairs: [["«", "»"], ["“", "”"]], toggle: [], end: [".", "!", "?"], dash: ["—", "–", "―"] }),
++  fra: Object.freeze({ pairs: [["«", "»"], ["“", "”"]], toggle: ['"'], end: [".", "!", "?"], dash: ["—", "–", "―"] }),
++  spa: Object.freeze({ pairs: [["«", "»"], ["“", "”"]], toggle: ['"'], end: [".", "!", "?"], dash: ["—", "–", "―"] }),
++  rus: Object.freeze({ pairs: [["«", "»"], ["„", "“"]], toggle: ['"'], end: [".", "!", "?"], dash: ["—", "–", "―"] }),
++  ita: Object.freeze({ pairs: [["«", "»"], ["“", "”"]], toggle: ['"'], end: [".", "!", "?"], dash: ["—", "–", "―"] }),
+   deu: Object.freeze({ pairs: [["„", "“"], ["»", "«"]], toggle: [], end: [".", "!", "?"] }),
+   jpn: Object.freeze({ pairs: [["「", "」"], ["『", "』"]], toggle: [], end: ["。", "！", "？"] }),
+   zho: Object.freeze({ pairs: [["“", "”"], ["「", "」"], ["『", "』"]], toggle: [], end: ["。", "！", "？"] }),
+ });
+ 
++// A CODEC REGISTERS ITS OWN TABLE (the conventions differ by codec and edition, so the tables are data a codec brings, not code here). A built-in cannot be replaced silently.
++const REGISTERED = new Map();
++const tableOf = (lang) => QUOTE_TABLES[lang] ?? REGISTERED.get(lang) ?? null;
++export function registerQuoteTable(lang, table) {
++  if (QUOTE_TABLES[lang]) throw new Error(`a built-in quote table for "${lang}" cannot be replaced; register under another code`);
++  const ok = (a) => Array.isArray(a) && a.every((x) => typeof x === "string");
++  if (!Array.isArray(table?.pairs) || !table.pairs.every((p) => Array.isArray(p) && p.length >= 2 && typeof p[0] === "string" && typeof p[1] === "string")) throw new Error("a quote table needs pairs: [[open, close], ...]");
++  if (!ok(table.toggle ?? []) || !ok(table.end ?? [])) throw new Error("toggle and end must be arrays of strings");
++  REGISTERED.set(lang, Object.freeze({ pairs: table.pairs, toggle: table.toggle ?? [], end: table.end ?? [".", "!", "?"], ...(table.dash ? { dash: table.dash } : {}) })); return true;
++}
++// the marks a text uses that could be quotation marks (apostrophes and single curly quotes are not counted: they are mostly apostrophes)
++const CANDIDATES = ["“", "”", '"', "«", "»", "„", "‹", "›", "「", "」", "『", "』"];
++const marksIn = (s, except = new Set()) => { const m = {}; for (const ch of s) if (CANDIDATES.includes(ch) && !except.has(ch)) m[ch] = (m[ch] ?? 0) + 1; return m; };
++
+ /**
+  * quoteSpans(text, lang) -> { spans: [{ open, close, inner: [a, b], depth, continues?, continued? }], gap, gaps }  (character offsets into `text`)
+  * An opener with no closer is a quotation that CONTINUES (the convention when a speech runs into the next paragraph, which reopens): it runs to the end of the text, `continues: true`, gap "quotation_continues".
+@@ -27,7 +41,7 @@ export const QUOTE_TABLES = Object.freeze({
+  * `gap` is the first of `gaps` (kept for callers that read one).
+  */
+ export function quoteSpans(text, lang = "eng") {
+-  const T = QUOTE_TABLES[lang]; if (!T) return { spans: [], gap: { gap: "no_quote_table", lang }, gaps: [{ gap: "no_quote_table", lang }] };
++  const T = tableOf(lang); if (!T) { const g = { gap: "no_quote_table", lang, marks: marksIn(String(text ?? "")) }; return { spans: [], gap: g, gaps: [g] }; }
+   const opens = new Map(T.pairs.map(([o, c]) => [o, c])), closes = new Set(T.pairs.map(([, c]) => c)), toggles = new Set(T.toggle);
+   const stack = [], spans = [], gaps = []; const s = String(text ?? "");
+   const close = (o, i) => spans.push({ open: o.open, close: i, inner: [o.open + 1, i], depth: stack.length });
+@@ -42,12 +56,13 @@ export function quoteSpans(text, lang = "eng") {
+   }
+   while (stack.length) { const o = stack.pop(); spans.push({ open: o.open, close: s.length, inner: [o.open + 1, s.length], depth: stack.length, continues: true }); gaps.push({ gap: "quotation_continues", at: o.open }); }
+   gaps.sort((a, b) => a.at - b.at);
++  const known = new Set([...T.pairs.flat(), ...T.toggle]), stray = marksIn(s, known); if (Object.keys(stray).length) gaps.push({ gap: "marks_outside_table", lang, marks: stray });
+   return { spans: spans.sort((a, b) => a.open - b.open), gap: gaps[0] ?? null, gaps };
+ }
+ 
+ /** does this paragraph open with a dash that marks speech (no closing mark follows)? Only for a language whose table declares it; otherwise false (no claim). */
+ export function dashDialogue(paragraph, lang = "eng") {
+-  const d = QUOTE_TABLES[lang]?.dash; if (!d) return false;
++  const d = tableOf(lang)?.dash; if (!d) return false;
+   const t = String(paragraph ?? "").trimStart(); return d.some((m) => t.startsWith(m));
+ }
+ 
+diff --git a/native/chat/quote-frames.test.mjs b/native/chat/quote-frames.test.mjs
+index 907586f..ef01f76 100644
+--- a/native/chat/quote-frames.test.mjs
++++ b/native/chat/quote-frames.test.mjs
+@@ -109,3 +109,22 @@ test("FALSIFIER: a dash-dialogue paragraph, or a language with no table, is fram
+   const u = await ingestDocument(await mk(), "“Hello,” said Pierre.", { lang: "xxx" });
+   assert.ok(u.frames.length >= 1 && u.frames.every((f) => f.framed === null), JSON.stringify(u.frames)); assert.ok(u.quoteGaps.some((g) => g.gap === "no_quote_table"));
+ });
++
++// ── found by the Genesis run (65 languages, 2026-11-25): the Spanish table found 0 quotations in a Bible that marks 224 with straight quotes, and said nothing; 45 languages used marks and had no table. ──
++import { registerQuoteTable } from "./quote-frames.js";
++test("FALSIFIER: marks the table does not know are a typed gap that lists them, never a silent zero", () => {
++  const r = quoteSpans("Dijo ‹hola› y se fue.", "spa"); assert.equal(r.spans.length, 0); assert.equal(r.gaps.some((g) => g.gap === "marks_outside_table"), true);
++  assert.deepEqual(r.gaps.find((g) => g.gap === "marks_outside_table").marks, { "‹": 1, "›": 1 });
++});
++test("a language with no table says which quotation marks the text uses, so a codec author can write the table", () => {
++  const g = quoteSpans("Он сказал «да» и «нет».", "xxx").gap; assert.equal(g.gap, "no_quote_table"); assert.deepEqual(g.marks, { "«": 2, "»": 2 });
++});
++test("straight double quotes are read in Spanish, French, Italian and Russian too (a plain-text edition)", () => {
++  for (const l of ["spa", "fra", "ita", "rus"]) assert.equal(quoteSpans('Dijo "hola" y se fue.', l).spans.length, 1, l);
++});
++test("a codec registers its own table; a built-in cannot be silently replaced; a malformed table is refused", () => {
++  assert.equal(quoteSpans("«a»", "swh").gap.gap, "no_quote_table");
++  registerQuoteTable("swh", { pairs: [["«", "»"]], toggle: [], end: ["."] }); assert.equal(quoteSpans("Alisema «habari».", "swh").spans.length, 1);
++  assert.throws(() => registerQuoteTable("eng", { pairs: [["“", "”"]], toggle: [], end: ["."] }), /built-in/);
++  assert.throws(() => registerQuoteTable("zzz", { pairs: "no" }), /pairs/);
++});
 -- 
 2.43.0
 

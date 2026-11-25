@@ -1,0 +1,669 @@
+From 2fbfb29fc41dbf1776461b68b80baf48b7b3806f Mon Sep 17 00:00:00 2001
+From: Michael Lacy <michaeltlacy@gmail.com>
+Date: Mon, 23 Nov 2026 22:50:29 -0600
+Subject: [PATCH 1/3] exemplar-pool: the smell in the kernel's names, portable,
+ and loud about gaps
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+The reader's per-token phasepost smell (row.phasepost, from this pool) used the study's older operator names (DES, ALT, SUP) where the kernel has SIG, DEF, EVA, read three absolute paths on one machine, and threw on the first row where the study's data was absent.
+- kernelCell(): the study's cell key in the kernel's form ("DES|GROUND" -> "SIG·Ground"); the operator translation is DERIVED from each study operator's own mode and domain (the kernel operator with the same mode and domain), never typed; a gap or a collision is said.
+- paths: $EO_LEXICAL_ANALYSIS_DIR, else ~/eo-lexical-analysis; the full centroids through the priors door by name; a missing file is a typed gap in smellStatus(), not a throw.
+- smellStatus(): whether the data was found, how many exemplar verbs (at most K per cell: a lookup, not an embedding of the word), the translation, any gap.
+The existing exports behave as before (row.phasepost still carries the study's names: reading.js is a baseline-guarded file and its owner decides when to switch); the reading baseline and one-door tests pass. 9 tests.
+
+Co-Authored-By: Claude Sonnet 5.5 <noreply@anthropic.com>
+---
+ native/adapters/text/exemplar-pool.mjs      | 65 +++++++++++++++++----
+ native/adapters/text/exemplar-pool.test.mjs | 40 +++++++++++++
+ 2 files changed, 93 insertions(+), 12 deletions(-)
+
+diff --git a/native/adapters/text/exemplar-pool.mjs b/native/adapters/text/exemplar-pool.mjs
+index fdc4f8f..0326d5e 100644
+--- a/native/adapters/text/exemplar-pool.mjs
++++ b/native/adapters/text/exemplar-pool.mjs
+@@ -9,28 +9,52 @@
+ // find the nearest centroid (by string similarity or embedding distance).
+ 
+ import fs from "node:fs";
+-
+-const FULL_CENTROIDS_PATH = "/Users/mlacy/Downloads/workspace/khora-clone/native/priors/phasepost-centroids-full.json";
+-const EMBEDDINGS_3D_PATH = "/Users/mlacy/eo-lexical-analysis/output/phasepost_embeddings_3d.json";
+-const CROSSING_PATH = "/Users/mlacy/eo-lexical-analysis/output/crossling_27_cells.json";
++import os from "node:os";
++import path from "node:path";
++import { priorJson } from "../../the-fold/prior-source.mjs";
++import { cellOf, OPERATOR_CHAIN } from "../../kernel/cube.js";
++
++// WHERE THE STUDY'S DATA IS. Three absolute paths on one machine (/Users/mlacy/...) were hard-coded here, and a machine without them did not read less: it threw on the first row.
++// Now: the study's directory is $EO_LEXICAL_ANALYSIS_DIR, else ~/eo-lexical-analysis (the eo-lexical-analysis study's own checkout); the full-dimensional centroids come through the
++// priors door by name (janus/priors holds them); a file that is not there is a typed gap that `smellStatus()` states, never a throw and never a silent empty.
++const STUDY_DIR = process.env.EO_LEXICAL_ANALYSIS_DIR ? path.resolve(process.env.EO_LEXICAL_ANALYSIS_DIR) : path.join(os.homedir(), "eo-lexical-analysis");
++const EMBEDDINGS_3D_PATH = path.join(STUDY_DIR, "output", "phasepost_embeddings_3d.json");
++const CROSSING_PATH = path.join(STUDY_DIR, "output", "crossling_27_cells.json");
++const FULL_CENTROIDS_NAME = "phasepost-centroids-full.json";
+ 
+ let _fullCentroids = null;
+ let _pool3d = null;
+ 
+ export function loadFullCentroids() {
+   if (_fullCentroids) return _fullCentroids;
+-  try {
+-    _fullCentroids = JSON.parse(fs.readFileSync(FULL_CENTROIDS_PATH, "utf8"));
+-  } catch (e) {
+-    _fullCentroids = null;
+-  }
++  _fullCentroids = priorJson(FULL_CENTROIDS_NAME) ?? null;
+   return _fullCentroids;
+ }
+ 
++// The study (2026-02, eo-lexical-analysis) named the nine operators by an older registry: DES, ALT and SUP stand where the kernel says SIG, DEF and EVA (cube.js: "ALT and SUP are
++// not canonical operators"). The study's own records carry each operator's MODE (pos) and DOMAIN (tri), which is what the kernel's operators are defined by, so the translation is
++// DERIVED from the data, never typed: the kernel operator with the same mode and domain. DES is (Relate, Existence) = SIG; ALT (Differentiate, Interpretation) = DEF; SUP (Relate,
++// Interpretation) = EVA; the other six are the same operator under the same name. An operator with no kernel counterpart, or two that collide, is a gap in the status.
++function kernelOpMap(centroids) {
++  const byModeDomain = new Map(OPERATOR_CHAIN.map((op) => { const c = cellOf(op, "Ground"); return [`${c.mode}|${c.domain}`, op]; }));
++  const map = {}, gaps = [];
++  for (const c of centroids) {
++    const k = byModeDomain.get(`${c.pos}|${c.tri}`);
++    if (!k) { gaps.push({ op: c.op, why: `no kernel operator is (${c.pos}, ${c.tri})` }); continue; }
++    if (map[c.op] && map[c.op] !== k) gaps.push({ op: c.op, why: `maps to both ${map[c.op]} and ${k}` });
++    map[c.op] = k;
++  }
++  const used = Object.values(map); if (new Set(used).size !== used.length) gaps.push({ why: "two study operators map to one kernel operator" });
++  return { map, gaps };
++}
++
++const GAP = (why, lang) => ({ pool: null, centroidMap: null, nCells: 0, K: 0, lang, opMap: {}, gap: why });   // carries the language so a gap is not rebuilt on every row
++
+ export function buildExemplarPool(lang = "English", K = 10) {
+-  const data = JSON.parse(fs.readFileSync(EMBEDDINGS_3D_PATH, "utf8"));
++  let data;
++  try { data = JSON.parse(fs.readFileSync(EMBEDDINGS_3D_PATH, "utf8")); } catch (e) { return GAP(`the study's file ${EMBEDDINGS_3D_PATH} could not be read (${String(e?.code ?? e?.message ?? e).slice(0, 60)}); set EO_LEXICAL_ANALYSIS_DIR`, lang); }
+   const langData = data[lang];
+-  if (!langData) return null;
++  if (!langData) return GAP(`the study has no language "${lang}"`, lang);
+   const centroids = langData.centroids;
+   const scatter = langData.scatter;
+ 
+@@ -53,7 +77,8 @@ export function buildExemplarPool(lang = "English", K = 10) {
+     }));
+   }
+ 
+-  return { pool, centroidMap, nCells: Object.keys(pool).length, K, lang };
++  const { map: opMap, gaps } = kernelOpMap(centroids);
++  return { pool, centroidMap, nCells: Object.keys(pool).length, K, lang, opMap, ...(gaps.length ? { gap: `operator translation: ${gaps.map((g) => g.why).join("; ")}` } : {}) };
+ }
+ 
+ export function getExemplarPool(lang = "English") {
+@@ -169,6 +194,22 @@ export function nearestCellFull(embedding) {
+ }
+ 
+ // List supported languages
++/** A cell key of the study ("DES|GROUND") in the kernel's own form ("SIG·Ground"), or null where the translation has a gap. The reader's rows still carry the study's form (row.phasepost,
++ *  from reading.js, which is a baseline-guarded file); a consumer that joins the smell with the grammar's cells translates with this. */
++export function kernelCell(cellKey, lang = "English") {
++  const [op, ref] = String(cellKey ?? "").split("|"), { opMap } = getExemplarPool(lang), k = opMap?.[op];
++  return k && ref ? `${k}·${ref[0]}${ref.slice(1).toLowerCase()}` : null;
++}
++
++/** What the smell stands on, said: whether the study's data was found, how many exemplar verbs it holds, how its operators were translated, and any gap. Never throws. */
++export function smellStatus(lang = "English") {
++  const P = getExemplarPool(lang), exists = (f) => { try { return fs.existsSync(f); } catch { return false; } };
++  const exemplars = P.pool ? Object.values(P.pool).reduce((n, v) => n + v.length, 0) : 0;
++  return { on: !!P.pool && !P.gap, gap: P.gap ?? null, lang, cells: P.nCells, exemplars, opMap: P.opMap ?? {},
++    files: [{ what: "study embeddings (exemplar verbs per cell)", path: EMBEDDINGS_3D_PATH, found: exists(EMBEDDINGS_3D_PATH) }, { what: "study cross-language cells", path: CROSSING_PATH, found: exists(CROSSING_PATH) }, { what: `full centroids, through the priors door as ${FULL_CENTROIDS_NAME}`, found: !!loadFullCentroids() }],
++    how: "a token is smelled when its form is one of the exemplar verbs (exact), or within 0.8 string similarity of one: a lookup of at most K verbs per cell, not an embedding of the word" };
++}
++
+ export function supportedLanguages() {
+   try {
+     const data = JSON.parse(fs.readFileSync(EMBEDDINGS_3D_PATH, "utf8"));
+diff --git a/native/adapters/text/exemplar-pool.test.mjs b/native/adapters/text/exemplar-pool.test.mjs
+index 1bf727e..8e90d0e 100644
+--- a/native/adapters/text/exemplar-pool.test.mjs
++++ b/native/adapters/text/exemplar-pool.test.mjs
+@@ -30,3 +30,43 @@ test("empty cells have no exemplars", () => {
+   const exs = mostUniqueExemplars("SYN|GROUND", 3);
+   assert.equal(exs.length, 0, "empty cell should have no exemplars");
+ });
++
++// ---- the smell in the kernel's own names, and a loud gap where the study's data is not (2026-11-23)
++import { kernelCell, smellStatus } from "./exemplar-pool.mjs";
++import { cellOf } from "../../kernel/cube.js";
++
++test("kernelCell: the study's DES, ALT and SUP are the kernel's SIG, DEF and EVA, derived from each operator's own mode and domain", () => {
++  assert.equal(kernelCell("DES|GROUND"), "SIG·Ground");
++  assert.equal(kernelCell("ALT|FIGURE"), "DEF·Figure");
++  assert.equal(kernelCell("SUP|PATTERN"), "EVA·Pattern");
++  for (const same of ["NUL", "INS", "SEG", "CON", "SYN", "REC"]) assert.equal(kernelCell(`${same}|FIGURE`), `${same}·Figure`, `${same} keeps its name`);
++  assert.equal(kernelCell("XYZ|FIGURE"), null, "an operator the study never had is a gap, not a guess");
++  assert.equal(kernelCell(null), null);
++});
++
++test("every cell the pool holds translates to a real kernel cell, with the same mode and domain the study recorded for it", () => {
++  const { pool, opMap } = getExemplarPool();
++  for (const key of Object.keys(pool)) {
++    const kc = kernelCell(key); assert.ok(kc, `${key} has no kernel cell`);
++    const [op, grain] = kc.split("·"), c = cellOf(op, grain); assert.ok(!c.gap && c.op === op && c.grain === grain, `${kc} is not a kernel cell`);
++  }
++  assert.equal(new Set(Object.values(opMap)).size, Object.keys(opMap).length, "no two study operators collapse into one");
++  assert.deepEqual(opMap.DES, "SIG"); assert.deepEqual(opMap.ALT, "DEF"); assert.deepEqual(opMap.SUP, "EVA");
++});
++
++test("smellStatus says what the smell stands on", () => {
++  const st = smellStatus();
++  assert.equal(st.on, true); assert.equal(st.gap, null); assert.ok(st.exemplars > 100 && st.exemplars <= 270, `exemplars ${st.exemplars}: at most K per cell`);
++  assert.ok(st.files.length === 3 && st.files.every((f) => typeof f.found === "boolean")); assert.match(st.how, /not an embedding of the word/);
++});
++
++test("without the study's data the smell is a gap that says so, and a read does not throw", async () => {
++  const dir = (await import("node:fs")).mkdtempSync((await import("node:path")).join((await import("node:os")).tmpdir(), "no-study-"));
++  const child = (await import("node:child_process")).spawnSync(process.execPath, ["--input-type=module", "-e", `
++    const m = await import(${JSON.stringify(new URL("./exemplar-pool.mjs", import.meta.url).href)});
++    const st = m.smellStatus(); const sniff = m.sniffByExemplar("work"); const near = m.nearestCellByString("work");
++    console.log(JSON.stringify({ on: st.on, gap: st.gap, sniff, near, kc: m.kernelCell("DES|GROUND") }));`], { env: { ...process.env, EO_LEXICAL_ANALYSIS_DIR: dir }, encoding: "utf8" });
++  assert.equal(child.status, 0, child.stderr);
++  const r = JSON.parse(child.stdout.trim().split("\n").pop());
++  assert.equal(r.on, false); assert.match(r.gap, /could not be read.*set EO_LEXICAL_ANALYSIS_DIR/); assert.equal(r.sniff, null); assert.equal(r.near, null); assert.equal(r.kc, null);
++});
+-- 
+2.43.0
+
+
+From 3542c86799553d0edc346231f074e186fedd90bf Mon Sep 17 00:00:00 2001
+From: Michael Lacy <michaeltlacy@gmail.com>
+Date: Tue, 24 Nov 2026 13:53:01 -0600
+Subject: [PATCH 2/3] formicary: the user-bound pattern layer: per-user trails
+ over the scholia's addresses, with the measured power-law fade
+
+organs/formicary.mjs: one colony per user (own file), trails laid only on a verified use over addresses of the corpus and the scholia (doc:<sha256>[#k], lemma:<lang>:<word>), heads are marks never text, order() is a permutation of its candidates (earned, untried as given, dead), alarms forget, the user can forgetAll, marks mirror to a caller's log with the user named.
+kernel/stigmergy.js and organs/trail-store.mjs: an opt-in law: "power" (weight = (1 + age s)^-1.2, the slope measured in pharos/eoql/SIG-ANSWER.md); the default stays the 7-day exponential, so nothing that runs changes.
+Not built: promotion to synapses and expressways, forgetting one head, the hunt wiring.
+
+Tests: formicary 10, stigmergy 9, trail-store 8, reading-baseline and one-door 6, all pass. Nothing pushed.
+
+Co-Authored-By: Claude Sonnet 5.5 <noreply@anthropic.com>
+---
+ native/kernel/stigmergy.js       | 17 ++++---
+ native/organs/formicary.mjs      | 69 +++++++++++++++++++++++++
+ native/organs/formicary.test.mjs | 87 ++++++++++++++++++++++++++++++++
+ native/organs/trail-store.mjs    |  6 +--
+ 4 files changed, 170 insertions(+), 9 deletions(-)
+ create mode 100644 native/organs/formicary.mjs
+ create mode 100644 native/organs/formicary.test.mjs
+
+diff --git a/native/kernel/stigmergy.js b/native/kernel/stigmergy.js
+index d9d3adc..a983ccc 100644
+--- a/native/kernel/stigmergy.js
++++ b/native/kernel/stigmergy.js
+@@ -41,9 +41,14 @@ export const TRAIL_WINDOW = 128; // deposits kept per head — old ones evaporat
+ export const EXPLORE_EPSILON = 0.1; // chance a never-tried route is probed first
+ 
+ export const ageDays = (at, now) => Math.max(0, (now - at) / DAY_MS);
++// THE FADE'S SHAPE. The 7-day exponential above is a hand-set half-life. The nexus measured the shape on real reads (pharos/eoql/SIG-ANSWER.md, the replication: "reuse fades as a power law, with a slope of about -1.2 in
++// seconds"; at hit@8 a power-law sum beat plain recency 39.7 against 34.8, and frequency was worst at 29.5), so `law: "power"` is offered: weight = (1 + age in seconds) ^ -alpha. The default stays "exp" so nothing that
++// already runs changes; the formicary (organs/formicary.mjs) asks for "power". alpha 1.2 is the measured slope, not tuned here.
++export const TRAIL_POWER_ALPHA = 1.2;
+ 
+-/** Evaporation: how much of a deposit from `at` is still in the air at `now`. */
+-export function trailWeight(at, now, { halfLifeDays = TRAIL_HALF_LIFE_DAYS } = {}) {
++/** Evaporation: how much of a deposit from `at` is still in the air at `now`. `law` "exp" (default, half-life) or "power" (the measured shape). */
++export function trailWeight(at, now, { halfLifeDays = TRAIL_HALF_LIFE_DAYS, law = "exp", alpha = TRAIL_POWER_ALPHA } = {}) {
++  if (law === "power") return Math.pow(1 + Math.max(0, now - at) / 1000, -alpha);
+   return Math.exp(-ageDays(at, now) / halfLifeDays);
+ }
+ 
+@@ -60,7 +65,7 @@ export function deposit(trails, entry) {
+ }
+ 
+ /** The per-route reading of one head's trails, compared for speed and efficiency. */
+-export function trailStats(trails, head, { now = Date.now(), routes = null, halfLifeDays = TRAIL_HALF_LIFE_DAYS } = {}) {
++export function trailStats(trails, head, { now = Date.now(), routes = null, halfLifeDays = TRAIL_HALF_LIFE_DAYS, law = "exp", alpha = TRAIL_POWER_ALPHA } = {}) {
+   const list = trails?.[head] ?? [];
+   const out = new Map();
+   const blank = (r) => ({ route: r, strength: 0, deposits: 0, hits: 0, totalMs: 0, lastAt: -Infinity });
+@@ -69,7 +74,7 @@ export function trailStats(trails, head, { now = Date.now(), routes = null, half
+     const s = out.get(t.route) ?? blank(t.route);
+     s.deposits += 1;
+     s.lastAt = Math.max(s.lastAt, Number(t.at) || 0);
+-    if (t.ok) { s.hits += 1; s.strength += halfLifeDays === Infinity ? 1 : trailWeight(t.at, now, { halfLifeDays }); s.totalMs += t.ms; }
++    if (t.ok) { s.hits += 1; s.strength += law !== "power" && halfLifeDays === Infinity ? 1 : trailWeight(t.at, now, { halfLifeDays, law, alpha }); s.totalMs += t.ms; }
+     out.set(t.route, s);
+   }
+   return [...out.values()].map((s) => ({ ...s, meanMs: s.hits ? s.totalMs / s.hits : null }));
+@@ -95,10 +100,10 @@ export function trailStats(trails, head, { now = Date.now(), routes = null, half
+  * restores that. `explore: 0` turns scouts off. The rng is injectable.
+  * `halfLifeDays` sets evaporation (Infinity = none).
+  */
+-export function routeOrderFor(trails, head, { now = Date.now(), routes = null, explore = EXPLORE_EPSILON, rng = Math.random, halfLifeDays = TRAIL_HALF_LIFE_DAYS, deadLast = true, scoutTried = true } = {}) {
++export function routeOrderFor(trails, head, { now = Date.now(), routes = null, explore = EXPLORE_EPSILON, rng = Math.random, halfLifeDays = TRAIL_HALF_LIFE_DAYS, deadLast = true, scoutTried = true, law = "exp", alpha = TRAIL_POWER_ALPHA } = {}) {
+   const defaults = routes ?? [];
+   const idx = (r) => { const i = defaults.indexOf(r); return i < 0 ? Infinity : i; };
+-  const stats = trailStats(trails, head, { now, routes: defaults, halfLifeDays });
++  const stats = trailStats(trails, head, { now, routes: defaults, halfLifeDays, law, alpha });
+   const byStrength = (a, b) => {
+     if (b.strength !== a.strength) return b.strength - a.strength;
+     if (a.meanMs !== null && b.meanMs !== null && a.meanMs !== b.meanMs) return a.meanMs - b.meanMs;
+diff --git a/native/organs/formicary.mjs b/native/organs/formicary.mjs
+new file mode 100644
+index 0000000..91ec991
+--- /dev/null
++++ b/native/organs/formicary.mjs
+@@ -0,0 +1,69 @@
++// organs/formicary.mjs — THE FORMICARY: the user-bound PATTERN layer (the owner, 2026-11-24: "the Corpus, the scholia, and the formicary"; ground = the source files, figure = the scholia (Ýlir-One's readings), pattern = attention).
++// Aliases the owner gave: the log, the shadow, the impression, the trails, the pheromone trails. Canonical name in code and files: formicary.
++//
++// WHAT IT IS. One colony per user: a small, fading record of WHERE THAT USER'S QUESTIONS WERE ANSWERED, laid as pheromone trails over the ADDRESSES of the other two layers: a document by the sha256 of its bytes
++// (`doc:<sha256>`), a sentence in it (`doc:<sha256>#<k>`, k = the address the scholia's `at` and `sentences()` use), a word (`lemma:<lang>:<word>`). It holds no text and no values. It is built on the kernel's stigmergy
++// (kernel/stigmergy.js) and the trail store (organs/trail-store.mjs): a head (the marks of the question, never its words) is the place, a target address is the route, and the store gives the learned order.
++//
++// THE LAW IT KEEPS (eodb-clone/facade/SIG.md, pharos/eoql/SIG-ANSWER.md; the numbers are in those files):
++//   1. A trail is a pointer with no value. It may change what is READ FIRST and what that costs; it may never change an answer. `order()` returns a PERMUTATION of the candidates it was given: nothing added, nothing dropped.
++//   2. Presence can only cause more looking; absence proves nothing. An address with no trail is not "unlikely", it is untried, and untried candidates keep the caller's order after the earned ones.
++//   3. Deposit only on a VERIFIED use (the sentence was cut from the file and its sha256 checked, or the answer was accepted): `lay` refuses without `verified: true`. Most things are used once; marking every lookup is waste.
++//   4. An alarm (a wrong answer) forgets what the route had deposited before it.
++//   5. The fade is the measured power law (kernel `law: "power"`, alpha 1.2), not a hand-set half-life.
++//   6. A head is MARKS, not text: a string with whitespace or longer than 160 characters is refused (HEAD_IS_TEXT). The formicary never stores a question's words.
++//   7. The user can forget everything: `forgetAll()` deletes the file.
++// NOT BUILT HERE (stated, not hidden): promotion of a trail to a synapse or an expressway (it needs the held-out check in pharos/docs/PROPOSAL-SIG-FOLD.md); forgetting one head; wiring into the hunt (fork 2's organs call `order` and `lay`).
++import fs from "node:fs";
++import os from "node:os";
++import path from "node:path";
++import { makeTrailStore } from "./trail-store.mjs";
++import { TRAIL_POWER_ALPHA } from "../kernel/stigmergy.js";
++
++export const FORMICARY_SCHEMA = "Formicary@1";
++export class FormicaryError extends Error { constructor(code, message) { super(message); this.code = code; this.name = "FormicaryError"; } }
++const USER = /^[A-Za-z0-9._-]+$/, SHA = /^[0-9a-f]{64}$/;   // regex-ok: an identifier and a hash, not language
++
++/** The address of a target. A string is taken as an address already (doc:…, lemma:…); an object is { doc | hash, k? } or { lemma, lang }. */
++export function addrOf(t) {
++  if (typeof t === "string") { if (!/^(doc:[0-9a-f]{64}(#\d+)?|lemma:[a-z]{2,3}:\S+)$/.test(t)) throw new FormicaryError("BAD_ADDRESS", `not an address of the scholia: ${String(t).slice(0, 80)}`); return t; }   // regex-ok: the shape of an address
++  if (t && (t.doc ?? t.hash) !== undefined) { const h = String(t.doc ?? t.hash); if (!SHA.test(h)) throw new FormicaryError("BAD_ADDRESS", "a document is addressed by the sha256 of its bytes (64 hex)"); return Number.isInteger(t.k) ? `doc:${h}#${t.k}` : `doc:${h}`; }
++  if (t && t.lemma !== undefined) { if (!t.lang) throw new FormicaryError("BAD_ADDRESS", "a word is addressed with its language: { lemma, lang }"); return `lemma:${t.lang}:${t.lemma}`; }
++  throw new FormicaryError("BAD_ADDRESS", "a target is an address string, { doc, k? } or { lemma, lang }");
++}
++/** A head from the marks of a question (its content lemmas and roles, in any order): sorted and joined. Never the question's words as a sentence. */
++export function headOf(marks) {
++  const m = (Array.isArray(marks) ? marks : [marks]).map((x) => String(x ?? "").trim()).filter(Boolean);
++  if (!m.length) throw new FormicaryError("HEAD_IS_TEXT", "a head needs at least one mark");
++  if (m.some((x) => /\s/.test(x))) throw new FormicaryError("HEAD_IS_TEXT", "a head is marks (lemmas, roles), not text: a mark with a space is a phrase");   // regex-ok: whitespace in an identifier, not language
++  const h = [...new Set(m)].sort().join("+"); if (h.length > 160) throw new FormicaryError("HEAD_IS_TEXT", "a head longer than 160 characters is text"); return h;
++}
++const headKey = (head) => (Array.isArray(head) ? headOf(head) : typeof head === "string" && /^\S{1,160}$/.test(head) ? head : (() => { throw new FormicaryError("HEAD_IS_TEXT", "a head is one token of marks (use headOf([...]))"); })());   // regex-ok: no whitespace, not language
++
++/** One user's formicary. `onMark(mark)` (optional, e.g. trail-store's pharosMarkWriter) is offered every deposit, alarm and mark with `user` added. */
++export function openFormicary({ user, dir = path.join(os.homedir(), ".khora", "formicary"), now = () => Date.now(), law = "power", alpha = TRAIL_POWER_ALPHA, onMark = null, explore = 0.1 } = {}) {
++  if (!user || !USER.test(String(user))) throw new FormicaryError("BAD_USER", "a formicary is opened for a user named with letters, digits, . _ -");
++  const file = path.join(dir, `${user}.formicary.json`), sink = onMark ? Object.assign((m) => onMark({ ...m, user }), { status: () => onMark.status?.() ?? { on: true }, flush: () => onMark.flush?.() ?? Promise.resolve() }) : null;
++  const make = () => makeTrailStore({ name: `formicary:${user}`, file, now, law, alpha, onMark: sink });
++  let store = make();
++  return {
++    schema: FORMICARY_SCHEMA, user, file, law, alpha,
++    /** a VERIFIED use: the target answered this head. Refused unless `verified: true` (the caller cut the sentence and checked the sha256, or the answer was accepted). */
++    lay(head, target, { verified = false, ms = 0 } = {}) { if (verified !== true) throw new FormicaryError("NOT_VERIFIED", "a trail is laid only on a verified use: pass { verified: true } after the span was cut and its sha256 checked"); store.deposit(headKey(head), addrOf(target), true, ms); },
++    /** an attempt that did not answer: it earns nothing, it only marks the target as tried */
++    tried(head, target, { ms = 0 } = {}) { store.deposit(headKey(head), addrOf(target), false, ms); },
++    /** a wrong answer from this target for this head: what it had deposited before no longer counts */
++    alarm(head, target, why = null) { store.veto(headKey(head), addrOf(target), why); },
++    /** the candidates in the learned order for this head: earned (strongest first), then untried (as given), then dead; a scout may go first. ALWAYS a permutation of the input. */
++    order(head, candidates, { explore: e = explore, rng = Math.random } = {}) {
++      const h = headKey(head), items = [...candidates], keys = items.map((c) => addrOf(c)), uniq = [...new Set(keys)], ordered = store.orderFor(h, uniq, { explore: e, rng }), rank = new Map(ordered.map((a, i) => [a, i]));
++      return items.map((it, i) => ({ it, i, r: rank.get(keys[i]) })).sort((a, b) => a.r - b.r || a.i - b.i).map((x) => x.it);
++    },
++    strength(head, target) { return store.stats(headKey(head), [addrOf(target)])[0]?.strength ?? 0; },
++    known(head) { return store.known(headKey(head)); },
++    snapshot() { return store.snapshot(); },
++    pharos() { return store.pharos(); }, flush() { return store.flush(); },
++    /** the user's right to be forgotten: the file is deleted and the colony starts empty */
++    forgetAll() { try { fs.rmSync(file, { force: true }); } catch { /* none */ } store = make(); return true; },
++  };
++}
+diff --git a/native/organs/formicary.test.mjs b/native/organs/formicary.test.mjs
+new file mode 100644
+index 0000000..8fbcd93
+--- /dev/null
++++ b/native/organs/formicary.test.mjs
+@@ -0,0 +1,87 @@
++// formicary.test.mjs: the law of the formicary, one test per clause (organs/formicary.mjs header). node --test native/organs/formicary.test.mjs
++import test from "node:test";
++import assert from "node:assert/strict";
++import fs from "node:fs";
++import os from "node:os";
++import path from "node:path";
++import { openFormicary, addrOf, headOf, FormicaryError } from "./formicary.mjs";
++import { trailWeight } from "../kernel/stigmergy.js";
++
++const H = (c) => c.repeat(64), docA = H("a"), docB = H("b"), docC = H("c"), docD = H("d");
++const tmp = () => fs.mkdtempSync(path.join(os.tmpdir(), "formicary-"));
++const clock = (t0 = 1_700_000_000_000) => { let t = t0; return { now: () => t, tick: (ms) => { t += ms; } }; };
++const code = (fn) => { try { fn(); } catch (e) { return e instanceof FormicaryError ? e.code : `other:${e.message}`; } return "no error"; };
++
++test("a target is an address of the scholia, a head is marks, never text", () => {
++  assert.equal(addrOf({ doc: docA }), `doc:${docA}`); assert.equal(addrOf({ hash: docA, k: 7 }), `doc:${docA}#7`); assert.equal(addrOf({ lemma: "hamlet", lang: "en" }), "lemma:en:hamlet"); assert.equal(addrOf(`doc:${docA}#3`), `doc:${docA}#3`);
++  assert.equal(code(() => addrOf({ doc: "abc" })), "BAD_ADDRESS"); assert.equal(code(() => addrOf("who was hamlet's father")), "BAD_ADDRESS"); assert.equal(code(() => addrOf({ lemma: "x" })), "BAD_ADDRESS");
++  assert.equal(headOf(["father", "hamlet"]), headOf(["hamlet", "father", "hamlet"]), "the same marks in any order are one head");
++  assert.equal(code(() => headOf(["who was hamlet's father"])), "HEAD_IS_TEXT"); assert.equal(code(() => headOf(["a".repeat(170)])), "HEAD_IS_TEXT"); assert.equal(code(() => headOf([])), "HEAD_IS_TEXT");
++});
++
++test("a trail is laid only on a verified use, and a failed try earns nothing", () => {
++  const f = openFormicary({ user: "u1", dir: tmp() }), h = headOf(["hamlet"]);
++  assert.equal(code(() => f.lay(h, { doc: docA })), "NOT_VERIFIED"); assert.equal(code(() => f.lay(h, { doc: docA }, { verified: "yes" })), "NOT_VERIFIED");
++  f.tried(h, { doc: docB }); assert.equal(f.strength(h, { doc: docB }), 0, "a failure deposits no strength");
++  f.lay(h, { doc: docA }, { verified: true }); assert.ok(f.strength(h, { doc: docA }) > 0);
++});
++
++test("order() is a PERMUTATION: earned first, untried as given, dead last; nothing added, nothing dropped", () => {
++  const c = clock(), f = openFormicary({ user: "u1", dir: tmp(), now: c.now }), h = headOf(["hamlet"]), cands = [{ doc: docB }, { doc: docA }, { doc: docC }, { doc: docD }];
++  f.lay(h, { doc: docC }, { verified: true }); f.tried(h, { doc: docB });
++  const out = f.order(h, cands, { explore: 0 });
++  assert.deepEqual(out.map((x) => x.doc), [docC, docA, docD, docB], "earned C, then untried A and D in the caller's order, then dead B");
++  assert.deepEqual([...out].sort((x, y) => x.doc.localeCompare(y.doc)), [...cands].sort((x, y) => x.doc.localeCompare(y.doc)), "the same candidates");
++  const empty = openFormicary({ user: "u2", dir: tmp() }).order(h, cands, { explore: 0 }); assert.deepEqual(empty, cands, "no trails, no reordering: absence proves nothing");
++  const dup = f.order(h, [{ doc: docA }, { doc: docC }, { doc: docA }], { explore: 0 }); assert.equal(dup.length, 3, "a repeated candidate stays repeated");
++});
++
++test("each user has their own colony: one user's trails never reorder another's, and both persist", () => {
++  const dir = tmp(), c = clock(), a = openFormicary({ user: "alice", dir, now: c.now }), b = openFormicary({ user: "bob", dir, now: c.now }), h = headOf(["hamlet"]), cands = [{ doc: docA }, { doc: docB }];
++  a.lay(h, { doc: docB }, { verified: true });
++  assert.deepEqual(a.order(h, cands, { explore: 0 }).map((x) => x.doc), [docB, docA]); assert.deepEqual(b.order(h, cands, { explore: 0 }).map((x) => x.doc), [docA, docB], "bob has no trail: his order is as given");
++  assert.notEqual(a.file, b.file); const a2 = openFormicary({ user: "alice", dir, now: c.now }); assert.deepEqual(a2.order(h, cands, { explore: 0 }).map((x) => x.doc), [docB, docA], "alice's trail survives reopening");
++  assert.equal(code(() => openFormicary({ user: "../etc" })), "BAD_USER");
++});
++
++test("the fade is the measured power law, not a half-life: weight = (1 + age in seconds)^-1.2, and an old trail never reaches zero", () => {
++  const now = 2_000_000_000_000, w = (age) => trailWeight(now - age * 1000, now, { law: "power" }), ratio = (w(1) / w(100));
++  assert.ok(Math.abs(Math.log(w(2) / w(101)) / Math.log(102 / 3) - 1.2) < 0.001, "the log-log slope against (1 + age) is -1.2");
++  assert.ok(Math.abs(ratio / Math.pow(101 / 2, 1.2) - 1) < 0.001, `1 s ago against 100 s ago is (101/2)^1.2 = ${Math.pow(101 / 2, 1.2).toFixed(0)} times as strong, got ${ratio.toFixed(1)}`);
++  assert.ok(w(86400 * 30) > 0, "a month-old trail still counts a little");
++  const exp = (age) => trailWeight(now - age * 1000, now, { law: "exp" }); assert.ok(exp(1) / exp(100) < 1.001, "the 7-day exponential cannot tell 1 s from 100 s: that is the shape the nexus measured against");
++});
++
++test("recency beats an older, larger pile under the power law, and frequency still counts among equals", () => {
++  const c = clock(), f = openFormicary({ user: "u1", dir: tmp(), now: c.now }), h = headOf(["hamlet"]);
++  for (let i = 0; i < 3; i++) f.lay(h, { doc: docA }, { verified: true }); c.tick(3_600_000); f.lay(h, { doc: docB }, { verified: true });
++  assert.deepEqual(f.order(h, [{ doc: docA }, { doc: docB }], { explore: 0 }).map((x) => x.doc), [docB, docA], "one trail an hour newer outranks three older ones");
++  const g = openFormicary({ user: "u2", dir: tmp(), now: c.now }); g.lay(h, { doc: docA }, { verified: true }); g.lay(h, { doc: docB }, { verified: true }); g.lay(h, { doc: docB }, { verified: true });
++  assert.ok(g.strength(h, { doc: docB }) > g.strength(h, { doc: docA }), "equally recent: more deposits, more strength");
++});
++
++test("a poisoned trail costs order, never membership; an alarm forgets what the route had deposited", () => {
++  const c = clock(), f = openFormicary({ user: "u1", dir: tmp(), now: c.now }), h = headOf(["hamlet"]), cands = [{ doc: docA }, { doc: docB }, { doc: docC }];
++  f.lay(h, { doc: docC }, { verified: true });   // a wrong document, laid in error
++  const bad = f.order(h, cands, { explore: 0 }); assert.equal(bad[0].doc, docC); assert.deepEqual(bad.map((x) => x.doc).sort(), [docA, docB, docC].sort(), "the answer set is unchanged: only the order moved");
++  c.tick(10); f.alarm(h, { doc: docC }, "gave a wrong answer"); assert.equal(f.strength(h, { doc: docC }), 0, "the alarm forgets the earlier deposits"); assert.deepEqual(f.order(h, cands, { explore: 0 }).map((x) => x.doc), [docA, docB, docC], "back to the caller's order");
++});
++
++test("scouts still go first sometimes: the exploration is not closed by the trails", () => {
++  const f = openFormicary({ user: "u1", dir: tmp() }), h = headOf(["hamlet"]), cands = [{ doc: docA }, { doc: docB }, { doc: docC }];
++  f.lay(h, { doc: docA }, { verified: true }); assert.equal(f.order(h, cands, { explore: 1, rng: () => 0 })[0].doc, docB, "an untried candidate is probed first when the scout rolls");
++  assert.equal(f.order(h, cands, { explore: 0 })[0].doc, docA);
++});
++
++test("the user can forget everything; two handles on one user's file see each other", () => {
++  const dir = tmp(), c = clock(), a = openFormicary({ user: "u1", dir, now: c.now }), a2 = openFormicary({ user: "u1", dir, now: c.now }), h = headOf(["hamlet"]), cands = [{ doc: docA }, { doc: docB }];
++  a.lay(h, { doc: docB }, { verified: true }); assert.deepEqual(a2.order(h, cands, { explore: 0 }).map((x) => x.doc), [docB, docA], "the environment is the message: a second handle reads the first's deposit");
++  a.forgetAll(); assert.equal(fs.existsSync(a.file), false); assert.deepEqual(a.order(h, cands, { explore: 0 }).map((x) => x.doc), [docA, docB]);
++});
++
++test("every deposit, alarm and mark is offered to a caller's log with the user named; nothing is written outside the user's file otherwise", async () => {
++  const seen = [], c = clock(), f = openFormicary({ user: "u1", dir: tmp(), now: c.now, onMark: (m) => seen.push(m) }), h = headOf(["hamlet"]);
++  f.lay(h, { doc: docA }, { verified: true }); f.alarm(h, { doc: docA }, "wrong"); await f.flush();
++  assert.deepEqual(seen.map((m) => m.kind), ["trail-deposit", "trail-veto"]); assert.ok(seen.every((m) => m.user === "u1" && m.head === h && m.route === `doc:${docA}`), "the mark names the user, the head and the address, and no text");
++  assert.equal(openFormicary({ user: "u2", dir: tmp() }).pharos().on, false, "no writer given: nothing goes to pharos, and it says so");
++});
+diff --git a/native/organs/trail-store.mjs b/native/organs/trail-store.mjs
+index 40b80d3..4bfb91b 100644
+--- a/native/organs/trail-store.mjs
++++ b/native/organs/trail-store.mjs
+@@ -50,7 +50,7 @@ const merge = (a, b) => {
+   return out;
+ };
+ 
+-export function makeTrailStore({ name = "default", file = null, now = () => Date.now(), halfLifeDays = TRAIL_HALF_LIFE_DAYS, persist = true, onMark = undefined } = {}) {
++export function makeTrailStore({ name = "default", file = null, now = () => Date.now(), halfLifeDays = TRAIL_HALF_LIFE_DAYS, persist = true, onMark = undefined, law = "exp", alpha = undefined } = {}) {   // law "power": the measured fade (kernel/stigmergy.js); default "exp" changes nothing for existing callers
+   const f = file ?? path.join(os.homedir(), ".khora", "trails", `${name}.json`);
+   const sink = onMark === undefined ? (file == null && persist ? pharosMarkWriter() : null) : onMark;   // the machine-wide store mirrors to pharos; any other store only if it is given a writer
+   let mem = { trails: {}, vetoes: {}, marks: {} }, seen = 0;
+@@ -74,9 +74,9 @@ export function makeTrailStore({ name = "default", file = null, now = () => Date
+     /** an alarm: this route gave a wrong answer for this head; what it deposited before no longer counts */
+     veto(head, route, why = null) { refresh(); const at = now(); (mem.vetoes[head] ??= {})[route] = at; save(); tell({ kind: "trail-veto", head, route, why, at }); },
+     /** per-route strength with evaporation: [{ route, strength, deposits, hits, meanMs }] */
+-    stats(head, routes = null) { return trailStats(live(head), head, { now: now(), routes, halfLifeDays }); },
++    stats(head, routes = null) { return trailStats(live(head), head, { now: now(), routes, halfLifeDays, law, ...(alpha != null ? { alpha } : {}) }); },
+     /** the learned order of `routes` for `head`: earned routes strongest first, then untried, then dead; a scout sometimes goes first */
+-    orderFor(head, routes, { explore, rng = Math.random } = {}) { return routeOrderFor(live(head), head, { now: now(), routes, rng, halfLifeDays, ...(explore != null ? { explore } : {}) }); },
++    orderFor(head, routes, { explore, rng = Math.random } = {}) { return routeOrderFor(live(head), head, { now: now(), routes, rng, halfLifeDays, law, ...(alpha != null ? { alpha } : {}), ...(explore != null ? { explore } : {}) }); },
+     /** routes with a live success, strongest first */
+     known(head) { return this.stats(head).filter((s) => s.strength > 0).sort((a, b) => b.strength - a.strength).map((s) => s.route); },
+     /** a thing about the world, for everyone who reads this store: `until` is an epoch ms */
+-- 
+2.43.0
+
+
+From 01a0543ea2cc45738f9783d777e963743bb899e9 Mon Sep 17 00:00:00 2001
+From: Claude <noreply@anthropic.com>
+Date: Wed, 25 Nov 2026 17:59:10 +0000
+Subject: [PATCH 3/3] trail-rules: a trail becomes a rule only past a seeded
+ null on a held-out third; the rules about rules as data
+
+Pure kernel module (promoteRoute, promoteHead, ruleEntry, META_RULES). 10 tests, including a
+control built to fail: 0 of 600 chance-label route-tests promoted. Power measured on synthetic labels
+(needs ~60-120 deposits for a 0.9 v 0.1 gap, 240 for 0.8 v 0.3). ruleEntry shapes an entry; nothing is woven.
+
+Co-Authored-By: Claude Sonnet 5.5 <noreply@anthropic.com>
+Claude-Session: https://claude.ai/code/session_01AP2eRC5CScKTs8ZE4Wpdoe
+---
+ native/kernel/trail-rules.js       | 93 ++++++++++++++++++++++++++++++
+ native/kernel/trail-rules.test.mjs | 83 ++++++++++++++++++++++++++
+ package.json                       |  2 +-
+ 3 files changed, 177 insertions(+), 1 deletion(-)
+ create mode 100644 native/kernel/trail-rules.js
+ create mode 100644 native/kernel/trail-rules.test.mjs
+
+diff --git a/native/kernel/trail-rules.js b/native/kernel/trail-rules.js
+new file mode 100644
+index 0000000..817bd33
+--- /dev/null
++++ b/native/kernel/trail-rules.js
+@@ -0,0 +1,93 @@
++// kernel/trail-rules.js — when a trail becomes a RULE, and the rules about rules.
++// Handle: Wilson (kernel/stigmergy.js) — the colony's trail is a pointer that fades; a rule is what a trail earns by beating chance on later evidence.
++//
++// WHAT THIS ADDS. stigmergy.js deposits, evaporates, vetoes and scouts. It never says when a route has EARNED a standing order. formicary.mjs lists promotion as
++// "not built here" and points at the held-out check of pharos/docs/PROPOSAL-SIG-FOLD.md. This is that check for trails, pure: no clock, no file, no network.
++//
++// THE RULE (M4). A route is promoted for a head only if, on BOTH the earlier two thirds (the nomination) and the later third (held out), its number of resolved
++// deposits is STRICTLY MORE than the most any of PROMOTE_NULL_N seeded shuffles of the resolved/unresolved labels gives it. Nothing is typed as a threshold:
++// the null sets the bar. A small sample cannot clear it, so no minimum count is typed either. A route that is the head's only route has nothing to be better than.
++// An alarm (a wrong answer) first forgets everything that route had deposited before it (the kernel's own rule), so a vetoed route is demoted unless it earns the standing again.
++//
++// WHAT IT DOES NOT DO. It does not change an answer: promotion is about READ ORDER and about what may be written down as a rule; the formicary law still holds (a
++// permutation, never a filter). It does not write anywhere: `ruleEntry` only SHAPES the entry, and the caller weaves it, by cell and kind, into the shared log.
++// Falsified if: chance labels promote at a rate that is not small (the test measures it), or the same log and seed give two verdicts.
++import { createHash } from "node:crypto";
++
++export const TRAIL_RULES_SCHEMA = "TrailRules@1";
++export const PROMOTE_NULL_N = 2000;      // shuffles; the bar is the maximum over these, so more shuffles only make the bar harder to clear
++const INSTRUMENT = "trail-rules@1";
++
++/** A small seeded generator (mulberry32): the same seed, the same shuffles, so a verdict can be re-derived from the log. */
++export function mulberry32(seed) {
++  let a = seed >>> 0;
++  return () => { a = (a + 0x6D2B79F5) >>> 0; let t = a; t = Math.imul(t ^ (t >>> 15), t | 1); t ^= t + Math.imul(t ^ (t >>> 7), t | 61); return ((t ^ (t >>> 14)) >>> 0) / 4294967296; };
++}
++const seedOf = (head, route, n) => createHash("sha256").update(`${head}\0${route}\0${n}`).digest().readUInt32BE(0);
++
++/** hits of `route` in `rows`, and the most it gets under `N` shuffles of the ok labels (route labels held fixed). */
++function against(rows, route, rng, N) {
++  const idx = []; rows.forEach((r, i) => { if (r.route === route) idx.push(i); });
++  const ok = rows.map((r) => (r.ok ? 1 : 0)), obs = idx.reduce((s, i) => s + ok[i], 0);
++  let max = -1; const a = ok.slice();
++  for (let k = 0; k < N; k++) {
++    for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(rng() * (i + 1)); const t = a[i]; a[i] = a[j]; a[j] = t; }
++    let h = 0; for (const i of idx) h += a[i]; if (h > max) max = h;
++  }
++  return { obs, nullMax: max, n: idx.length, routes: new Set(rows.map((r) => r.route)).size };
++}
++
++/**
++ * promoteRoute(deposits, head, route, { vetoes, seed, nullN }) -> { schema, head, route, state, why, obs, nullMax, nullN, train, test, seed }
++ *   deposits  [{ head, route, ok, at }] (extra fields ignored); only this head's are read
++ *   vetoes    { route: at } an alarm: that route's deposits at or before `at` are forgotten
++ *   state     "promoted" | "undecided" | "demoted" (a vetoed route that does not earn the standing again)
++ * obs / nullMax are for the HELD-OUT third (the one that decides); `train` and `test` are the deposit counts of the two parts.
++ */
++export function promoteRoute(deposits, head, route, { vetoes = {}, seed = null, nullN = PROMOTE_NULL_N } = {}) {
++  const vetoAt = vetoes?.[route];
++  const rows = (deposits ?? []).filter((d) => d && d.head === head && !(vetoAt != null && d.route === route && Number(d.at) <= vetoAt)).map((d) => ({ route: d.route, ok: !!d.ok, at: Number(d.at) || 0 })).sort((a, b) => a.at - b.at);
++  const s = seed ?? seedOf(head, route, rows.length), rng = mulberry32(s), cut = Math.ceil((rows.length * 2) / 3), early = rows.slice(0, cut), late = rows.slice(cut);
++  const out = (state, why, extra = {}) => ({ schema: TRAIL_RULES_SCHEMA, head, route, state: state === "undecided" && vetoAt != null ? "demoted" : state, why: state === "undecided" && vetoAt != null ? `alarm at ${vetoAt}: ${why}` : why, obs: 0, nullMax: 0, nullN, train: early.length, test: late.length, seed: s, ...extra });
++  if (!rows.some((r) => r.route === route)) return out("undecided", "this route has no deposits left");
++  if (new Set(rows.map((r) => r.route)).size < 2) return out("undecided", "no other route has been tried, so there is nothing to be better than");
++  const a = against(early, route, rng, nullN);
++  if (!(a.obs > a.nullMax && a.n > 0)) return out("undecided", `the nomination did not beat chance (${a.obs} resolved against a shuffled best of ${a.nullMax})`, { obs: a.obs, nullMax: a.nullMax });
++  const b = against(late, route, rng, nullN);
++  if (!(b.n > 0)) return out("undecided", "nominated, but the held-out third never tried this route");
++  if (!(b.obs > b.nullMax)) return out("undecided", `nominated, but the held-out third did not beat chance (${b.obs} resolved against a shuffled best of ${b.nullMax})`, { obs: b.obs, nullMax: b.nullMax });
++  return out("promoted", `beat the shuffled best on the nomination (${a.obs} > ${a.nullMax}) and on the held-out third (${b.obs} > ${b.nullMax})`, { obs: b.obs, nullMax: b.nullMax });
++}
++
++/** Every route of a head, judged. Reads only; the input is not changed. */
++export function promoteHead(deposits, head, opts = {}) {
++  const routes = [...new Set((deposits ?? []).filter((d) => d && d.head === head).map((d) => d.route))];
++  return routes.map((r) => promoteRoute(deposits, head, r, opts));
++}
++
++/**
++ * The entry a promotion becomes, by cell and kind, for whoever weaves it. It holds marks and numbers, never the question's words.
++ * The cell is a PROPOSAL (EVA·Pattern: a pattern evaluated against a standard, here the null); the owner has not chosen it. `of` is left for the caller (the deposits it read).
++ */
++export const TRAIL_RULE_KIND = { name: "trail-rule", cell: "EVA·Pattern", why: "a route earned a standing order for a head: it beat a seeded shuffle on the nomination and on the held-out third (state may also be undecided or demoted)" };
++export function ruleEntry(r, of = []) {
++  const bad = (x) => typeof x !== "string" || !x.length || x.length > 160 || [...x].some((c) => c.trim() === "");
++  if (bad(r?.head)) throw new Error("a head is marks, not text: one token of at most 160 characters");
++  if (bad(r?.route)) throw new Error("a route is one token");
++  return { cell: TRAIL_RULE_KIND.cell, kind: TRAIL_RULE_KIND.name, addr: `trail-rule:${r.head}|${r.route}`, of, basis: { instrument: INSTRUMENT, seed: r.seed, nullN: r.nullN },
++    body: { head: r.head, route: r.route, state: r.state, why: r.why, obs: r.obs, nullMax: r.nullMax, nullN: r.nullN, train: r.train, test: r.test } };
++}
++
++// THE RULES ABOUT RULES (M6): declared once, as data, so they can be shown, tested and woven; each carries what would falsify it and where it is enforced.
++// `built` is true only where the code is in this checkout; `enforcedBy` names the file and the test that checks it.
++const rule = (id, name, text, falsifier, enforcedBy, built) => Object.freeze({ id, name, rule: text, falsifier, enforcedBy, built });
++export const META_RULES = Object.freeze([
++  rule("M1", "deposit on verified use", "A trail is laid only when a use was verified (the span was cut and its hash checked, or the answer was accepted); a lookup alone lays nothing.", "a deposit is accepted with no verified flag", "organs/formicary.mjs (lay) + organs/formicary.test.mjs", true),
++  rule("M2", "alarm", "A wrong answer vetoes its route and forgets what the route had deposited before it; absence of a trail is never evidence against a route.", "a vetoed route still ranks by its old deposits, or an untried route is dropped", "organs/trail-store.mjs (veto) + organs/formicary.test.mjs", true),
++  rule("M3", "evaporation", "Strength fades by the measured power law (weight = (1 + seconds)^-1.2), not a typed half-life; a ledger that never forgets is an archive.", "a recency or frequency order beats the power law on held-out reads", "kernel/stigmergy.js (law: power) + kernel/stigmergy.test.js", true),
++  rule("M4", "promotion past a null", "A trail becomes a rule only if it beats the best of seeded shuffles on the nomination and on a held-out later third; no typed threshold, no typed minimum.", "chance labels promote at a rate that is not small, or one log and seed give two verdicts", "kernel/trail-rules.js (promoteRoute) + kernel/trail-rules.test.mjs", true),
++  rule("M5", "scouts", "With some probability a route that is not first is tried first, so the colony cannot only exploit; the order is always a permutation of the candidates.", "scouts stop once every route has a deposit, or order() adds or drops a candidate", "kernel/stigmergy.js (scoutTried) + organs/formicary.test.mjs", true),
++  rule("M6", "rules about rules are written down", "Every rule above is declared as data with its falsifier and shown beside the trails it governs; a promotion, a demotion and an alarm are entries in the shared log, never a silent flag.", "a rule changes state with no entry in the log", "kernel/trail-rules.js (META_RULES, ruleEntry); trail-store.mjs mirrors deposits and vetoes; WEAVING PROMOTIONS IS NOT WIRED", false),
++]);
++/** The table the panel shows: one row per rule. */
++export const metaRuleTable = () => META_RULES.map((m) => ({ id: m.id, name: m.name, rule: m.rule, falsifier: m.falsifier, enforcedBy: m.enforcedBy, built: m.built }));
+diff --git a/native/kernel/trail-rules.test.mjs b/native/kernel/trail-rules.test.mjs
+new file mode 100644
+index 0000000..0205f83
+--- /dev/null
++++ b/native/kernel/trail-rules.test.mjs
+@@ -0,0 +1,83 @@
++// kernel/trail-rules.test.mjs — the promotion of a trail to a rule, and the rules about rules.
++// Written before the module. Each test says what would falsify the rule it checks.
++import test from "node:test";
++import assert from "node:assert/strict";
++import { promoteRoute, promoteHead, ruleEntry, META_RULES, metaRuleTable, mulberry32, PROMOTE_NULL_N } from "./trail-rules.js";
++
++const DAY = 86400000, T0 = Date.UTC(2026, 10, 1);
++// deposits for one head: [{route, ok, at}], one per day, in order
++const mk = (rows) => rows.map(([route, ok], i) => ({ head: "h", route, ok, ms: 5, at: T0 + i * DAY }));
++const alternating = (n, f) => Array.from({ length: n }, (_, i) => [i % 2 ? "B" : "A", f(i)]);
++
++test("M4: a route that resolves every time where the other never does is promoted, on a held-out third", () => {
++  const d = mk(alternating(60, (i) => i % 2 === 0));          // A always ok, B never
++  const r = promoteRoute(d, "h", "A");
++  assert.equal(r.state, "promoted", JSON.stringify(r));
++  assert.ok(r.obs > r.nullMax, "the observed hits must exceed every shuffled run, not a typed threshold");
++  assert.equal(r.nullN, PROMOTE_NULL_N);
++  assert.ok(r.train > r.test && r.test > 0, "the later third is held out from the nomination");
++  assert.equal(promoteRoute(d, "h", "B").state, "undecided", "the route that never resolves is not promoted");
++});
++
++test("M4: the same input and seed give the same verdict (a verdict can be re-derived from the log)", () => {
++  const d = mk(alternating(60, (i) => i % 2 === 0));
++  assert.deepEqual(promoteRoute(d, "h", "A"), promoteRoute(d, "h", "A"));
++  assert.notEqual(promoteRoute(d, "h", "A", { seed: 7 }).seed, promoteRoute(d, "h", "A").seed);
++});
++
++test("M4: too few deposits cannot beat the null, so nothing is promoted and no minimum was typed", () => {
++  for (const n of [2, 4, 6]) assert.notEqual(promoteRoute(mk(alternating(n, (i) => i % 2 === 0)), "h", "A").state, "promoted", `n=${n}`);
++});
++
++test("M4: one route alone has nothing to be better than: undecided, with the reason", () => {
++  const r = promoteRoute(mk(Array.from({ length: 40 }, () => ["A", true])), "h", "A");
++  assert.equal(r.state, "undecided"); assert.match(r.why, /no other route/);
++});
++
++test("M4 control built to fail: routes whose successes are chance are not promoted (false-promotion rate measured over many heads)", () => {
++  let rng = mulberry32(12345), promoted = 0, heads = 200;
++  for (let k = 0; k < heads; k++) {
++    const rows = Array.from({ length: 45 }, (_, i) => [["A", "B", "C"][Math.floor(rng() * 3)], rng() < 0.5]);
++    const d = mk(rows);
++    for (const r of ["A", "B", "C"]) if (promoteRoute(d, "h", r).state === "promoted") promoted++;
++  }
++  // 600 route-tests on pure noise. Report the rate; the rule is falsified if it is not small.
++  console.log(`# false promotions on chance labels: ${promoted} of ${heads * 3} route-tests`);
++  assert.ok(promoted / (heads * 3) < 0.02, `false promotion rate ${promoted}/${heads * 3}`);
++});
++
++test("M4: a route that worked only early is not promoted: the later third decides (held out)", () => {
++  const d = mk(alternating(60, (i) => (i < 30 ? i % 2 === 0 : false)));   // A ok in the first half, then never
++  assert.notEqual(promoteRoute(d, "h", "A").state, "promoted");
++});
++
++test("M2 meets M4: an alarm forgets what the route had deposited before it, so a wrong answer unpromotes", () => {
++  const d = mk(alternating(60, (i) => i % 2 === 0));
++  assert.equal(promoteRoute(d, "h", "A").state, "promoted");
++  const vetoAt = T0 + 59 * DAY;                                   // the route gave a wrong answer at the end
++  const r = promoteRoute(d, "h", "A", { vetoes: { A: vetoAt } });
++  assert.equal(r.state, "demoted"); assert.match(r.why, /alarm/);
++});
++
++test("M4: promoteHead judges every route of a head and never mutates its input", () => {
++  const d = mk(alternating(60, (i) => i % 2 === 0)), before = JSON.stringify(d);
++  const out = promoteHead(d, "h");
++  assert.deepEqual(out.map((x) => [x.route, x.state]).sort(), [["A", "promoted"], ["B", "undecided"]]);
++  assert.equal(JSON.stringify(d), before);
++});
++
++test("M6: a promotion is an entry for the pharos by cell and kind: it names its seed, its null and its inputs, and holds no text", () => {
++  const d = mk(alternating(60, (i) => i % 2 === 0)), r = promoteRoute(d, "h", "A"), e = ruleEntry(r);
++  assert.equal(e.kind, "trail-rule"); assert.match(e.cell, /^[A-Z]{3}·(Ground|Figure|Pattern)$/);
++  assert.equal(e.addr, "trail-rule:h|A"); assert.equal(e.basis.seed, r.seed); assert.equal(e.basis.instrument, "trail-rules@1");
++  assert.ok(!/\s/.test(e.body.head), "a head is marks, never the question's words");
++  assert.throws(() => ruleEntry({ ...r, head: "two words" }), /head/);
++});
++
++test("M6: the rules about rules are declared as data, each with a falsifier, and shown as a table", () => {
++  assert.deepEqual(META_RULES.map((m) => m.id), ["M1", "M2", "M3", "M4", "M5", "M6"]);
++  for (const m of META_RULES) { assert.ok(m.rule && m.falsifier && m.enforcedBy, m.id); assert.ok(Object.isFrozen(m), m.id); }
++  const t = metaRuleTable();
++  assert.equal(t.length, 6); assert.ok(t.every((row) => row.id && row.rule && row.falsifier && row.enforcedBy && typeof row.built === "boolean"));
++  assert.equal(t.find((r) => r.id === "M4").built, true);
++});
+diff --git a/package.json b/package.json
+index 91bad73..74f900d 100644
+--- a/package.json
++++ b/package.json
+@@ -4,7 +4,7 @@
+   "description": "EOReader 7 now has a native canonical recursive-reading kernel.",
+   "main": "kernel.js",
+   "scripts": {
+-    "test": "node native/scripts/check-reading-hygiene.mjs && node native/scripts/check-no-legacy-submodule.mjs && node --test native/the-fold/essay-fold-falsify.test.mjs native/the-fold/pipeline-run-falsify.test.mjs native/the-fold/parameter-induction-falsify.test.mjs native/the-fold/referents-falsify.test.mjs native/the-fold/ground-replay-falsify.test.mjs native/the-fold/constitution.test.mjs native/the-fold/span-drift.test.mjs native/the-fold/standing-cube.test.mjs native/the-fold/step-fold.test.mjs native/the-fold/surf-types.test.mjs native/the-fold/openness.test.mjs box-governor.test.mjs opencode-longform.test.mjs opencode-gather.test.mjs opencode-gather-reason.test.mjs opencode-gather-gate.test.mjs opencode-gather-senses.test.mjs opencode-gather-identity.test.mjs opencode-gather-voids.test.mjs opencode-gather-typos.test.mjs native/adapters/text/ud-parser.test.mjs native/kernel/eot-claim-match.test.mjs native/adapters/text/figure-binding.test.mjs native/adapters/text/non-personal.test.mjs native/adapters/text/reading-referents.test.mjs native/the-fold/declension-wiring.test.mjs native/adapters/text/ledger-opinion.test.mjs native/adapters/text/folded-card.test.mjs native/adapters/text/form-usage.test.mjs native/organs/relation-defs.test.mjs native/organs/encode.test.mjs native/adapters/text/grammar-ud-codec.test.mjs native/organs/greenberg.test.mjs native/adapters/text/ud-tokenize.test.mjs native/adapters/text/grammar-ud.test.mjs native/adapters/text/atom-world.test.mjs native/kernel/stage-identity.test.mjs native/adapters/text/corpus-exclusion.test.mjs native/organs/read-page.test.mjs native/kernel/stage-sense.test.mjs native/organs/coref-person.test.mjs native/organs/recipient-role.test.mjs native/the-fold/weft-atoms.test.mjs native/the-fold/weft-identity.test.mjs native/adapters/text/figure-period.en.test.mjs opencode-shift.test.mjs opencode-workplan-acts.test.mjs opencode-workplan-e2e-falsify.test.mjs opencode-workplan-live-e2e.test.mjs native/organs/code-form.test.mjs native/organs/web.test.mjs native/tests/entity-profile.test.js native/conformance/block-profile.test.mjs tests/opencode-cube.test.mjs native/kernel/identity-cancel.test.mjs native/kernel/reader-identity.test.mjs native/the-fold/reader-log.test.mjs native/the-fold/cancel-identity.test.mjs native/the-fold/arrangement-features.test.mjs native/kernel/attach-prior.test.mjs native/adapters/text/pronoun-gaps.test.mjs native/adapters/text/pronoun-presence.test.mjs native/tests/same-for.test.js native/tests/respects.test.js native/adapters/text/pronoun-presence-chosen.test.mjs native/adapters/text/clause-attach.test.mjs native/kernel/attend.test.mjs native/organs/thoughts.test.mjs native/the-fold/read-process-pronouns.test.mjs native/adapters/text/pronoun-registers.test.mjs native/the-fold/language-names.test.mjs native/tests/reading-baseline.test.mjs native/tests/one-door.test.mjs native/tests/pharos-gate.test.mjs native/adapters/text/pronoun-registers-san.test.mjs native/adapters/text/sanskrit-sandhi.test.mjs native/the-fold/read-san.test.mjs native/adapters/text/grc-reading.test.mjs native/tests/name-prior.test.mjs native/tests/priors-home.test.mjs native/tests/canonical-docs.test.mjs native/tests/language-competency.test.mjs native/tests/apoha.test.mjs native/tests/wikidata-name-giver.test.mjs native/tests/case-marked-clauses.test.mjs native/tests/vector-library.test.mjs native/tests/pos-smell.test.mjs native/tests/nest-from-read.test.mjs native/adapters/text/karaka-total.test.mjs native/adapters/text/gender-from-rows.test.mjs native/adapters/text/referents-in-order.test.mjs native/tests/weave-referents.test.mjs native/chat/thread.test.mjs native/adapters/text/text-mereology.test.mjs native/tests/place-grain.test.mjs native/tests/chat-register.test.mjs",
++    "test": "node native/scripts/check-reading-hygiene.mjs && node native/scripts/check-no-legacy-submodule.mjs && node --test native/the-fold/essay-fold-falsify.test.mjs native/the-fold/pipeline-run-falsify.test.mjs native/the-fold/parameter-induction-falsify.test.mjs native/the-fold/referents-falsify.test.mjs native/the-fold/ground-replay-falsify.test.mjs native/the-fold/constitution.test.mjs native/the-fold/span-drift.test.mjs native/the-fold/standing-cube.test.mjs native/the-fold/step-fold.test.mjs native/the-fold/surf-types.test.mjs native/the-fold/openness.test.mjs box-governor.test.mjs opencode-longform.test.mjs opencode-gather.test.mjs opencode-gather-reason.test.mjs opencode-gather-gate.test.mjs opencode-gather-senses.test.mjs opencode-gather-identity.test.mjs opencode-gather-voids.test.mjs opencode-gather-typos.test.mjs native/adapters/text/ud-parser.test.mjs native/kernel/eot-claim-match.test.mjs native/adapters/text/figure-binding.test.mjs native/adapters/text/non-personal.test.mjs native/adapters/text/reading-referents.test.mjs native/the-fold/declension-wiring.test.mjs native/adapters/text/ledger-opinion.test.mjs native/adapters/text/folded-card.test.mjs native/adapters/text/form-usage.test.mjs native/organs/relation-defs.test.mjs native/organs/encode.test.mjs native/adapters/text/grammar-ud-codec.test.mjs native/organs/greenberg.test.mjs native/adapters/text/ud-tokenize.test.mjs native/adapters/text/grammar-ud.test.mjs native/adapters/text/atom-world.test.mjs native/kernel/stage-identity.test.mjs native/adapters/text/corpus-exclusion.test.mjs native/organs/read-page.test.mjs native/kernel/stage-sense.test.mjs native/organs/coref-person.test.mjs native/organs/recipient-role.test.mjs native/the-fold/weft-atoms.test.mjs native/the-fold/weft-identity.test.mjs native/adapters/text/figure-period.en.test.mjs opencode-shift.test.mjs opencode-workplan-acts.test.mjs opencode-workplan-e2e-falsify.test.mjs opencode-workplan-live-e2e.test.mjs native/organs/code-form.test.mjs native/organs/web.test.mjs native/tests/entity-profile.test.js native/conformance/block-profile.test.mjs tests/opencode-cube.test.mjs native/kernel/identity-cancel.test.mjs native/kernel/reader-identity.test.mjs native/the-fold/reader-log.test.mjs native/the-fold/cancel-identity.test.mjs native/the-fold/arrangement-features.test.mjs native/kernel/attach-prior.test.mjs native/adapters/text/pronoun-gaps.test.mjs native/adapters/text/pronoun-presence.test.mjs native/tests/same-for.test.js native/tests/respects.test.js native/adapters/text/pronoun-presence-chosen.test.mjs native/adapters/text/clause-attach.test.mjs native/kernel/attend.test.mjs native/organs/thoughts.test.mjs native/the-fold/read-process-pronouns.test.mjs native/adapters/text/pronoun-registers.test.mjs native/the-fold/language-names.test.mjs native/tests/reading-baseline.test.mjs native/tests/one-door.test.mjs native/tests/pharos-gate.test.mjs native/adapters/text/pronoun-registers-san.test.mjs native/adapters/text/sanskrit-sandhi.test.mjs native/the-fold/read-san.test.mjs native/adapters/text/grc-reading.test.mjs native/tests/name-prior.test.mjs native/tests/priors-home.test.mjs native/tests/canonical-docs.test.mjs native/tests/language-competency.test.mjs native/tests/apoha.test.mjs native/tests/wikidata-name-giver.test.mjs native/tests/case-marked-clauses.test.mjs native/tests/vector-library.test.mjs native/tests/pos-smell.test.mjs native/tests/nest-from-read.test.mjs native/adapters/text/karaka-total.test.mjs native/adapters/text/gender-from-rows.test.mjs native/adapters/text/referents-in-order.test.mjs native/tests/weave-referents.test.mjs native/chat/thread.test.mjs native/kernel/trail-rules.test.mjs native/adapters/text/text-mereology.test.mjs native/tests/place-grain.test.mjs native/tests/chat-register.test.mjs",
+     "test:code": "node --test native/the-fold/code-loop.test.mjs native/the-fold/void-loop.test.mjs native/the-fold/void-spec-falsify.test.mjs native/the-fold/tool-call-physics.test.mjs native/the-fold/direct-bridge.test.mjs",
+     "sync": "node scripts/sync.mjs",
+     "sync:check": "node scripts/sync.mjs --check",
+-- 
+2.43.0
+

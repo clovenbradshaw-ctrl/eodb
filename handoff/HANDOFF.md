@@ -7,10 +7,11 @@ The cloud session can read `scores-patch-points/*` but cannot push there (push t
 
 ## State
 - **eodb**: `fold-write-model.md` is merged (PR #1). Facade tests: 109, with 4 failing on the plain store and 2 on the lazy store against current pharos `main` (`P.migrate is not a function` in tests 22, 102, 107; "a binary pharos is detected as plain" in test 18). Not fixed.
-- **khora patch** (`handoff/khora-fold-iterate.patch`, 3 commits, `git format-patch`), based on `scores-patch-points/khora` `chat-engine` f024a55:
+- **khora patch** (`handoff/khora-fold-iterate.patch`, 4 commits, `git format-patch`), based on `scores-patch-points/khora` `chat-engine` f024a55:
   1. `exemplar-pool`: PR #114's fix (already on khora `main`; `chat-engine` lacks it)
   2. `formicary`: the user-bound pattern layer (khora branch `formicary` e000ad1; not in `chat-engine`)
   3. `trail-rules`: `native/kernel/trail-rules.js` and its test: M4 promotion past a seeded null on a held-out third, `ruleEntry`, `META_RULES`. 10 tests pass, 0 of 600 chance-label route-tests promoted. Power on synthetic labels: about 60 to 120 deposits for a 0.9 v 0.1 gap, 240 for 0.8 v 0.3, none for 0.6 v 0.5. The kernel keeps 128 deposits per head.
+  4. `chat/ingest.mjs` + `ingest.test.mjs`: the document door. A text is read into the fold paragraph by paragraph through `say()`, never routed through `turn()` (which sent paragraphs with a quoted question to answering: 3 of 8 read in the test text, 9 of the first 14 of pg1342 ch. I; `say()` reads 27 of 27). 6 tests with a control that fails if `turn()` is fixed. Against the canonical read on 88 lines of pg1342 ch. I: 13 of 14 cast names (misses George Allen, from a bracketed caption it sets aside; adds "Mr." as a separate name), 43 v 45 sentences, 66 of 71 canonical VERB clauses (93%). Not matched: `acknowledge`, `consider` (an imperative inside dialogue is set aside as a request), `delight`, `ought`. Not wired into `server.mjs`; it does not bind I/you inside a quotation to the quoted speaker (the canonical read does, `adapters/text/speakers.js`).
 - **khora chat tests** (`node --test native/chat/*.test.mjs`, with the patch applied): 106 tests, 66 pass, 2 fail (27, 86; undiagnosed), 38 neither passed nor failed (not looked at).
 - **Not in any remote, only on the owner's Mac** (`~/Downloads/workspace/khora-chat`, `~/Documents/janus/priors`): `outcomes.mjs`, `outcomes.test.mjs`, `discourse.test.mjs`, the ants M1 to M6 panel section, the "interrogative word anywhere" mark, the Ýlir-One door. Ask the owner to attach the folder; do not rewrite it.
 - **Not run**: the full khora suite; any system's real behaviour.
@@ -46,4 +47,5 @@ Repos never call each other; the log is the database and everything derived is a
 > Continue the Fold project. Read `AGENTS.md`, `fold-write-model.md` and `handoff/HANDOFF.md` in clovenbradshaw-ctrl/eodb, branch `ccr-fed9252c-jlvpq1`. Clone the nexus read-only from scores-patch-points (pharos, khora, janus, penelope, the map repo). Apply `handoff/khora-fold-iterate.patch` to khora per the HANDOFF, then follow "Order of work". Update the State and Log sections here and commit on this branch as you go. Ask me to attach `~/Downloads/workspace/khora-chat` from my Mac before touching anything it holds.
 
 ## Log
+- 2026-11-25 (later): document door added (khora commit 16b778d); patch refreshed to 4 commits. Open: wire it into `server.mjs`/the thread; read a quoted imperative as speech, not a request (needs a `say()` option in `thread.mjs`, which has uncommitted edits on the owner's Mac); bind I/you in quotes to the speaker.
 - 2026-11-25: branch restarted from `main` after PR #1 merged; handoff added.

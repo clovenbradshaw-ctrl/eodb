@@ -1,7 +1,7 @@
 From 2fbfb29fc41dbf1776461b68b80baf48b7b3806f Mon Sep 17 00:00:00 2001
 From: Michael Lacy <michaeltlacy@gmail.com>
 Date: Mon, 23 Nov 2026 22:50:29 -0600
-Subject: [PATCH 1/3] exemplar-pool: the smell in the kernel's names, portable,
+Subject: [PATCH 1/4] exemplar-pool: the smell in the kernel's names, portable,
  and loud about gaps
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -175,7 +175,7 @@ index 1bf727e..8e90d0e 100644
 From 3542c86799553d0edc346231f074e186fedd90bf Mon Sep 17 00:00:00 2001
 From: Michael Lacy <michaeltlacy@gmail.com>
 Date: Tue, 24 Nov 2026 13:53:01 -0600
-Subject: [PATCH 2/3] formicary: the user-bound pattern layer: per-user trails
+Subject: [PATCH 2/4] formicary: the user-bound pattern layer: per-user trails
  over the scholia's addresses, with the measured power-law fade
 
 organs/formicary.mjs: one colony per user (own file), trails laid only on a verified use over addresses of the corpus and the scholia (doc:<sha256>[#k], lemma:<lang>:<word>), heads are marks never text, order() is a permutation of its candidates (earned, untried as given, dead), alarms forget, the user can forgetAll, marks mirror to a caller's log with the user named.
@@ -446,7 +446,7 @@ index 40b80d3..4bfb91b 100644
 From 01a0543ea2cc45738f9783d777e963743bb899e9 Mon Sep 17 00:00:00 2001
 From: Claude <noreply@anthropic.com>
 Date: Wed, 25 Nov 2026 17:59:10 +0000
-Subject: [PATCH 3/3] trail-rules: a trail becomes a rule only past a seeded
+Subject: [PATCH 3/4] trail-rules: a trail becomes a rule only past a seeded
  null on a held-out third; the rules about rules as data
 
 Pure kernel module (promoteRoute, promoteHead, ruleEntry, META_RULES). 10 tests, including a
@@ -661,6 +661,148 @@ index 91bad73..74f900d 100644
    "scripts": {
 -    "test": "node native/scripts/check-reading-hygiene.mjs && node native/scripts/check-no-legacy-submodule.mjs && node --test native/the-fold/essay-fold-falsify.test.mjs native/the-fold/pipeline-run-falsify.test.mjs native/the-fold/parameter-induction-falsify.test.mjs native/the-fold/referents-falsify.test.mjs native/the-fold/ground-replay-falsify.test.mjs native/the-fold/constitution.test.mjs native/the-fold/span-drift.test.mjs native/the-fold/standing-cube.test.mjs native/the-fold/step-fold.test.mjs native/the-fold/surf-types.test.mjs native/the-fold/openness.test.mjs box-governor.test.mjs opencode-longform.test.mjs opencode-gather.test.mjs opencode-gather-reason.test.mjs opencode-gather-gate.test.mjs opencode-gather-senses.test.mjs opencode-gather-identity.test.mjs opencode-gather-voids.test.mjs opencode-gather-typos.test.mjs native/adapters/text/ud-parser.test.mjs native/kernel/eot-claim-match.test.mjs native/adapters/text/figure-binding.test.mjs native/adapters/text/non-personal.test.mjs native/adapters/text/reading-referents.test.mjs native/the-fold/declension-wiring.test.mjs native/adapters/text/ledger-opinion.test.mjs native/adapters/text/folded-card.test.mjs native/adapters/text/form-usage.test.mjs native/organs/relation-defs.test.mjs native/organs/encode.test.mjs native/adapters/text/grammar-ud-codec.test.mjs native/organs/greenberg.test.mjs native/adapters/text/ud-tokenize.test.mjs native/adapters/text/grammar-ud.test.mjs native/adapters/text/atom-world.test.mjs native/kernel/stage-identity.test.mjs native/adapters/text/corpus-exclusion.test.mjs native/organs/read-page.test.mjs native/kernel/stage-sense.test.mjs native/organs/coref-person.test.mjs native/organs/recipient-role.test.mjs native/the-fold/weft-atoms.test.mjs native/the-fold/weft-identity.test.mjs native/adapters/text/figure-period.en.test.mjs opencode-shift.test.mjs opencode-workplan-acts.test.mjs opencode-workplan-e2e-falsify.test.mjs opencode-workplan-live-e2e.test.mjs native/organs/code-form.test.mjs native/organs/web.test.mjs native/tests/entity-profile.test.js native/conformance/block-profile.test.mjs tests/opencode-cube.test.mjs native/kernel/identity-cancel.test.mjs native/kernel/reader-identity.test.mjs native/the-fold/reader-log.test.mjs native/the-fold/cancel-identity.test.mjs native/the-fold/arrangement-features.test.mjs native/kernel/attach-prior.test.mjs native/adapters/text/pronoun-gaps.test.mjs native/adapters/text/pronoun-presence.test.mjs native/tests/same-for.test.js native/tests/respects.test.js native/adapters/text/pronoun-presence-chosen.test.mjs native/adapters/text/clause-attach.test.mjs native/kernel/attend.test.mjs native/organs/thoughts.test.mjs native/the-fold/read-process-pronouns.test.mjs native/adapters/text/pronoun-registers.test.mjs native/the-fold/language-names.test.mjs native/tests/reading-baseline.test.mjs native/tests/one-door.test.mjs native/tests/pharos-gate.test.mjs native/adapters/text/pronoun-registers-san.test.mjs native/adapters/text/sanskrit-sandhi.test.mjs native/the-fold/read-san.test.mjs native/adapters/text/grc-reading.test.mjs native/tests/name-prior.test.mjs native/tests/priors-home.test.mjs native/tests/canonical-docs.test.mjs native/tests/language-competency.test.mjs native/tests/apoha.test.mjs native/tests/wikidata-name-giver.test.mjs native/tests/case-marked-clauses.test.mjs native/tests/vector-library.test.mjs native/tests/pos-smell.test.mjs native/tests/nest-from-read.test.mjs native/adapters/text/karaka-total.test.mjs native/adapters/text/gender-from-rows.test.mjs native/adapters/text/referents-in-order.test.mjs native/tests/weave-referents.test.mjs native/chat/thread.test.mjs native/adapters/text/text-mereology.test.mjs native/tests/place-grain.test.mjs native/tests/chat-register.test.mjs",
 +    "test": "node native/scripts/check-reading-hygiene.mjs && node native/scripts/check-no-legacy-submodule.mjs && node --test native/the-fold/essay-fold-falsify.test.mjs native/the-fold/pipeline-run-falsify.test.mjs native/the-fold/parameter-induction-falsify.test.mjs native/the-fold/referents-falsify.test.mjs native/the-fold/ground-replay-falsify.test.mjs native/the-fold/constitution.test.mjs native/the-fold/span-drift.test.mjs native/the-fold/standing-cube.test.mjs native/the-fold/step-fold.test.mjs native/the-fold/surf-types.test.mjs native/the-fold/openness.test.mjs box-governor.test.mjs opencode-longform.test.mjs opencode-gather.test.mjs opencode-gather-reason.test.mjs opencode-gather-gate.test.mjs opencode-gather-senses.test.mjs opencode-gather-identity.test.mjs opencode-gather-voids.test.mjs opencode-gather-typos.test.mjs native/adapters/text/ud-parser.test.mjs native/kernel/eot-claim-match.test.mjs native/adapters/text/figure-binding.test.mjs native/adapters/text/non-personal.test.mjs native/adapters/text/reading-referents.test.mjs native/the-fold/declension-wiring.test.mjs native/adapters/text/ledger-opinion.test.mjs native/adapters/text/folded-card.test.mjs native/adapters/text/form-usage.test.mjs native/organs/relation-defs.test.mjs native/organs/encode.test.mjs native/adapters/text/grammar-ud-codec.test.mjs native/organs/greenberg.test.mjs native/adapters/text/ud-tokenize.test.mjs native/adapters/text/grammar-ud.test.mjs native/adapters/text/atom-world.test.mjs native/kernel/stage-identity.test.mjs native/adapters/text/corpus-exclusion.test.mjs native/organs/read-page.test.mjs native/kernel/stage-sense.test.mjs native/organs/coref-person.test.mjs native/organs/recipient-role.test.mjs native/the-fold/weft-atoms.test.mjs native/the-fold/weft-identity.test.mjs native/adapters/text/figure-period.en.test.mjs opencode-shift.test.mjs opencode-workplan-acts.test.mjs opencode-workplan-e2e-falsify.test.mjs opencode-workplan-live-e2e.test.mjs native/organs/code-form.test.mjs native/organs/web.test.mjs native/tests/entity-profile.test.js native/conformance/block-profile.test.mjs tests/opencode-cube.test.mjs native/kernel/identity-cancel.test.mjs native/kernel/reader-identity.test.mjs native/the-fold/reader-log.test.mjs native/the-fold/cancel-identity.test.mjs native/the-fold/arrangement-features.test.mjs native/kernel/attach-prior.test.mjs native/adapters/text/pronoun-gaps.test.mjs native/adapters/text/pronoun-presence.test.mjs native/tests/same-for.test.js native/tests/respects.test.js native/adapters/text/pronoun-presence-chosen.test.mjs native/adapters/text/clause-attach.test.mjs native/kernel/attend.test.mjs native/organs/thoughts.test.mjs native/the-fold/read-process-pronouns.test.mjs native/adapters/text/pronoun-registers.test.mjs native/the-fold/language-names.test.mjs native/tests/reading-baseline.test.mjs native/tests/one-door.test.mjs native/tests/pharos-gate.test.mjs native/adapters/text/pronoun-registers-san.test.mjs native/adapters/text/sanskrit-sandhi.test.mjs native/the-fold/read-san.test.mjs native/adapters/text/grc-reading.test.mjs native/tests/name-prior.test.mjs native/tests/priors-home.test.mjs native/tests/canonical-docs.test.mjs native/tests/language-competency.test.mjs native/tests/apoha.test.mjs native/tests/wikidata-name-giver.test.mjs native/tests/case-marked-clauses.test.mjs native/tests/vector-library.test.mjs native/tests/pos-smell.test.mjs native/tests/nest-from-read.test.mjs native/adapters/text/karaka-total.test.mjs native/adapters/text/gender-from-rows.test.mjs native/adapters/text/referents-in-order.test.mjs native/tests/weave-referents.test.mjs native/chat/thread.test.mjs native/kernel/trail-rules.test.mjs native/adapters/text/text-mereology.test.mjs native/tests/place-grain.test.mjs native/tests/chat-register.test.mjs",
+     "test:code": "node --test native/the-fold/code-loop.test.mjs native/the-fold/void-loop.test.mjs native/the-fold/void-spec-falsify.test.mjs native/the-fold/tool-call-physics.test.mjs native/the-fold/direct-bridge.test.mjs",
+     "sync": "node scripts/sync.mjs",
+     "sync:check": "node scripts/sync.mjs --check",
+-- 
+2.43.0
+
+
+From 16b778d4708061bdf9108b4b0c11a2243efe84d4 Mon Sep 17 00:00:00 2001
+From: Claude <noreply@anthropic.com>
+Date: Wed, 25 Nov 2026 18:28:12 +0000
+Subject: [PATCH 4/4] chat: the document door: a text is read into the fold
+ paragraph by paragraph, never routed
+
+turn() sent paragraphs holding a quoted question to answering (3 of 8 read in the test text, 9 of the
+first 14 of pg1342 ch. I); say() reads quotations fine (27 of 27). ingestDocument calls say() directly and
+reports every paragraph it sets aside with its reason. 6 tests, with a control that fails if turn() is fixed.
+Against the canonical read on 88 lines: 13 of 14 cast names, 66 of 71 verb clauses. Not wired into server.mjs.
+
+Co-Authored-By: Claude Sonnet 5.5 <noreply@anthropic.com>
+Claude-Session: https://claude.ai/code/session_01AP2eRC5CScKTs8ZE4Wpdoe
+---
+ native/chat/ingest.mjs      | 35 +++++++++++++++++++++++
+ native/chat/ingest.test.mjs | 57 +++++++++++++++++++++++++++++++++++++
+ package.json                |  2 +-
+ 3 files changed, 93 insertions(+), 1 deletion(-)
+ create mode 100644 native/chat/ingest.mjs
+ create mode 100644 native/chat/ingest.test.mjs
+
+diff --git a/native/chat/ingest.mjs b/native/chat/ingest.mjs
+new file mode 100644
+index 0000000..9dc88cb
+--- /dev/null
++++ b/native/chat/ingest.mjs
+@@ -0,0 +1,35 @@
++// chat/ingest.mjs — THE DOCUMENT DOOR OF THE CHAT: a text is READ into the thread's fold, paragraph by paragraph, never routed.
++//
++// WHY. turn() decides first whether a message is a statement or a question, which is right for a person typing. A paragraph of a novel that holds a quoted question ("Do not you want to know
++// who has taken it?") or opens with a quotation is routed to ANSWERING, and its facts never enter the fold (measured 2026-11-25, pg1342 chapter I: 9 of the first 14 paragraphs read; handed to say()
++// directly, 27 of 27, and the dialogue could then be asked about). The reader was never the limit. This door hands each paragraph to the thread's own say(), which reads every sentence with the
++// chat's parser, quotations included. It adds no reader and no rule: it chooses the door.
++//
++// WHAT IT DOES NOT DO. It does not bind the I and you inside a quotation to the quoted speaker: the canonical read does that (adapters/text/speakers.js) and the chat's pronoun binder does not
++// (thread.mjs bindings: "inside a quotation: not the user's words"). It does not write the log: each read is offered to `onRead(paragraph, result)` and the caller weaves it (server.mjs does with weaveSay).
++// A paragraph that is not text (a bracketed note) or that say() sets aside (an imperative is a request, and the chat acts on no request) is REPORTED with its reason, never dropped silently.
++//
++// ingestDocument(thread, text, { onRead }) -> { paragraphs, read, sentences, facts, setAside: [{ text, why }], gap }
++const paragraphsOf = (text) => {
++  const out = []; let cur = [];
++  for (const line of String(text ?? "").split("\n")) { if (line.trim() === "") { if (cur.length) out.push(cur.join(" ")); cur = []; } else cur.push(line.trim()); }
++  if (cur.length) out.push(cur.join(" "));
++  return out.map((p) => p.split(" ").filter(Boolean).join(" ")).filter(Boolean);   // the file's hard wraps become spaces
++};
++const bracketed = (p) => p.startsWith("[") && p.endsWith("]");   // a note in the source's own markup (an illustration credit), not a sentence of the text
++
++export async function ingestDocument(thread, text, { onRead = null } = {}) {
++  const paras = paragraphsOf(text);
++  if (!paras.length) return { paragraphs: 0, read: 0, sentences: 0, facts: 0, setAside: [], gap: "empty_text" };
++  const res = { paragraphs: paras.length, read: 0, sentences: 0, facts: 0, setAside: [], gap: null };
++  for (const p of paras) {
++    if (bracketed(p)) { res.setAside.push({ text: p, why: "a bracketed note in the source's markup, not a sentence" }); continue; }
++    const r = await thread.say(p);
++    if (!r || r.type !== "read") { res.setAside.push({ text: p, why: `the thread did not read it (${r?.type ?? "nothing"})` }); continue; }
++    if (!r.sentences) { res.setAside.push({ text: p, why: r.requests?.length ? "it reads as a request, which the chat does not act on" : "no sentence in it could be read" }); continue; }
++    res.read += 1; res.sentences += r.sentences; res.facts += (r.facts ?? []).length;
++    if (r.requests?.length) res.setAside.push({ text: r.requests[0], why: "a sentence in the paragraph reads as a request, which the chat does not act on" });
++    if (onRead) onRead(p, r);
++  }
++  return res;
++}
+diff --git a/native/chat/ingest.test.mjs b/native/chat/ingest.test.mjs
+new file mode 100644
+index 0000000..3d1ca1a
+--- /dev/null
++++ b/native/chat/ingest.test.mjs
+@@ -0,0 +1,57 @@
++// chat/ingest.test.mjs — a document is READ, never routed: the ingest door reads every paragraph of a text into the thread's fold, whatever the paragraph looks like.
++// Why it exists (measured 2026-11-25, pg1342 chapter I, 27 paragraphs): handed one at a time through turn(), only 9 of the first 14 paragraphs were read; the rest, which hold a quoted question or
++// open with a quotation, were routed to ANSWERING (act_open, action_not_in_text, fragment_unclear) and their facts never entered the fold. Handed to say() directly, all 27 were read and the
++// dialogue answered ("What did Mrs. Long say?"). The reader was never the limit; the routing was. Needs the reader's priors (KHORA_PRIORS_DIR); skips without them.
++import test from "node:test"; import assert from "node:assert/strict";
++let mk = null, why = null, ingestDocument = null;
++try { const { makeThread } = await import("./thread.mjs"); ({ ingestDocument } = await import("./ingest.mjs")); mk = () => makeThread({ hl: "http://127.0.0.1:1", know: null, codeRouter: null, now: () => new Date("2026-11-25T14:00:00") }); await mk(); } catch (e) { why = String(e?.message ?? e).slice(0, 120); if (!String(e?.code ?? e).includes("ERR_MODULE_NOT_FOUND") || String(e?.message).includes("ingest.mjs")) throw e; }
++const T = { skip: mk ? false : `no reader here: ${why}` };
++// Pride and Prejudice, chapter I (public domain; Zenodotus 01-literature-books/gutenberg/pg1342), hard-wrapped as in the file
++const CH1 = [
++  "“My dear Mr. Bennet,” said his lady to him one day, “have you heard that\nNetherfield Park is let at last?”",
++  "Mr. Bennet replied that he had not.",
++  "“But it is,” returned she; “for Mrs. Long has just been here, and she\ntold me all about it.”",
++  "Mr. Bennet made no answer.",
++  "“Do not you want to know who has taken it?” cried his wife, impatiently.",
++  "“Why, my dear, you must know, Mrs. Long says that Netherfield is taken\nby a young man of large fortune from the north of England; that he came\ndown on Monday in a chaise and four to see the place.”",
++  "“What is his name?”",
++  "“Bingley.”",
++].join("\n\n");
++
++test("every paragraph is read, including those that open with a quotation or hold a quoted question", T, async () => {
++  const th = await mk(); const r = await ingestDocument(th, CH1);
++  assert.equal(r.paragraphs, 8); assert.equal(r.read, 8, JSON.stringify(r.setAside)); assert.deepEqual(r.setAside, []);
++  assert.ok(r.facts >= 8, `facts ${r.facts}`); assert.ok(r.sentences >= 8);
++  assert.equal(r.gap, null);
++});
++
++test("what was said inside the dialogue can be asked afterwards, with its sentence as evidence", T, async () => {
++  const th = await mk(); await ingestDocument(th, CH1);
++  const a = await th.turn("What did Mrs. Long say?"); assert.equal(a.handled, true); assert.match(a.text, /Netherfield is taken by a young man/); assert.ok(a.evidence.length >= 1);
++  assert.match((await th.turn("When did he come down?")).text, /Monday/);
++  assert.match((await th.turn("Who made no answer?")).text, /Mr\. Bennet/);
++});
++
++test("control built to fail: the same text through turn() loses paragraphs that ingest keeps (the routing the door exists to avoid)", T, async () => {
++  const th = await mk(); let viaTurn = 0; for (const p of CH1.split("\n\n")) if ((await th.turn(p.split("\n").join(" "))).type === "read") viaTurn++;
++  const r = await ingestDocument(await mk(), CH1);
++  console.log(`# read via turn(): ${viaTurn} of ${r.paragraphs}; via ingest: ${r.read} of ${r.paragraphs}`);
++  assert.ok(r.read > viaTurn, `ingest ${r.read} must read more than turn ${viaTurn}`);
++});
++
++test("ingest does not change how a typed message is handled: a question afterwards is answered, not read", T, async () => {
++  const th = await mk(); await ingestDocument(th, CH1);
++  const q = await th.turn("Who replied that he had not?"); assert.notEqual(q.type, "read");
++});
++
++test("an empty text is a typed gap; a paragraph the reader holds nothing from is reported, never dropped silently", T, async () => {
++  const th = await mk(); const e = await ingestDocument(th, "  \n\n  "); assert.equal(e.read, 0); assert.equal(e.gap, "empty_text");
++  const r = await ingestDocument(await mk(), "Mr. Bennet made no answer.\n\n“Go away,” said Mr. Bennet.");
++  assert.equal(r.paragraphs, 2); assert.equal(r.read + r.setAside.length, 2, "every paragraph is either read or reported");
++  for (const s of r.setAside) assert.ok(s.text && s.why, "a set-aside paragraph says which and why");
++});
++
++test("each read is offered to the caller, so the log is written by the caller, not by this door", T, async () => {
++  const th = await mk(), seen = []; await ingestDocument(th, CH1, { onRead: (p, res) => seen.push([p.slice(0, 12), res.type]) });
++  assert.equal(seen.length, 8); assert.ok(seen.every(([, t]) => t === "read"));
++});
+diff --git a/package.json b/package.json
+index 74f900d..067764e 100644
+--- a/package.json
++++ b/package.json
+@@ -4,7 +4,7 @@
+   "description": "EOReader 7 now has a native canonical recursive-reading kernel.",
+   "main": "kernel.js",
+   "scripts": {
+-    "test": "node native/scripts/check-reading-hygiene.mjs && node native/scripts/check-no-legacy-submodule.mjs && node --test native/the-fold/essay-fold-falsify.test.mjs native/the-fold/pipeline-run-falsify.test.mjs native/the-fold/parameter-induction-falsify.test.mjs native/the-fold/referents-falsify.test.mjs native/the-fold/ground-replay-falsify.test.mjs native/the-fold/constitution.test.mjs native/the-fold/span-drift.test.mjs native/the-fold/standing-cube.test.mjs native/the-fold/step-fold.test.mjs native/the-fold/surf-types.test.mjs native/the-fold/openness.test.mjs box-governor.test.mjs opencode-longform.test.mjs opencode-gather.test.mjs opencode-gather-reason.test.mjs opencode-gather-gate.test.mjs opencode-gather-senses.test.mjs opencode-gather-identity.test.mjs opencode-gather-voids.test.mjs opencode-gather-typos.test.mjs native/adapters/text/ud-parser.test.mjs native/kernel/eot-claim-match.test.mjs native/adapters/text/figure-binding.test.mjs native/adapters/text/non-personal.test.mjs native/adapters/text/reading-referents.test.mjs native/the-fold/declension-wiring.test.mjs native/adapters/text/ledger-opinion.test.mjs native/adapters/text/folded-card.test.mjs native/adapters/text/form-usage.test.mjs native/organs/relation-defs.test.mjs native/organs/encode.test.mjs native/adapters/text/grammar-ud-codec.test.mjs native/organs/greenberg.test.mjs native/adapters/text/ud-tokenize.test.mjs native/adapters/text/grammar-ud.test.mjs native/adapters/text/atom-world.test.mjs native/kernel/stage-identity.test.mjs native/adapters/text/corpus-exclusion.test.mjs native/organs/read-page.test.mjs native/kernel/stage-sense.test.mjs native/organs/coref-person.test.mjs native/organs/recipient-role.test.mjs native/the-fold/weft-atoms.test.mjs native/the-fold/weft-identity.test.mjs native/adapters/text/figure-period.en.test.mjs opencode-shift.test.mjs opencode-workplan-acts.test.mjs opencode-workplan-e2e-falsify.test.mjs opencode-workplan-live-e2e.test.mjs native/organs/code-form.test.mjs native/organs/web.test.mjs native/tests/entity-profile.test.js native/conformance/block-profile.test.mjs tests/opencode-cube.test.mjs native/kernel/identity-cancel.test.mjs native/kernel/reader-identity.test.mjs native/the-fold/reader-log.test.mjs native/the-fold/cancel-identity.test.mjs native/the-fold/arrangement-features.test.mjs native/kernel/attach-prior.test.mjs native/adapters/text/pronoun-gaps.test.mjs native/adapters/text/pronoun-presence.test.mjs native/tests/same-for.test.js native/tests/respects.test.js native/adapters/text/pronoun-presence-chosen.test.mjs native/adapters/text/clause-attach.test.mjs native/kernel/attend.test.mjs native/organs/thoughts.test.mjs native/the-fold/read-process-pronouns.test.mjs native/adapters/text/pronoun-registers.test.mjs native/the-fold/language-names.test.mjs native/tests/reading-baseline.test.mjs native/tests/one-door.test.mjs native/tests/pharos-gate.test.mjs native/adapters/text/pronoun-registers-san.test.mjs native/adapters/text/sanskrit-sandhi.test.mjs native/the-fold/read-san.test.mjs native/adapters/text/grc-reading.test.mjs native/tests/name-prior.test.mjs native/tests/priors-home.test.mjs native/tests/canonical-docs.test.mjs native/tests/language-competency.test.mjs native/tests/apoha.test.mjs native/tests/wikidata-name-giver.test.mjs native/tests/case-marked-clauses.test.mjs native/tests/vector-library.test.mjs native/tests/pos-smell.test.mjs native/tests/nest-from-read.test.mjs native/adapters/text/karaka-total.test.mjs native/adapters/text/gender-from-rows.test.mjs native/adapters/text/referents-in-order.test.mjs native/tests/weave-referents.test.mjs native/chat/thread.test.mjs native/kernel/trail-rules.test.mjs native/adapters/text/text-mereology.test.mjs native/tests/place-grain.test.mjs native/tests/chat-register.test.mjs",
++    "test": "node native/scripts/check-reading-hygiene.mjs && node native/scripts/check-no-legacy-submodule.mjs && node --test native/the-fold/essay-fold-falsify.test.mjs native/the-fold/pipeline-run-falsify.test.mjs native/the-fold/parameter-induction-falsify.test.mjs native/the-fold/referents-falsify.test.mjs native/the-fold/ground-replay-falsify.test.mjs native/the-fold/constitution.test.mjs native/the-fold/span-drift.test.mjs native/the-fold/standing-cube.test.mjs native/the-fold/step-fold.test.mjs native/the-fold/surf-types.test.mjs native/the-fold/openness.test.mjs box-governor.test.mjs opencode-longform.test.mjs opencode-gather.test.mjs opencode-gather-reason.test.mjs opencode-gather-gate.test.mjs opencode-gather-senses.test.mjs opencode-gather-identity.test.mjs opencode-gather-voids.test.mjs opencode-gather-typos.test.mjs native/adapters/text/ud-parser.test.mjs native/kernel/eot-claim-match.test.mjs native/adapters/text/figure-binding.test.mjs native/adapters/text/non-personal.test.mjs native/adapters/text/reading-referents.test.mjs native/the-fold/declension-wiring.test.mjs native/adapters/text/ledger-opinion.test.mjs native/adapters/text/folded-card.test.mjs native/adapters/text/form-usage.test.mjs native/organs/relation-defs.test.mjs native/organs/encode.test.mjs native/adapters/text/grammar-ud-codec.test.mjs native/organs/greenberg.test.mjs native/adapters/text/ud-tokenize.test.mjs native/adapters/text/grammar-ud.test.mjs native/adapters/text/atom-world.test.mjs native/kernel/stage-identity.test.mjs native/adapters/text/corpus-exclusion.test.mjs native/organs/read-page.test.mjs native/kernel/stage-sense.test.mjs native/organs/coref-person.test.mjs native/organs/recipient-role.test.mjs native/the-fold/weft-atoms.test.mjs native/the-fold/weft-identity.test.mjs native/adapters/text/figure-period.en.test.mjs opencode-shift.test.mjs opencode-workplan-acts.test.mjs opencode-workplan-e2e-falsify.test.mjs opencode-workplan-live-e2e.test.mjs native/organs/code-form.test.mjs native/organs/web.test.mjs native/tests/entity-profile.test.js native/conformance/block-profile.test.mjs tests/opencode-cube.test.mjs native/kernel/identity-cancel.test.mjs native/kernel/reader-identity.test.mjs native/the-fold/reader-log.test.mjs native/the-fold/cancel-identity.test.mjs native/the-fold/arrangement-features.test.mjs native/kernel/attach-prior.test.mjs native/adapters/text/pronoun-gaps.test.mjs native/adapters/text/pronoun-presence.test.mjs native/tests/same-for.test.js native/tests/respects.test.js native/adapters/text/pronoun-presence-chosen.test.mjs native/adapters/text/clause-attach.test.mjs native/kernel/attend.test.mjs native/organs/thoughts.test.mjs native/the-fold/read-process-pronouns.test.mjs native/adapters/text/pronoun-registers.test.mjs native/the-fold/language-names.test.mjs native/tests/reading-baseline.test.mjs native/tests/one-door.test.mjs native/tests/pharos-gate.test.mjs native/adapters/text/pronoun-registers-san.test.mjs native/adapters/text/sanskrit-sandhi.test.mjs native/the-fold/read-san.test.mjs native/adapters/text/grc-reading.test.mjs native/tests/name-prior.test.mjs native/tests/priors-home.test.mjs native/tests/canonical-docs.test.mjs native/tests/language-competency.test.mjs native/tests/apoha.test.mjs native/tests/wikidata-name-giver.test.mjs native/tests/case-marked-clauses.test.mjs native/tests/vector-library.test.mjs native/tests/pos-smell.test.mjs native/tests/nest-from-read.test.mjs native/adapters/text/karaka-total.test.mjs native/adapters/text/gender-from-rows.test.mjs native/adapters/text/referents-in-order.test.mjs native/tests/weave-referents.test.mjs native/chat/thread.test.mjs native/chat/ingest.test.mjs native/kernel/trail-rules.test.mjs native/adapters/text/text-mereology.test.mjs native/tests/place-grain.test.mjs native/tests/chat-register.test.mjs",
      "test:code": "node --test native/the-fold/code-loop.test.mjs native/the-fold/void-loop.test.mjs native/the-fold/void-spec-falsify.test.mjs native/the-fold/tool-call-physics.test.mjs native/the-fold/direct-bridge.test.mjs",
      "sync": "node scripts/sync.mjs",
      "sync:check": "node scripts/sync.mjs --check",

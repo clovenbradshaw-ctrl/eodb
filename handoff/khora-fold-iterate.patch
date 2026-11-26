@@ -3831,7 +3831,7 @@ index 444bfb37..59046792 100644
 From 97eb1c634d68dd4f0a9d392cd0e05e1a8abfc613 Mon Sep 17 00:00:00 2001
 From: Claude <noreply@anthropic.com>
 Date: Thu, 26 Nov 2026 22:20:24 +0000
-Subject: [PATCH] the whole reading is written into the pharos: text-codec,
+Subject: [PATCH 1/2] the whole reading is written into the pharos: text-codec,
  text-layers, text-quotes, text-frames, text-gap (khora writes Existence and
  Structure; Janus and Penelope read by kind)
 
@@ -4034,6 +4034,72 @@ index 3ed0acd8..9fb8e9fc 100644
    { id: "L8", rule: "NO SILENT DROP: every paragraph is read or reported with its reason.", status: "built", evidence: "chat/ingest.mjs setAside" },
    { id: "L10", rule: "A CODEC CARRIES ITS CONVENTIONS: the quote table (and, when built, the prosification rules) is part of the codec, as its form table and order parameters are; the codec default is the prior and the edition's own marks are the evidence (the variant wins, the default fills in what marks cannot show); no evidence and no default is a typed gap.", status: "quote table built (codecQuotes, carried on foldCodec and read by readFramed); prosification rules not built; the janus codec file (UDGrammar@1) does not yet carry a `quotes` field", evidence: "adapters/text/quote-frames.js::codecQuotes; scripts/measure-quote-infer.mjs; scripts/measure-codec-quotes.mjs" },
    { id: "L9", rule: "CODECS ARE CONTINUOUS: a language is a point in a continuum of tables and priors loaded when needed, so a new language lowers surprise instead of switching a branch.", status: "first piece built (R1); the continuity of tables across related languages is not", evidence: "related languages already explain each other (Norwegian under Danish reaches 0.76 to 0.80 coverage)" },
+-- 
+2.43.0
+
+
+From c524b0e75463d63e685d2df897538ac1fe9f1a04 Mon Sep 17 00:00:00 2001
+From: Claude <noreply@anthropic.com>
+Date: Thu, 26 Nov 2026 23:20:15 +0000
+Subject: [PATCH 2/2] codec-fold: a bits model option (vocab | constant),
+ tested and NOT adopted: constant pricing fixes one pcm-over-eng case and
+ loses one Genesis edition; the todo test carries the measurement
+
+Co-Authored-By: Claude Sonnet 5.5 <noreply@anthropic.com>
+Claude-Session: https://claude.ai/code/session_01AP2eRC5CScKTs8ZE4Wpdoe
+---
+ native/tests/reading-standard.test.mjs |  2 +-
+ native/the-fold/codec-fold.mjs         | 10 ++++++----
+ 2 files changed, 7 insertions(+), 5 deletions(-)
+
+diff --git a/native/tests/reading-standard.test.mjs b/native/tests/reading-standard.test.mjs
+index 9815af2c..c4320220 100644
+--- a/native/tests/reading-standard.test.mjs
++++ b/native/tests/reading-standard.test.mjs
+@@ -93,7 +93,7 @@ test("L10: the codec foldCodec finds carries its quote table, read from the text
+   const b = await foldCodec("Mr. Bennet replied that he had not. The woman said that the serpent beguiled her. My dear, you must know that Netherfield is taken by a young man of large fortune."); assert.ok(b.chosen); if (b.quotes.table) assert.equal(b.quotes.source, "codec"); else assert.equal(b.quotes.gap.gap, "no_quote_table", "a codec with no table and a text with no marks: the typed gap, not a guess");
+ });
+ 
+-test("R1 (found while testing L10): an English novel passage is explained best by the English codec, with p that does not saturate on a one-bit difference", { todo: "KNOWN NON-CONFORMANCE: on 80 words of Pride and Prejudice the chosen codec is pcm (Nigerian Pidgin, an English-lexified codec) at p = 1.00 although eng has HIGHER coverage (0.86 vs 0.82); pcm wins on bits per token (14.4 vs 15.4). The 95% Genesis result did not see this: the ranking is by bits per token, and p saturates. Falsifier for a fix: eng chosen on this passage AND on the 37 Genesis editions without losing any" }, async () => {
++test("R1 (found while testing L10): an English novel passage is explained best by the English codec, with p that does not saturate on a one-bit difference", { todo: "KNOWN NON-CONFORMANCE (tested 2026-11-26, not fixed): an English novel passage is chosen as pcm (Nigerian Pidgin, an English-lexified codec) at p = 1.00. TWO causes, measured: (1) a known word is priced log2(table size), and the table size is the TREEBANK's (eng 13287, pcm 3967, tgl 209), so a small table makes every known word cheaper: on the 80-word-longer passage eng covers MORE (0.86 v 0.82) yet pcm wins on bits; (2) on the shorter passage pcm's coverage is genuinely HIGHER (0.87 v 0.85), because its table holds English words. TRIED: one language-independent price per known word (CODEC_FOLD_BITS=constant): fixes cause 1 (the long passage chooses eng) but NOT cause 2, and it LOSES a Genesis edition (Tagalog goes to Indonesian: 92 of 97 against 93), so it fails the no-regression gate and is not adopted. NEXT, untested: evidence from words only the candidate holds (pcm's own function words dey, na, wey are absent from English text)" }, async () => {
+   const q = "“My dear Mr. Bennet,” said his lady to him one day, “have you heard that Netherfield Park is let at last?” Mr. Bennet replied that he had not. “But it is,” returned she; “for Mrs. Long has just been here, and she told me all about it.” Mr. Bennet made no answer."; const r = await foldCodec(q);
+   assert.equal(r.chosen, "eng", `chose ${r.chosen}: ${JSON.stringify(r.distribution.slice(0, 3).map((d) => [d.code, +d.p.toFixed(2), +d.coverage.toFixed(2), +d.bitsPerToken.toFixed(1)]))}`);
+ });
+diff --git a/native/the-fold/codec-fold.mjs b/native/the-fold/codec-fold.mjs
+index 525d9aa3..f65f03a9 100644
+--- a/native/the-fold/codec-fold.mjs
++++ b/native/the-fold/codec-fold.mjs
+@@ -57,9 +57,11 @@ function tokensOf(text, v) {
+ const knownIn = (v, tok) => v.forms.has(tok) || (v.spaced && tok.includes("'") && v.forms.has(tok.split("'").pop())) || (v.spaced && tok.includes("’") && v.forms.has(tok.split("’").pop()));
+ 
+ /** surpriseOf(text, code) -> { code, tokens, known, coverage, totalBits, bitsPerToken } */
+-export function surpriseOf(text, code) {
++export const KNOWN_BITS_MODELS = Object.freeze(["vocab", "constant"]);   // how a KNOWN word is priced: "vocab" = log2(this codec's table size) (the table's size is the TREEBANK's, not the language's); "constant" = one language-independent price
++export const NOMINAL_VOCAB = 2 ** 14;
++export function surpriseOf(text, code, { bits = "vocab" } = {}) {
+   const v = loadVocab(code), toks = tokensOf(text, v), known = toks.filter((t) => knownIn(v, t)).length, n = toks.length || 1;
+-  const bitsKnown = Math.log2(v.size / (1 - ESCAPE)), bitsUnknown = Math.log2(UNIVERSE / ESCAPE), total = known * bitsKnown + (toks.length - known) * bitsUnknown;
++  const bitsKnown = Math.log2((bits === "constant" ? NOMINAL_VOCAB : v.size) / (1 - ESCAPE)), bitsUnknown = Math.log2(UNIVERSE / ESCAPE), total = known * bitsKnown + (toks.length - known) * bitsUnknown;
+   return Promise.resolve({ code, tokens: toks.length, known, coverage: known / n, totalBits: total, bitsPerToken: total / n });
+ }
+ export const entropyOf = (dist) => -dist.reduce((s, d) => s + (d.p > 0 ? d.p * Math.log2(d.p) : 0), 0);
+@@ -70,14 +72,14 @@ const shuffleLetters = (text, r) => String(text).replace(/[\p{L}\p{M}]+/gu, (w)
+  * foldCodec(text, { codes }) -> { chosen, distribution: [{ code, p, coverage, bitsPerToken, tokens }], entropy, pruned, nullCoverage, gap? }
+  * `distribution` is over the codecs that survived the alphabet pass, sorted by probability; `chosen` is its head, and is null with a typed gap when the best codec's coverage does not beat the shuffled null.
+  */
+-export async function foldCodec(text, { codes = null, seed = 1 } = {}) {
++export async function foldCodec(text, { codes = null, seed = 1, bits = process.env.CODEC_FOLD_BITS ?? "vocab" } = {}) {
+   const idx = index(), held = codes ?? idx.codes; considered = held.length;
+   const letters = [...String(text ?? "").toLowerCase()].filter(isLetter); if (!letters.length) return { chosen: null, distribution: [], entropy: 0, pruned: held.length, gap: { gap: "no_letters" } };
+   // stage 1: the alphabet pass: how much of the text's letters can this codec write at all? keep the codecs within a whisker of the best (relative, not a typed floor)
+   const cover = Object.fromEntries(held.map((c) => { const a = new Set(idx.by[c].alphabet); return [c, letters.filter((ch) => a.has(ch)).length / letters.length]; })), best = Math.max(...Object.values(cover));
+   const cand = held.filter((c) => cover[c] >= best - 0.02);
+   // stage 2: surprise under each candidate's vocabulary (loaded now, memoised)
+-  const rows = []; for (const c of cand) rows.push(await surpriseOf(text, c));
++  const rows = []; for (const c of cand) rows.push(await surpriseOf(text, c, { bits }));
+   const minBits = Math.min(...rows.map((r) => r.totalBits)), z = rows.reduce((s, r) => s + 2 ** (-(r.totalBits - minBits)), 0);
+   const distribution = rows.map((r) => ({ code: r.code, p: 2 ** (-(r.totalBits - minBits)) / z, coverage: r.coverage, bitsPerToken: r.bitsPerToken, tokens: r.tokens })).sort((a, b) => b.p - a.p);
+   // the measured null: the same text with each token's letters shuffled, under the best codec: coverage by chance
 -- 
 2.43.0
 

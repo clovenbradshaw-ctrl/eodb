@@ -20,7 +20,7 @@ Co-Authored-By: Claude Sonnet 5.5 <noreply@anthropic.com>
  2 files changed, 93 insertions(+), 12 deletions(-)
 
 diff --git a/native/adapters/text/exemplar-pool.mjs b/native/adapters/text/exemplar-pool.mjs
-index fdc4f8f..0326d5e 100644
+index fdc4f8f1..0326d5e6 100644
 --- a/native/adapters/text/exemplar-pool.mjs
 +++ b/native/adapters/text/exemplar-pool.mjs
 @@ -9,28 +9,52 @@
@@ -121,7 +121,7 @@ index fdc4f8f..0326d5e 100644
    try {
      const data = JSON.parse(fs.readFileSync(EMBEDDINGS_3D_PATH, "utf8"));
 diff --git a/native/adapters/text/exemplar-pool.test.mjs b/native/adapters/text/exemplar-pool.test.mjs
-index 1bf727e..8e90d0e 100644
+index 1bf727ed..8e90d0eb 100644
 --- a/native/adapters/text/exemplar-pool.test.mjs
 +++ b/native/adapters/text/exemplar-pool.test.mjs
 @@ -30,3 +30,43 @@ test("empty cells have no exemplars", () => {
@@ -195,7 +195,7 @@ Co-Authored-By: Claude Sonnet 5.5 <noreply@anthropic.com>
  create mode 100644 native/organs/formicary.test.mjs
 
 diff --git a/native/kernel/stigmergy.js b/native/kernel/stigmergy.js
-index d9d3adc..a983ccc 100644
+index d9d3adc2..a983cccd 100644
 --- a/native/kernel/stigmergy.js
 +++ b/native/kernel/stigmergy.js
 @@ -41,9 +41,14 @@ export const TRAIL_WINDOW = 128; // deposits kept per head — old ones evaporat
@@ -248,7 +248,7 @@ index d9d3adc..a983ccc 100644
      if (a.meanMs !== null && b.meanMs !== null && a.meanMs !== b.meanMs) return a.meanMs - b.meanMs;
 diff --git a/native/organs/formicary.mjs b/native/organs/formicary.mjs
 new file mode 100644
-index 0000000..91ec991
+index 00000000..91ec991f
 --- /dev/null
 +++ b/native/organs/formicary.mjs
 @@ -0,0 +1,69 @@
@@ -323,7 +323,7 @@ index 0000000..91ec991
 +}
 diff --git a/native/organs/formicary.test.mjs b/native/organs/formicary.test.mjs
 new file mode 100644
-index 0000000..8fbcd93
+index 00000000..8fbcd93e
 --- /dev/null
 +++ b/native/organs/formicary.test.mjs
 @@ -0,0 +1,87 @@
@@ -415,7 +415,7 @@ index 0000000..8fbcd93
 +  assert.equal(openFormicary({ user: "u2", dir: tmp() }).pharos().on, false, "no writer given: nothing goes to pharos, and it says so");
 +});
 diff --git a/native/organs/trail-store.mjs b/native/organs/trail-store.mjs
-index 40b80d3..4bfb91b 100644
+index 40b80d3c..4bfb91bf 100644
 --- a/native/organs/trail-store.mjs
 +++ b/native/organs/trail-store.mjs
 @@ -50,7 +50,7 @@ const merge = (a, b) => {
@@ -465,7 +465,7 @@ Claude-Session: https://claude.ai/code/session_01AP2eRC5CScKTs8ZE4Wpdoe
 
 diff --git a/native/kernel/trail-rules.js b/native/kernel/trail-rules.js
 new file mode 100644
-index 0000000..817bd33
+index 00000000..817bd33c
 --- /dev/null
 +++ b/native/kernel/trail-rules.js
 @@ -0,0 +1,93 @@
@@ -564,7 +564,7 @@ index 0000000..817bd33
 +export const metaRuleTable = () => META_RULES.map((m) => ({ id: m.id, name: m.name, rule: m.rule, falsifier: m.falsifier, enforcedBy: m.enforcedBy, built: m.built }));
 diff --git a/native/kernel/trail-rules.test.mjs b/native/kernel/trail-rules.test.mjs
 new file mode 100644
-index 0000000..0205f83
+index 00000000..0205f830
 --- /dev/null
 +++ b/native/kernel/trail-rules.test.mjs
 @@ -0,0 +1,83 @@
@@ -652,7 +652,7 @@ index 0000000..0205f83
 +  assert.equal(t.find((r) => r.id === "M4").built, true);
 +});
 diff --git a/package.json b/package.json
-index 91bad73..74f900d 100644
+index 91bad738..74f900d1 100644
 --- a/package.json
 +++ b/package.json
 @@ -4,7 +4,7 @@
@@ -691,7 +691,7 @@ Claude-Session: https://claude.ai/code/session_01AP2eRC5CScKTs8ZE4Wpdoe
 
 diff --git a/native/chat/ingest.mjs b/native/chat/ingest.mjs
 new file mode 100644
-index 0000000..9dc88cb
+index 00000000..9dc88cb9
 --- /dev/null
 +++ b/native/chat/ingest.mjs
 @@ -0,0 +1,35 @@
@@ -732,7 +732,7 @@ index 0000000..9dc88cb
 +}
 diff --git a/native/chat/ingest.test.mjs b/native/chat/ingest.test.mjs
 new file mode 100644
-index 0000000..3d1ca1a
+index 00000000..3d1ca1af
 --- /dev/null
 +++ b/native/chat/ingest.test.mjs
 @@ -0,0 +1,57 @@
@@ -794,7 +794,7 @@ index 0000000..3d1ca1a
 +  assert.equal(seen.length, 8); assert.ok(seen.every(([, t]) => t === "read"));
 +});
 diff --git a/package.json b/package.json
-index 74f900d..067764e 100644
+index 74f900d1..067764e2 100644
 --- a/package.json
 +++ b/package.json
 @@ -4,7 +4,7 @@
@@ -834,7 +834,7 @@ Claude-Session: https://claude.ai/code/session_01AP2eRC5CScKTs8ZE4Wpdoe
  create mode 100644 native/chat/quote-frames.test.mjs
 
 diff --git a/native/chat/ingest.mjs b/native/chat/ingest.mjs
-index 9dc88cb..c1dccd9 100644
+index 9dc88cb9..c1dccd9b 100644
 --- a/native/chat/ingest.mjs
 +++ b/native/chat/ingest.mjs
 @@ -9,7 +9,12 @@
@@ -908,7 +908,7 @@ index 9dc88cb..c1dccd9 100644
 +}
 diff --git a/native/chat/quote-frames.js b/native/chat/quote-frames.js
 new file mode 100644
-index 0000000..ddbb3ba
+index 00000000..ddbb3baa
 --- /dev/null
 +++ b/native/chat/quote-frames.js
 @@ -0,0 +1,84 @@
@@ -998,7 +998,7 @@ index 0000000..ddbb3ba
 +}
 diff --git a/native/chat/quote-frames.test.mjs b/native/chat/quote-frames.test.mjs
 new file mode 100644
-index 0000000..907586f
+index 00000000..907586f3
 --- /dev/null
 +++ b/native/chat/quote-frames.test.mjs
 @@ -0,0 +1,111 @@
@@ -1114,7 +1114,7 @@ index 0000000..907586f
 +  assert.ok(u.frames.length >= 1 && u.frames.every((f) => f.framed === null), JSON.stringify(u.frames)); assert.ok(u.quoteGaps.some((g) => g.gap === "no_quote_table"));
 +});
 diff --git a/package.json b/package.json
-index 067764e..4b0deba 100644
+index 067764e2..4b0deba0 100644
 --- a/package.json
 +++ b/package.json
 @@ -4,7 +4,7 @@
@@ -1150,7 +1150,7 @@ Claude-Session: https://claude.ai/code/session_01AP2eRC5CScKTs8ZE4Wpdoe
  3 files changed, 43 insertions(+), 7 deletions(-)
 
 diff --git a/native/chat/ingest.mjs b/native/chat/ingest.mjs
-index c1dccd9..57ea80b 100644
+index c1dccd9b..57ea80ba 100644
 --- a/native/chat/ingest.mjs
 +++ b/native/chat/ingest.mjs
 @@ -23,10 +23,12 @@ const paragraphsOf = (text) => {
@@ -1168,7 +1168,7 @@ index c1dccd9..57ea80b 100644
    for (const [pi, p] of paras.entries()) {
      if (bracketed(p)) { res.setAside.push({ text: p, why: "a bracketed note in the source's markup, not a sentence" }); continue; }
 diff --git a/native/chat/quote-frames.js b/native/chat/quote-frames.js
-index ddbb3ba..62b9d78 100644
+index ddbb3baa..62b9d780 100644
 --- a/native/chat/quote-frames.js
 +++ b/native/chat/quote-frames.js
 @@ -11,15 +11,29 @@
@@ -1230,7 +1230,7 @@ index ddbb3ba..62b9d78 100644
  }
  
 diff --git a/native/chat/quote-frames.test.mjs b/native/chat/quote-frames.test.mjs
-index 907586f..ef01f76 100644
+index 907586f3..ef01f76c 100644
 --- a/native/chat/quote-frames.test.mjs
 +++ b/native/chat/quote-frames.test.mjs
 @@ -109,3 +109,22 @@ test("FALSIFIER: a dash-dialogue paragraph, or a language with no table, is fram
@@ -1286,7 +1286,7 @@ Claude-Session: https://claude.ai/code/session_01AP2eRC5CScKTs8ZE4Wpdoe
  create mode 100644 native/chat/speech-frames.test.mjs
 
 diff --git a/native/chat/ingest.mjs b/native/chat/ingest.mjs
-index 57ea80b..96be151 100644
+index 57ea80ba..96be151a 100644
 --- a/native/chat/ingest.mjs
 +++ b/native/chat/ingest.mjs
 @@ -14,6 +14,11 @@
@@ -1384,7 +1384,7 @@ index 57ea80b..96be151 100644
 +}
 diff --git a/native/chat/speech-frames.js b/native/chat/speech-frames.js
 new file mode 100644
-index 0000000..8ca8e94
+index 00000000..8ca8e94a
 --- /dev/null
 +++ b/native/chat/speech-frames.js
 @@ -0,0 +1,74 @@
@@ -1464,7 +1464,7 @@ index 0000000..8ca8e94
 +}
 diff --git a/native/chat/speech-frames.test.mjs b/native/chat/speech-frames.test.mjs
 new file mode 100644
-index 0000000..66ac0b5
+index 00000000..66ac0b5f
 --- /dev/null
 +++ b/native/chat/speech-frames.test.mjs
 @@ -0,0 +1,93 @@
@@ -1562,7 +1562,7 @@ index 0000000..66ac0b5
 +  assert.deepEqual(speechFrames(rows, isSpeech), []);
 +});
 diff --git a/package.json b/package.json
-index 4b0deba..0074b7f 100644
+index 4b0deba0..0074b7f9 100644
 --- a/package.json
 +++ b/package.json
 @@ -4,7 +4,7 @@
@@ -1615,7 +1615,7 @@ Claude-Session: https://claude.ai/code/session_01AP2eRC5CScKTs8ZE4Wpdoe
 
 diff --git a/native/adapters/text/frames-layer.js b/native/adapters/text/frames-layer.js
 new file mode 100644
-index 0000000..9069802
+index 00000000..9069802a
 --- /dev/null
 +++ b/native/adapters/text/frames-layer.js
 @@ -0,0 +1,44 @@
@@ -1667,7 +1667,7 @@ diff --git a/native/chat/quote-frames.js b/native/adapters/text/quote-frames.js
 similarity index 91%
 rename from native/chat/quote-frames.js
 rename to native/adapters/text/quote-frames.js
-index 62b9d78..5e65ef3 100644
+index 62b9d780..5e65ef3f 100644
 --- a/native/chat/quote-frames.js
 +++ b/native/adapters/text/quote-frames.js
 @@ -45,13 +45,16 @@ export function quoteSpans(text, lang = "eng") {
@@ -1692,7 +1692,7 @@ diff --git a/native/chat/quote-frames.test.mjs b/native/adapters/text/quote-fram
 similarity index 96%
 rename from native/chat/quote-frames.test.mjs
 rename to native/adapters/text/quote-frames.test.mjs
-index ef01f76..2808d4d 100644
+index ef01f76c..2808d4d5 100644
 --- a/native/chat/quote-frames.test.mjs
 +++ b/native/adapters/text/quote-frames.test.mjs
 @@ -46,7 +46,7 @@ function pick(h) { return { holder: h.holder, via: h.via }; }
@@ -1708,7 +1708,7 @@ diff --git a/native/chat/speech-frames.js b/native/adapters/text/speech-frames.j
 similarity index 93%
 rename from native/chat/speech-frames.js
 rename to native/adapters/text/speech-frames.js
-index 8ca8e94..9b2474d 100644
+index 8ca8e94a..9b2474d0 100644
 --- a/native/chat/speech-frames.js
 +++ b/native/adapters/text/speech-frames.js
 @@ -72,3 +72,11 @@ export function speechVerbFromActPrior(prior) {
@@ -1727,7 +1727,7 @@ diff --git a/native/chat/speech-frames.test.mjs b/native/adapters/text/speech-fr
 similarity index 97%
 rename from native/chat/speech-frames.test.mjs
 rename to native/adapters/text/speech-frames.test.mjs
-index 66ac0b5..67a6a6a 100644
+index 66ac0b5f..67a6a6a2 100644
 --- a/native/chat/speech-frames.test.mjs
 +++ b/native/adapters/text/speech-frames.test.mjs
 @@ -55,7 +55,7 @@ test("speech verbs come from the act prior's communication classes (VerbNet 37.x
@@ -1740,7 +1740,7 @@ index 66ac0b5..67a6a6a 100644
  const KJV = ["And God said, Let there be light: and there was light.", "And the LORD God said unto the woman, What is this that thou hast done?", "And the woman said, The serpent beguiled me, and I did eat.", "Now the serpent was more subtil than any beast of the field which the LORD God had made.", "Mr. Bennet replied that he had not.", "“Hello,” said Pierre, and he left.", "And he said unto the woman, Yea, hath God said, Ye shall not eat of every tree of the garden?"];
  // [paragraph, verb form, reported, holder]
 diff --git a/native/chat/ingest.mjs b/native/chat/ingest.mjs
-index 96be151..f67540f 100644
+index 96be151a..f67540f6 100644
 --- a/native/chat/ingest.mjs
 +++ b/native/chat/ingest.mjs
 @@ -13,11 +13,8 @@
@@ -1796,7 +1796,7 @@ index 96be151..f67540f 100644
  /** askFramed(thread, question) -> the thread's own reply, plus { framed, holder }: an answer drawn wholly from inside a quotation says whose words they are; a mixed or narrated one is left as it was */
 diff --git a/native/tests/read-framed.test.mjs b/native/tests/read-framed.test.mjs
 new file mode 100644
-index 0000000..a1b5656
+index 00000000..a1b5656e
 --- /dev/null
 +++ b/native/tests/read-framed.test.mjs
 @@ -0,0 +1,70 @@
@@ -1872,7 +1872,7 @@ index 0000000..a1b5656
 +});
 diff --git a/native/the-fold/read-framed.mjs b/native/the-fold/read-framed.mjs
 new file mode 100644
-index 0000000..04b0c38
+index 00000000..04b0c38f
 --- /dev/null
 +++ b/native/the-fold/read-framed.mjs
 @@ -0,0 +1,49 @@
@@ -1926,7 +1926,7 @@ index 0000000..04b0c38
 +  return { reportedByLayer: layerSentences.size, speechComplementByTree: treeSentences.size, both, onlyLayer: layerSentences.size - both, onlyTree: treeSentences.size - both };
 +}
 diff --git a/package.json b/package.json
-index 0074b7f..7fbbf1d 100644
+index 0074b7f9..7fbbf1dc 100644
 --- a/package.json
 +++ b/package.json
 @@ -4,7 +4,7 @@
@@ -1967,7 +1967,7 @@ Claude-Session: https://claude.ai/code/session_01AP2eRC5CScKTs8ZE4Wpdoe
 
 diff --git a/native/adapters/text/name-smell.js b/native/adapters/text/name-smell.js
 new file mode 100644
-index 0000000..deef039
+index 00000000..deef0396
 --- /dev/null
 +++ b/native/adapters/text/name-smell.js
 @@ -0,0 +1,51 @@
@@ -2024,7 +2024,7 @@ index 0000000..deef039
 +}
 diff --git a/native/adapters/text/name-smell.test.mjs b/native/adapters/text/name-smell.test.mjs
 new file mode 100644
-index 0000000..b17027e
+index 00000000..b17027e0
 --- /dev/null
 +++ b/native/adapters/text/name-smell.test.mjs
 @@ -0,0 +1,55 @@
@@ -2084,7 +2084,7 @@ index 0000000..b17027e
 +  assert.equal(nameSmell({ surface: "Yea", text: t, sentenceStarts: s, pos: { yea: undefined }, posAt }).verdict, "unknown");
 +});
 diff --git a/package.json b/package.json
-index 7fbbf1d..135e2f2 100644
+index 7fbbf1dc..135e2f28 100644
 --- a/package.json
 +++ b/package.json
 @@ -4,7 +4,7 @@
@@ -2132,7 +2132,7 @@ Claude-Session: https://claude.ai/code/session_01AP2eRC5CScKTs8ZE4Wpdoe
  create mode 100644 native/tests/data/name-smell-gold.json
 
 diff --git a/native/adapters/text/name-smell.js b/native/adapters/text/name-smell.js
-index deef039..24ed2a5 100644
+index deef0396..24ed2a5e 100644
 --- a/native/adapters/text/name-smell.js
 +++ b/native/adapters/text/name-smell.js
 @@ -1,25 +1,39 @@
@@ -2248,7 +2248,7 @@ index deef039..24ed2a5 100644
 +  return finish(contributions, features, { capMid, capInitial, lower, reliability: r, tagged: tags.length, ...(prior ? { prior } : {}) }, priorGap ? { priorGap } : {});
  }
 diff --git a/native/adapters/text/name-smell.test.mjs b/native/adapters/text/name-smell.test.mjs
-index b17027e..268e4b6 100644
+index b17027e0..268e4b6c 100644
 --- a/native/adapters/text/name-smell.test.mjs
 +++ b/native/adapters/text/name-smell.test.mjs
 @@ -1,55 +1,93 @@
@@ -2390,7 +2390,7 @@ index b17027e..268e4b6 100644
  });
 diff --git a/native/adapters/text/name-smell/name-smell-eng.json b/native/adapters/text/name-smell/name-smell-eng.json
 new file mode 100644
-index 0000000..044c06d
+index 00000000..044c06d0
 --- /dev/null
 +++ b/native/adapters/text/name-smell/name-smell-eng.json
 @@ -0,0 +1,89 @@
@@ -2485,7 +2485,7 @@ index 0000000..044c06d
 +}
 diff --git a/native/scripts/ablate-name-smell-loto.mjs b/native/scripts/ablate-name-smell-loto.mjs
 new file mode 100644
-index 0000000..9dcaf2e
+index 00000000..9dcaf2ef
 --- /dev/null
 +++ b/native/scripts/ablate-name-smell-loto.mjs
 @@ -0,0 +1,68 @@
@@ -2559,7 +2559,7 @@ index 0000000..9dcaf2e
 +process.exitCode = regress.length ? 1 : 0;
 diff --git a/native/scripts/ablate-name-smell.mjs b/native/scripts/ablate-name-smell.mjs
 new file mode 100644
-index 0000000..1d85ec4
+index 00000000..1d85ec4a
 --- /dev/null
 +++ b/native/scripts/ablate-name-smell.mjs
 @@ -0,0 +1,57 @@
@@ -2622,7 +2622,7 @@ index 0000000..1d85ec4
 +process.exitCode = verdict.harmful.length || verdict.regress.length ? 1 : 0;
 diff --git a/native/scripts/fit-name-smell.mjs b/native/scripts/fit-name-smell.mjs
 new file mode 100644
-index 0000000..627577e
+index 00000000..627577e4
 --- /dev/null
 +++ b/native/scripts/fit-name-smell.mjs
 @@ -0,0 +1,63 @@
@@ -2691,7 +2691,7 @@ index 0000000..627577e
 +}
 diff --git a/native/tests/data/name-smell-gold.json b/native/tests/data/name-smell-gold.json
 new file mode 100644
-index 0000000..2b09a59
+index 00000000..2b09a597
 --- /dev/null
 +++ b/native/tests/data/name-smell-gold.json
 @@ -0,0 +1,176 @@
@@ -2895,7 +2895,7 @@ Claude-Session: https://claude.ai/code/session_01AP2eRC5CScKTs8ZE4Wpdoe
 
 diff --git a/native/scripts/falsify-regional-cue.mjs b/native/scripts/falsify-regional-cue.mjs
 new file mode 100644
-index 0000000..5d14323
+index 00000000..5d14323f
 --- /dev/null
 +++ b/native/scripts/falsify-regional-cue.mjs
 @@ -0,0 +1,57 @@
@@ -2993,7 +2993,7 @@ Claude-Session: https://claude.ai/code/session_01AP2eRC5CScKTs8ZE4Wpdoe
  create mode 100644 native/the-fold/reading-standard.mjs
 
 diff --git a/native/adapters/text/frames-layer.js b/native/adapters/text/frames-layer.js
-index 9069802..96af8de 100644
+index 9069802a..96af8de4 100644
 --- a/native/adapters/text/frames-layer.js
 +++ b/native/adapters/text/frames-layer.js
 @@ -18,8 +18,9 @@ import { speechFrames, heldAt } from "./speech-frames.js";
@@ -3010,7 +3010,7 @@ index 9069802..96af8de 100644
    for (const t of targets) {
 diff --git a/native/scripts/measure-codec-fold.mjs b/native/scripts/measure-codec-fold.mjs
 new file mode 100644
-index 0000000..070266e
+index 00000000..070266e0
 --- /dev/null
 +++ b/native/scripts/measure-codec-fold.mjs
 @@ -0,0 +1,32 @@
@@ -3048,7 +3048,7 @@ index 0000000..070266e
 +if (arg("out", null)) fs.writeFileSync(arg("out"), JSON.stringify({ schema: "CodecFoldCalibration@1", verses: N, editions: new Set(rows.map((r) => r.name)).size, held: held.size, ownLanguageCoverage: { clean: { min: Math.min(...pos), p05: q(pos, 0.05), median: q(pos, 0.5) } }, notHeldBestCoverage: { clean: { median: q(neg, 0.5), p95: q(neg, 0.95), max: Math.max(...neg), n: neg.length } }, separabilityAUC: fa(pos, neg) }, null, 1) + "\n");
 diff --git a/native/tests/reading-standard.test.mjs b/native/tests/reading-standard.test.mjs
 new file mode 100644
-index 0000000..aca010e
+index 00000000..aca010e3
 --- /dev/null
 +++ b/native/tests/reading-standard.test.mjs
 @@ -0,0 +1,83 @@
@@ -3137,7 +3137,7 @@ index 0000000..aca010e
 +test("L7: the read's frames, its layer ledger and any promoted rule are woven into the pharos by cell and kind", { todo: "NOT BUILT: entry.frames and entry.layers are not woven; the kind and cell are proposals only (trail-rule at EVA·Pattern; Penelope owns writes at DEF, EVA and REC)" }, () => { throw new Error("not woven"); });
 diff --git a/native/the-fold/codec-fold-calibration.json b/native/the-fold/codec-fold-calibration.json
 new file mode 100644
-index 0000000..e1a1884
+index 00000000..e1a18843
 --- /dev/null
 +++ b/native/the-fold/codec-fold-calibration.json
 @@ -0,0 +1,14 @@
@@ -3157,7 +3157,7 @@ index 0000000..e1a1884
 +}
 diff --git a/native/the-fold/codec-fold.mjs b/native/the-fold/codec-fold.mjs
 new file mode 100644
-index 0000000..db3682c
+index 00000000..db3682c7
 --- /dev/null
 +++ b/native/the-fold/codec-fold.mjs
 @@ -0,0 +1,91 @@
@@ -3254,7 +3254,7 @@ index 0000000..db3682c
 +}
 diff --git a/native/the-fold/codec-fold.test.mjs b/native/the-fold/codec-fold.test.mjs
 new file mode 100644
-index 0000000..8554eb1
+index 00000000..8554eb1d
 --- /dev/null
 +++ b/native/the-fold/codec-fold.test.mjs
 @@ -0,0 +1,54 @@
@@ -3313,7 +3313,7 @@ index 0000000..8554eb1
 +
 +test("an unspaced script says its open-world term is uncalibrated, never a number it has no basis for", async () => { const r = await foldCodec(ZH); assert.equal(r.pOwn, null); assert.equal(r.calibrationGap, "uncalibrated_for_unspaced_scripts"); });
 diff --git a/native/the-fold/read-framed.mjs b/native/the-fold/read-framed.mjs
-index 04b0c38..ed0cfe6 100644
+index 04b0c38f..ed0cfe69 100644
 --- a/native/the-fold/read-framed.mjs
 +++ b/native/the-fold/read-framed.mjs
 @@ -11,26 +11,29 @@
@@ -3354,7 +3354,7 @@ index 04b0c38..ed0cfe6 100644
  
 diff --git a/native/the-fold/reading-standard.mjs b/native/the-fold/reading-standard.mjs
 new file mode 100644
-index 0000000..957dc6c
+index 00000000..957dc6c8
 --- /dev/null
 +++ b/native/the-fold/reading-standard.mjs
 @@ -0,0 +1,50 @@
@@ -3409,7 +3409,7 @@ index 0000000..957dc6c
 +  return out;
 +}
 diff --git a/package.json b/package.json
-index 135e2f2..e464585 100644
+index 135e2f28..e4645855 100644
 --- a/package.json
 +++ b/package.json
 @@ -4,7 +4,7 @@
@@ -3441,7 +3441,7 @@ Claude-Session: https://claude.ai/code/session_01AP2eRC5CScKTs8ZE4Wpdoe
  create mode 100644 native/scripts/measure-quote-infer.mjs
 
 diff --git a/native/adapters/text/quote-frames.js b/native/adapters/text/quote-frames.js
-index 5e65ef3..1198e8c 100644
+index 5e65ef3f..1198e8c3 100644
 --- a/native/adapters/text/quote-frames.js
 +++ b/native/adapters/text/quote-frames.js
 @@ -22,7 +22,7 @@ export const QUOTE_TABLES = Object.freeze({
@@ -3513,7 +3513,7 @@ index 5e65ef3..1198e8c 100644
    // a sentence-end mark inside a known name ("Mr.") does not end the tag: the name, not the mark, is read first (a title the cast does not hold still ends it: a typed miss, never a guess)
    const next = spans.find((x) => x.open > q.close && x.depth === 0); const a = q.close + 1, stop = next ? next.open : text.length, hitsA = namesIn(text, spans, a, stop, names);
 diff --git a/native/adapters/text/quote-frames.test.mjs b/native/adapters/text/quote-frames.test.mjs
-index 2808d4d..d4f047a 100644
+index 2808d4d5..d4f047a4 100644
 --- a/native/adapters/text/quote-frames.test.mjs
 +++ b/native/adapters/text/quote-frames.test.mjs
 @@ -128,3 +128,19 @@ test("a codec registers its own table; a built-in cannot be silently replaced; a
@@ -3538,7 +3538,7 @@ index 2808d4d..d4f047a 100644
 +});
 diff --git a/native/scripts/measure-quote-infer.mjs b/native/scripts/measure-quote-infer.mjs
 new file mode 100644
-index 0000000..b70922c
+index 00000000..b70922cf
 --- /dev/null
 +++ b/native/scripts/measure-quote-infer.mjs
 @@ -0,0 +1,17 @@
@@ -3585,7 +3585,7 @@ Claude-Session: https://claude.ai/code/session_01AP2eRC5CScKTs8ZE4Wpdoe
  create mode 100644 native/scripts/measure-codec-quotes.mjs
 
 diff --git a/native/adapters/text/frames-layer.js b/native/adapters/text/frames-layer.js
-index 96af8de..d8643a5 100644
+index 96af8de4..d8643a57 100644
 --- a/native/adapters/text/frames-layer.js
 +++ b/native/adapters/text/frames-layer.js
 @@ -18,14 +18,15 @@ import { speechFrames, heldAt } from "./speech-frames.js";
@@ -3620,7 +3620,7 @@ index 96af8de..d8643a5 100644
    return { frames, speech: speechOut, gap: noTable ?? null, gaps };
  }
 diff --git a/native/adapters/text/quote-frames.js b/native/adapters/text/quote-frames.js
-index 1198e8c..7c19238 100644
+index 1198e8c3..7c192380 100644
 --- a/native/adapters/text/quote-frames.js
 +++ b/native/adapters/text/quote-frames.js
 @@ -73,6 +73,23 @@ export function inferQuoteTable(text, { end = [".", "!", "?"] } = {}) {
@@ -3648,7 +3648,7 @@ index 1198e8c..7c19238 100644
  const CANDIDATES = ["“", "”", '"', "«", "»", "„", "‹", "›", "「", "」", "『", "』"];
  const marksIn = (s, except = new Set()) => { const m = {}; for (const ch of s) if (CANDIDATES.includes(ch) && !except.has(ch)) m[ch] = (m[ch] ?? 0) + 1; return m; };
 diff --git a/native/adapters/text/quote-frames.test.mjs b/native/adapters/text/quote-frames.test.mjs
-index d4f047a..5104cda 100644
+index d4f047a4..5104cdae 100644
 --- a/native/adapters/text/quote-frames.test.mjs
 +++ b/native/adapters/text/quote-frames.test.mjs
 @@ -144,3 +144,14 @@ test("infer: an inferred table drives quoteSpans directly (the table is the edit
@@ -3668,7 +3668,7 @@ index d4f047a..5104cda 100644
 +});
 diff --git a/native/scripts/measure-codec-quotes.mjs b/native/scripts/measure-codec-quotes.mjs
 new file mode 100644
-index 0000000..039872f
+index 00000000..039872fd
 --- /dev/null
 +++ b/native/scripts/measure-codec-quotes.mjs
 @@ -0,0 +1,9 @@
@@ -3682,7 +3682,7 @@ index 0000000..039872f
 +for (const r of rows.filter((r) => r.differs)) console.log(`  ${r.n}[${r.iso}] ${r.nm} marks: default table -> ${r.defSpans} spans, ${r.defBad} stray/unmatched marks | codec table -> ${r.codecSpans} spans, ${r.codecBad} stray/unmatched`);
 +const same = rows.filter((r) => !r.differs); console.log(`where it does NOT differ (${same.length}): identical spans on ${same.filter((r) => r.defSpans === r.codecSpans).length}; unmatched marks default ${same.reduce((a, r) => a + r.defBad, 0)} vs codec ${same.reduce((a, r) => a + r.codecBad, 0)}`);
 diff --git a/native/tests/reading-standard.test.mjs b/native/tests/reading-standard.test.mjs
-index aca010e..9f0f334 100644
+index aca010e3..9f0f3349 100644
 --- a/native/tests/reading-standard.test.mjs
 +++ b/native/tests/reading-standard.test.mjs
 @@ -11,7 +11,7 @@ const T = { skip: readFramed ? false : `no canonical reader here: ${why}` };
@@ -3706,7 +3706,7 @@ index aca010e..9f0f334 100644
 +  const b = await foldCodec("Mr. Bennet replied that he had not. The woman said that the serpent beguiled her. My dear, you must know that Netherfield is taken by a young man of large fortune."); assert.equal(b.quotes.source, "codec");
 +});
 diff --git a/native/the-fold/codec-fold.mjs b/native/the-fold/codec-fold.mjs
-index db3682c..525d9aa 100644
+index db3682c7..525d9aa3 100644
 --- a/native/the-fold/codec-fold.mjs
 +++ b/native/the-fold/codec-fold.mjs
 @@ -13,6 +13,7 @@
@@ -3725,7 +3725,7 @@ index db3682c..525d9aa 100644
 +  return { ...out, quotes: codecQuotes(top.code, String(text ?? "")) };   // the codec carries its conventions: the quote table (the default, or this text's own variant)
  }
 diff --git a/native/the-fold/read-framed.mjs b/native/the-fold/read-framed.mjs
-index ed0cfe6..029fb56 100644
+index ed0cfe69..029fb56d 100644
 --- a/native/the-fold/read-framed.mjs
 +++ b/native/the-fold/read-framed.mjs
 @@ -9,7 +9,7 @@
@@ -3750,7 +3750,7 @@ index ed0cfe6..029fb56 100644
    return entry;
  }
 diff --git a/native/the-fold/reading-standard.mjs b/native/the-fold/reading-standard.mjs
-index 957dc6c..3ed0acd 100644
+index 957dc6c8..3ed0acd8 100644
 --- a/native/the-fold/reading-standard.mjs
 +++ b/native/the-fold/reading-standard.mjs
 @@ -24,6 +24,7 @@ export const STANDARD = Object.freeze([
@@ -3778,7 +3778,7 @@ Claude-Session: https://claude.ai/code/session_01AP2eRC5CScKTs8ZE4Wpdoe
  1 file changed, 6 insertions(+), 1 deletion(-)
 
 diff --git a/native/tests/reading-standard.test.mjs b/native/tests/reading-standard.test.mjs
-index 9f0f334..444bfb3 100644
+index 9f0f3349..444bfb37 100644
 --- a/native/tests/reading-standard.test.mjs
 +++ b/native/tests/reading-standard.test.mjs
 @@ -85,6 +85,11 @@ test("L7: the read's frames, its layer ledger and any promoted rule are woven in
@@ -3811,7 +3811,7 @@ Claude-Session: https://claude.ai/code/session_01AP2eRC5CScKTs8ZE4Wpdoe
  1 file changed, 2 insertions(+), 2 deletions(-)
 
 diff --git a/native/tests/reading-standard.test.mjs b/native/tests/reading-standard.test.mjs
-index 444bfb3..5904679 100644
+index 444bfb37..59046792 100644
 --- a/native/tests/reading-standard.test.mjs
 +++ b/native/tests/reading-standard.test.mjs
 @@ -85,8 +85,8 @@ test("L7: the read's frames, its layer ledger and any promoted rule are woven in
@@ -3825,6 +3825,215 @@ index 444bfb3..5904679 100644
  });
  
  test("R1 (found while testing L10): an English novel passage is explained best by the English codec, with p that does not saturate on a one-bit difference", { todo: "KNOWN NON-CONFORMANCE: on 80 words of Pride and Prejudice the chosen codec is pcm (Nigerian Pidgin, an English-lexified codec) at p = 1.00 although eng has HIGHER coverage (0.86 vs 0.82); pcm wins on bits per token (14.4 vs 15.4). The 95% Genesis result did not see this: the ranking is by bits per token, and p saturates. Falsifier for a fix: eng chosen on this passage AND on the 37 Genesis editions without losing any" }, async () => {
+-- 
+2.43.0
+
+From 97eb1c634d68dd4f0a9d392cd0e05e1a8abfc613 Mon Sep 17 00:00:00 2001
+From: Claude <noreply@anthropic.com>
+Date: Thu, 26 Nov 2026 22:20:24 +0000
+Subject: [PATCH] the whole reading is written into the pharos: text-codec,
+ text-layers, text-quotes, text-frames, text-gap (khora writes Existence and
+ Structure; Janus and Penelope read by kind)
+
+Co-Authored-By: Claude Sonnet 5.5 <noreply@anthropic.com>
+Claude-Session: https://claude.ai/code/session_01AP2eRC5CScKTs8ZE4Wpdoe
+---
+ native/tests/reading-standard.test.mjs |  6 +-
+ native/the-fold/pharos-framed.mjs      | 79 ++++++++++++++++++++++++++
+ native/the-fold/pharos-framed.test.mjs | 44 ++++++++++++++
+ native/the-fold/pharos-reading.mjs     |  4 +-
+ native/the-fold/reading-standard.mjs   |  2 +-
+ 5 files changed, 131 insertions(+), 4 deletions(-)
+ create mode 100644 native/the-fold/pharos-framed.mjs
+ create mode 100644 native/the-fold/pharos-framed.test.mjs
+
+diff --git a/native/tests/reading-standard.test.mjs b/native/tests/reading-standard.test.mjs
+index 59046792..9815af2c 100644
+--- a/native/tests/reading-standard.test.mjs
++++ b/native/tests/reading-standard.test.mjs
+@@ -80,7 +80,11 @@ test("L6: the chat and the canonical door agree on the cast of an ordinary passa
+ test("R3: a transform takes EOT and returns new EOT (modify, reason) with no surface string in between", { todo: "NOT BUILT as one interface: the Stage reasoner (kernel/stage.js) consumes atoms; no EOT-to-EOT transform API found. Owner: define it, then test it in janus beside nl-eot.mjs" }, () => { throw new Error("no EOT->EOT transform interface exists"); });
+ test("R4: encode PROSIFIES: the target codec restores natural order, negation placement, punctuation, capitalisation and sentence boundaries", { todo: "NOT BUILT. Baseline measured 2026-11-26 on 25 English sentences with janus nl-eot.mjs: surface identical to the original 16% (4 of 25); form_unattested on 13.8% of content nodes; 'Mr. Bennet replied that he had not.' -> ['Mr', 'Bennet replied that he not had']; 'It is a truth universally acknowledged' -> 'is it a truth universally acknowledged'. Test belongs in janus." }, () => { throw new Error("the codec carries a form table and order parameters, not prosification rules"); });
+ test("R5: for a sentence the codec fully attests (no gaps), decode(encode(decode(x))) is the same EOT as decode(x)", { todo: "FAILS today. Baseline: the EOT is a fixed point for 24% of 25 English sentences (6 of 25), counting gap-bearing ones. The invariant is conditional (gap-free sentences only) so it needs no tuned bar: it must hold for 100% of them. Test belongs in janus." }, () => { throw new Error("round trip is not an EOT fixed point"); });
+-test("L7: the read's frames, its layer ledger and any promoted rule are woven into the pharos by cell and kind", { todo: "NOT BUILT: entry.frames and entry.layers are not woven; the kind and cell are proposals only (trail-rule at EVA·Pattern; Penelope owns writes at DEF, EVA and REC)" }, () => { throw new Error("not woven"); });
++test("L7: the read's codec, layer ledger, quotation spans and frames are woven into the pharos by cell and kind (the reading is stored in khora's own entries; the log is the record)", { skip: !process.env.PHAROS_HOME ? "set PHAROS_HOME to a pharos checkout" : (readFramed ? false : T.skip) }, async () => {
++  const fs = await import("node:fs"), os = await import("node:os"), path = await import("node:path"), { weaveFramedReading } = await import("../the-fold/pharos-framed.mjs"), d = fs.mkdtempSync(path.join(os.tmpdir(), "kl7-"));
++  const r = await weaveFramedReading(DOC, { language: "eng", log: "t", dir: d, actPrior: null }); for (const k of ["text-codec", "text-layers", "text-quotes", "text-frames"]) assert.ok(r.written.includes(k), k);
++});
++test("L7 (the rest): an EOT, a promoted trail-rule, and the round trip are woven by cell and kind", { todo: "NOT BUILT: the EOT of a text is Janus's to write (it reads text and text-codec by kind; a kind and cell for it are not declared); a promoted trail-rule is a proposal at EVA·Pattern, and EVA is Penelope's; the round trip (R3 to R5) has no entries" }, () => { throw new Error("not woven"); });
+ 
+ // ── L10: the codec carries its conventions ──
+ test("L10: the codec foldCodec finds carries its quote table, read from the text where the text gives evidence and from the codec default where it does not", async () => {
+diff --git a/native/the-fold/pharos-framed.mjs b/native/the-fold/pharos-framed.mjs
+new file mode 100644
+index 00000000..ec1972b2
+--- /dev/null
++++ b/native/the-fold/pharos-framed.mjs
+@@ -0,0 +1,79 @@
++// the-fold/pharos-framed.mjs — THE WHOLE READING, WRITTEN INTO THE PHAROS (owner, 2026-11-26: "the reading pipeline should be fully stored in Khora, and khora should write all of its work to a pharos").
++// pharos-reading.mjs already writes the text, its cuts and its dependency rows. This writes the REST of what the pipeline decided, so that no layer's result lives only in a returned object:
++//
++//   kind          cell          addr                          body
++//   text-codec    SIG·Pattern   codec:<sha16>                 { chosen, distribution (top 5), entropy, pOwn, gap, quotes: { source, differs, table } }    which codec explains the text, by surprise, and the convention it brought
++//   text-layers   SIG·Ground    layers:<sha16>                { layers: [{ layer, ran: true|false|"ablated", why }], ablate }                              what ran, what was skipped and why: nothing silent
++//   text-quotes   SEG·Figure    quotes:<sha16>                { table, source, spans: [{ open, close, depth, continues, continued }] }                      the OBSERVATION "there is a quotation here" (marks), under the codec's own table
++//   text-frames   CON·Figure    frames:<sha16>                { frames, speech, gaps, ablate, crossCheck }                                                  each verb with who holds its words; reported is null when a layer is ablated, never false
++//   text-gap      NUL·Figure    gap:<sha16>:<gap>             { gap, ...the typed gap's own fields }                                                        a typed gap about one thing (docs/PROPOSAL-WRITER-PHASEPOSTS.md: "a refusal or a typed gap")
++//
++// THE SPLIT OF WORK (pharos docs/PROPOSAL-WRITER-PHASEPOSTS.md, owner's rulings 2026-11-19). Observing is not defining: khora READS and so writes Existence and Structure (these cells) and leaves EVIDENCE; Janus researches
++// (it reads `text`, `text-codec`, `text-reading` and `text-referents` BY KIND and writes the links and the geometry: CON·Figure bonds, SYN·Pattern worlds, the EOT of a text) and Penelope DEFINES, JUDGES and REVISES (DEF, EVA, REC:
++// whether a `text-quotes` span IS a quotation, whether a `text-frames` frame IS reported speech, which codec the text IS in). Khora never writes at DEF, EVA or REC, never calls Janus or Penelope, and never imports them (nexus rule 1):
++// the log is the only seam. A frame's `reported` and `framed` are NOMINATIONS by the quotation-mark layer and the speech-verb layer; the basis of every entry says so.
++//
++// Idempotent: an entry already at the address with the same body is not written again. Retract by weaving, never by erasing. A language the canonical reader does not hold is a typed gap and NO frames are written (the framed door refuses).
++import { readFramed } from "./read-framed.mjs";
++import { foldCodec } from "./codec-fold.mjs";
++import { quoteSpans } from "../adapters/text/quote-frames.js";
++import { writeReading, sha16, canon, pharosLib } from "./pharos-reading.mjs";
++import { pathToFileURL } from "node:url";
++
++export const CODEC_KIND = "text-codec", LAYERS_KIND = "text-layers", QUOTES_KIND = "text-quotes", FRAMES_KIND = "text-frames", GAP_KIND = "text-gap";
++export const KINDS = Object.freeze([
++  { kind: CODEC_KIND, cell: "SIG·Pattern", why: "which codec explains a text, as a distribution found by surprise, with the quote convention the codec brought: a nomination, never a definition of the text's language" },
++  { kind: LAYERS_KIND, cell: "SIG·Ground", why: "the layer ledger of a read: every layer ran, was skipped with a reason, or was ablated; a skipped layer is never silent" },
++  { kind: QUOTES_KIND, cell: "SEG·Figure", why: "the quotation spans the marks make under the codec's table: the observation 'there is a quotation here'; that it IS a quotation is Penelope's definition" },
++  { kind: FRAMES_KIND, cell: "CON·Figure", why: "each verb with who holds its words (the quotation-mark layer and the speech-verb layer): nominations; reported is null where a layer is ablated, never false" },
++  { kind: GAP_KIND, cell: "NUL·Figure", why: "a typed gap about one text: a refusal or a missing prior, with how to fill it" },
++]);
++const NOMINATED = "khora's quotation-mark and speech-verb layers (adapters/text/quote-frames.js, speech-frames.js): nominations, not definitions";
++
++/**
++ * weaveFramedReading(text, { language, ablate, log, dir, writer, actPrior, referents, readWeft })
++ *   -> { written: [kinds], skipped: [kinds], ids: { text, codec, layers, quotes, frames }, gaps: [codes], entry }  or { gap, why }
++ * Runs the framed read (the canonical door plus the frames layer), folds the codec for the text, and weaves what each decided. `entry` is the in-memory read, returned for the caller; the log is the record.
++ */
++export async function weaveFramedReading(text, { language, ablate = [], log = process.env.PHAROS_LOG ?? "fold", dir = process.env.PHAROS ?? null, writer = "khora", actPrior, referents = false, readWeft = null } = {}) {
++  const lib = pharosLib(); if (!lib) return { gap: "no_pharos", why: "pharos was not found (set PHAROS_HOME); khora writes readings only into the pharos" };
++  const T = String(text ?? "");
++  const entry = await readFramed(T, { language, ablate, ...(actPrior !== undefined ? { actPrior } : {}) });
++  const fold = await foldCodec(T);
++  // the plain reading (text, cuts, rows [, referents]) first: every later entry is `of` the text entry. A language with no parser prior is a typed gap there, and we still record why.
++  const base = language ? await writeReading(T, { language: entry.language?.stem ?? language, log, dir, writer, referents, readWeft }) : { gap: "language_not_declared" };
++  const P = await import(pathToFileURL(lib).href), h = P.open(log, { writer, ...(dir ? { dir } : {}) });
++  const declare = ({ kind, cell, why }) => { if (!(P.fold(h, { kind: "kind" }).entries ?? []).some((e) => e.body?.name === kind)) P.weave(h, { cell: "DEF·Figure", kind: "kind", addr: `kind:${kind}`, body: { name: kind, cell, why } }); };
++  for (const k of KINDS) declare(k);
++  const out = { written: [...(base.written ?? [])], skipped: [...(base.skipped ?? [])], ids: { text: base.text ?? null }, gaps: [], entry };
++  const sha = sha16(T), textId = base.text ?? (P.fold(h, { kind: "text", addr: `text:${sha}` }).entries ?? [])[0]?.id ?? null, of = textId ? [textId] : [];
++  const put = (kind, cell, addr, body, basis) => { const have = (P.fold(h, { kind, addr }).entries ?? []).find((e) => canon(e.body) === canon(body)); if (have) { out.skipped.push(kind); return have; } const e = P.weave(h, { cell, kind, addr, body, of, ...(basis ? { basis } : {}) }); out.written.push(kind); return e; };
++  const gap = (g) => { const code = g?.gap ?? String(g); if (!out.gaps.includes(code)) { out.gaps.push(code); put(GAP_KIND, "NUL·Figure", `gap:${sha}:${code}`, typeof g === "object" ? g : { gap: code }, { by: "khora" }); } };
++  if (base.gap) gap({ gap: base.gap, why: base.why ?? null });
++
++  // the codec: found by surprise over the held codecs; the answer is a distribution, so it is written as one (top 5), with the convention it brought
++  put(CODEC_KIND, "SIG·Pattern", `codec:${sha}`, {
++    chosen: fold.chosen ?? null, distribution: (fold.distribution ?? []).slice(0, 5).map((d) => ({ code: d.code, p: +d.p.toFixed(4), coverage: +d.coverage.toFixed(4), bitsPerToken: +d.bitsPerToken.toFixed(2) })),
++    entropy: +(fold.entropy ?? 0).toFixed(4), pOwn: fold.pOwn == null ? null : +fold.pOwn.toFixed(4), gap: fold.gap?.gap ?? null, declared: language ?? null,
++    // the convention of the codec the read ran UNDER (the declared language), which is what framed the quotations; the codec the surprise fold found may differ, and `foundQuotes` keeps its convention beside it
++    quotes: entry.frames?.quotes ? { source: entry.frames.quotes.source, differs: entry.frames.quotes.differs, table: entry.frames.quotes.table, codec: entry.language?.stem ?? language ?? null } : null,
++    foundQuotes: fold.quotes ? { codec: fold.chosen ?? null, source: fold.quotes.source, table: fold.quotes.table, gap: fold.quotes.gap?.gap ?? null } : null, agrees: fold.chosen ? fold.chosen === (entry.language?.stem ?? language) : null,
++  }, { found_by: "surprise reduction over the held codecs (the-fold/codec-fold.mjs)", note: "a nomination: which codec explains the text best, not a definition of its language" });
++  if (fold.gap) gap(fold.gap);
++
++  // the layer ledger: every layer of the read, run or skipped with its reason
++  put(LAYERS_KIND, "SIG·Ground", `layers:${sha}`, { layers: entry.layers ?? [], ablate }, { by: "khora", note: "derived from the entry's own fields and gaps" });
++
++  // the quotations the marks make, under the table the codec brought (the edition's own convention where the text shows it)
++  const fq = entry.frames?.quotes ?? null, table = fq?.table ?? null;
++  if (table && !ablate.includes("quotes")) { const r = quoteSpans(T, table); put(QUOTES_KIND, "SEG·Figure", `quotes:${sha}`, { table, source: fq.source, differs: fq.differs, spans: r.spans.map((q) => ({ open: q.open, close: q.close, depth: q.depth, ...(q.continues ? { continues: true } : {}), ...(q.continued ? { continued: true } : {}) })), gaps: r.gaps.map((g) => g.gap) }, { by: NOMINATED }); }
++
++  // the frames: who holds each verb's words. Never written for a language the framed door refuses (that is a typed gap above).
++  if (entry.frames && !(entry.frames.frames.length === 0 && (entry.frames.gaps ?? []).some((g) => ["language_not_declared", "language_not_held", "no_parse_rows"].includes(g.gap)))) {
++    put(FRAMES_KIND, "CON·Figure", `frames:${sha}`, { frames: entry.frames.frames, speech: entry.frames.speech, gaps: entry.frames.gaps ?? [], ablate, crossCheck: entry.frames.crossCheck ?? null }, { by: NOMINATED });
++  }
++  for (const g of entry.frames?.gaps ?? []) gap(g);
++
++  out.ids = { ...out.ids, codec: (P.fold(h, { kind: CODEC_KIND, addr: `codec:${sha}` }).entries ?? []).at(-1)?.id ?? null, layers: (P.fold(h, { kind: LAYERS_KIND, addr: `layers:${sha}` }).entries ?? []).at(-1)?.id ?? null };
++  return out;
++}
+diff --git a/native/the-fold/pharos-framed.test.mjs b/native/the-fold/pharos-framed.test.mjs
+new file mode 100644
+index 00000000..939e0d89
+--- /dev/null
++++ b/native/the-fold/pharos-framed.test.mjs
+@@ -0,0 +1,44 @@
++// node --test pharos-framed.test.mjs   needs the reader's priors (KHORA_PRIORS_DIR) and the pharos library (PHAROS_HOME); skips without them, saying why.
++// The whole reading is written into the pharos by cell and kind (owner, 2026-11-26), and read back the way Janus and Penelope read it: by kind only, with no import of khora.
++import test from "node:test"; import assert from "node:assert/strict"; import fs from "node:fs"; import os from "node:os"; import path from "node:path";
++let weave = null, why = null, KINDS = null;
++const hasPharos = !!process.env.PHAROS_HOME && fs.existsSync(path.join(process.env.PHAROS_HOME, "lib", "pharos.mjs"));
++try { ({ weaveFramedReading: weave, KINDS } = await import("./pharos-framed.mjs")); } catch (e) { why = String(e?.message ?? e).slice(0, 120); }
++const skip = !hasPharos ? "set PHAROS_HOME to a pharos checkout" : !weave ? `module did not load: ${why}` : false;
++const dir = () => fs.mkdtempSync(path.join(os.tmpdir(), "kframed-"));
++const DOC = ["“My dear Mr. Bennet,” said his lady to him one day, “have you heard that Netherfield Park is let at last?”", "Mr. Bennet replied that he had not.", "And God said, Let there be light: and there was light.", "Mr. Bennet made no answer."].join("\n\n") + "\n\n" + "Mr. Bennet made no answer. ".repeat(4);
++const open = async (d) => { const P = await import(path.join(process.env.PHAROS_HOME, "lib", "pharos.mjs")); return { P, h: P.open("t", { dir: d, writer: "reader", frame: false }) }; };
++const byKind = (P, h, kind) => P.fold(h, { kind }).entries ?? [];
++
++test("the whole reading is woven by kind at the proposed cells, every entry is `of` the text, and a second weave adds nothing", { skip }, async () => {
++  const d = dir(), a = await weave(DOC, { language: "eng", log: "t", dir: d, actPrior: null });
++  if (a.gap) return assert.fail(`${a.gap}: ${a.why}`);
++  for (const k of ["text", "text-cuts", "text-reading", "text-codec", "text-layers", "text-quotes", "text-frames"]) assert.ok(a.written.includes(k), `${k} was not written: ${JSON.stringify(a.written)}`);
++  const { P, h } = await open(d), cellOf = { "text-codec": "SIG·Pattern", "text-layers": "SIG·Ground", "text-quotes": "SEG·Figure", "text-frames": "CON·Figure" }, t = byKind(P, h, "text")[0];
++  for (const [kind, cell] of Object.entries(cellOf)) { const e = byKind(P, h, kind); assert.equal(e.length, 1, kind); assert.equal(e[0].cell, cell, kind); assert.deepEqual(e[0].of, [t.id], `${kind} is of the text`); assert.equal(e[0].by ?? e[0].writer ?? "khora", e[0].by ?? "khora"); }
++  const b = await weave(DOC, { language: "eng", log: "t", dir: d, actPrior: null }); assert.deepEqual(b.written, [], "a second weave writes nothing");
++});
++test("read back BY KIND ONLY (as Janus and Penelope do): the codec, the quote spans, the frames and the ledger carry what the read decided", { skip }, async () => {
++  const d = dir(); await weave(DOC, { language: "eng", log: "t", dir: d, actPrior: null }); const { P, h } = await open(d);
++  const codec = byKind(P, h, "text-codec")[0].body, quotes = byKind(P, h, "text-quotes")[0].body, frames = byKind(P, h, "text-frames")[0].body, layers = byKind(P, h, "text-layers")[0].body;
++  assert.ok(codec.distribution.length >= 1 && typeof codec.entropy === "number"); assert.equal(codec.declared, "eng"); assert.ok(codec.quotes.table.pairs.some((p) => p[0] === "“"), "the convention the codec brought");
++  assert.ok(quotes.spans.length >= 2 && quotes.spans.every((s) => s.close > s.open)); assert.ok(frames.frames.some((f) => f.framed === true), "a verb inside a quotation is framed");
++  assert.deepEqual(layers.layers.map((r) => r.layer), ["language", "cut", "parse", "cast", "pronouns", "clauses", "speakers", "frames.quotes", "frames.speech"]);
++});
++test("ablating a layer is woven as ablated and unknown, never false; the quote spans are not written when the quote layer is off", { skip }, async () => {
++  const d = dir(), a = await weave(DOC, { language: "eng", ablate: ["quotes"], log: "t", dir: d, actPrior: null }); const { P, h } = await open(d);
++  assert.ok(!a.written.includes("text-quotes") && byKind(P, h, "text-quotes").length === 0);
++  const frames = byKind(P, h, "text-frames")[0].body, layers = byKind(P, h, "text-layers")[0].body.layers;
++  assert.ok(frames.frames.every((f) => f.framed === null), "unknown"); assert.equal(layers.find((r) => r.layer === "frames.quotes").ran, "ablated"); assert.deepEqual(byKind(P, h, "text-layers")[0].body.ablate, ["quotes"]);
++});
++test("a text with no declared language is a TYPED GAP entry (NUL·Figure) and NO frames entry; the codec is still recorded", { skip }, async () => {
++  const d = dir(), a = await weave("Mr. Bennet made no answer. ".repeat(10), { log: "t", dir: d }); const { P, h } = await open(d);
++  assert.ok(a.gaps.includes("language_not_declared")); const g = byKind(P, h, "text-gap"); assert.ok(g.length >= 1 && g.every((e) => e.cell === "NUL·Figure")); assert.equal(byKind(P, h, "text-frames").length, 0, "no frames for an undeclared language");
++  assert.equal(byKind(P, h, "text-codec").length, 1, "the codec choice is still a record");
++});
++test("khora writes only Existence and Structure cells plus the protocol's own kind declarations: never DEF, EVA or REC (that is Penelope's)", { skip }, async () => {
++  const d = dir(); await weave(DOC, { language: "eng", log: "t", dir: d, actPrior: null }); const { P, h } = await open(d);
++  const all = P.fold(h, {}).entries ?? []; assert.ok(all.length > 5);
++  for (const e of all) if (/^(DEF|EVA|REC)·/.test(e.cell)) assert.equal(e.kind, "kind", `khora wrote ${e.kind} at ${e.cell}: Interpretation is Penelope's`);
++  assert.deepEqual(KINDS.map((k) => k.cell).filter((c) => /^(DEF|EVA|REC)·/.test(c)), []);
++});
+diff --git a/native/the-fold/pharos-reading.mjs b/native/the-fold/pharos-reading.mjs
+index 0e89eaf9..37577141 100644
+--- a/native/the-fold/pharos-reading.mjs
++++ b/native/the-fold/pharos-reading.mjs
+@@ -19,7 +19,7 @@ import { priorsHome } from "./prior-source.mjs";
+ 
+ const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..", "..");
+ export const sha16 = (s) => crypto.createHash("sha256").update(String(s), "utf8").digest("hex").slice(0, 16);
+-const canon = (v) => (Array.isArray(v) ? `[${v.map(canon).join(",")}]` : v && typeof v === "object" ? `{${Object.keys(v).sort().map((k) => `${JSON.stringify(k)}:${canon(v[k])}`).join(",")}}` : JSON.stringify(v));   // pharos stores bodies with sorted keys
++export const canon = (v) => (Array.isArray(v) ? `[${v.map(canon).join(",")}]` : v && typeof v === "object" ? `{${Object.keys(v).sort().map((k) => `${JSON.stringify(k)}:${canon(v[k])}`).join(",")}}` : JSON.stringify(v));   // pharos stores bodies with sorted keys
+ export const TEXT_KIND = "text", READING_KIND = "text-reading", REFERENTS_KIND = "text-referents", CUTS_KIND = "text-cuts";
+ const MODELS = new Map();
+ /** the parser (and tokenizer) prior for a language, from the prior door's home; a typed gap when absent */
+@@ -51,7 +51,7 @@ export function readingRows(g, text, { predicate = false } = {}) {   // predicat
+   return rows;
+ }
+ // where pharos is: PHAROS_HOME, else a checkout beside this repo, else <repo>/pharos, else ~/Documents/pharos (the same places the gate looks)
+-const pharosLib = () => [process.env.PHAROS_HOME, path.join(ROOT, "..", "pharos"), path.join(ROOT, "pharos"), path.join(os.homedir(), "Documents", "pharos")].filter(Boolean).map((p) => path.join(path.resolve(p), "lib", "pharos.mjs")).find((f) => fs.existsSync(f));
++export const pharosLib = () => [process.env.PHAROS_HOME, path.join(ROOT, "..", "pharos"), path.join(ROOT, "pharos"), path.join(os.homedir(), "Documents", "pharos")].filter(Boolean).map((p) => path.join(path.resolve(p), "lib", "pharos.mjs")).find((f) => fs.existsSync(f));
+ /**
+  * writeReading(text, { language, log, dir, writer }) -> { text: id, reading: id, written: [kinds], skipped: [kinds] } or { gap, why }
+  * log / dir name the pharos log (PHAROS_LOG, PHAROS as the other doors); the writer is "khora".
+diff --git a/native/the-fold/reading-standard.mjs b/native/the-fold/reading-standard.mjs
+index 3ed0acd8..9fb8e9fc 100644
+--- a/native/the-fold/reading-standard.mjs
++++ b/native/the-fold/reading-standard.mjs
+@@ -22,7 +22,7 @@ export const STANDARD = Object.freeze([
+   { id: "L4", rule: "THE LANGUAGE IS DECLARED OR HEARD, RECORDED, NEVER GUESSED: a language no held codec explains yields a typed gap and NO reading in the target pipeline (no fallback to English priors).", status: "built for readFramed; readDocument still reads an unheld language as English beside its unknown_language gap", evidence: "codec-fold.mjs; read-framed.mjs" },
+   { id: "L5", rule: "A MISSING PRIOR OR CODEC IS A REFUSAL THAT SAYS HOW TO GET IT, never a silent degrade.", status: "mostly", evidence: "gaps name vendor-ud-codec.mjs and the prior files" },
+   { id: "L6", rule: "ONE DOOR: every surface reads through the canonical entry; two doors that compute the same thing agree on gold, and their disagreement is measured.", status: "frames: one layer, two doors, 17 of 17 agree; the chat still builds its fold from its own reader and the two cast builders agree on only 0.73 of names", evidence: "tests/read-framed.test.mjs" },
+-  { id: "L7", rule: "EVERYTHING WRITES TO THE PHAROS BY CELL AND KIND; derived state is a cache that can be deleted.", status: "NOT BUILT for frames and the round trip", evidence: "entry.frames is not woven" },
++  { id: "L7", rule: "EVERYTHING WRITES TO THE PHAROS BY CELL AND KIND; derived state is a cache that can be deleted.", status: "built for the reading (text, cuts, rows, codec, layers, quotes, frames, gaps); NOT built for the EOT, promoted rules and the round trip", evidence: "the-fold/pharos-framed.mjs weaveFramedReading; the-fold/pharos-framed.test.mjs; khora writes only Existence and Structure cells (SIG, INS, SEG, CON): Janus reads these by kind and writes the geometry, Penelope reads them and defines, judges and revises (pharos docs/PROPOSAL-WRITER-PHASEPOSTS.md)" },
+   { id: "L8", rule: "NO SILENT DROP: every paragraph is read or reported with its reason.", status: "built", evidence: "chat/ingest.mjs setAside" },
+   { id: "L10", rule: "A CODEC CARRIES ITS CONVENTIONS: the quote table (and, when built, the prosification rules) is part of the codec, as its form table and order parameters are; the codec default is the prior and the edition's own marks are the evidence (the variant wins, the default fills in what marks cannot show); no evidence and no default is a typed gap.", status: "quote table built (codecQuotes, carried on foldCodec and read by readFramed); prosification rules not built; the janus codec file (UDGrammar@1) does not yet carry a `quotes` field", evidence: "adapters/text/quote-frames.js::codecQuotes; scripts/measure-quote-infer.mjs; scripts/measure-codec-quotes.mjs" },
+   { id: "L9", rule: "CODECS ARE CONTINUOUS: a language is a point in a continuum of tables and priors loaded when needed, so a new language lowers surprise instead of switching a branch.", status: "first piece built (R1); the continuity of tables across related languages is not", evidence: "related languages already explain each other (Norwegian under Danish reaches 0.76 to 0.80 coverage)" },
 -- 
 2.43.0
 

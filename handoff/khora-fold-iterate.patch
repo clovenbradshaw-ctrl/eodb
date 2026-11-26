@@ -1,7 +1,7 @@
 From 2fbfb29fc41dbf1776461b68b80baf48b7b3806f Mon Sep 17 00:00:00 2001
 From: Michael Lacy <michaeltlacy@gmail.com>
 Date: Mon, 23 Nov 2026 22:50:29 -0600
-Subject: [PATCH 1/7] exemplar-pool: the smell in the kernel's names, portable,
+Subject: [PATCH 1/8] exemplar-pool: the smell in the kernel's names, portable,
  and loud about gaps
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -175,7 +175,7 @@ index 1bf727e..8e90d0e 100644
 From 3542c86799553d0edc346231f074e186fedd90bf Mon Sep 17 00:00:00 2001
 From: Michael Lacy <michaeltlacy@gmail.com>
 Date: Tue, 24 Nov 2026 13:53:01 -0600
-Subject: [PATCH 2/7] formicary: the user-bound pattern layer: per-user trails
+Subject: [PATCH 2/8] formicary: the user-bound pattern layer: per-user trails
  over the scholia's addresses, with the measured power-law fade
 
 organs/formicary.mjs: one colony per user (own file), trails laid only on a verified use over addresses of the corpus and the scholia (doc:<sha256>[#k], lemma:<lang>:<word>), heads are marks never text, order() is a permutation of its candidates (earned, untried as given, dead), alarms forget, the user can forgetAll, marks mirror to a caller's log with the user named.
@@ -446,7 +446,7 @@ index 40b80d3..4bfb91b 100644
 From 01a0543ea2cc45738f9783d777e963743bb899e9 Mon Sep 17 00:00:00 2001
 From: Claude <noreply@anthropic.com>
 Date: Wed, 25 Nov 2026 17:59:10 +0000
-Subject: [PATCH 3/7] trail-rules: a trail becomes a rule only past a seeded
+Subject: [PATCH 3/8] trail-rules: a trail becomes a rule only past a seeded
  null on a held-out third; the rules about rules as data
 
 Pure kernel module (promoteRoute, promoteHead, ruleEntry, META_RULES). 10 tests, including a
@@ -671,7 +671,7 @@ index 91bad73..74f900d 100644
 From 16b778d4708061bdf9108b4b0c11a2243efe84d4 Mon Sep 17 00:00:00 2001
 From: Claude <noreply@anthropic.com>
 Date: Wed, 25 Nov 2026 18:28:12 +0000
-Subject: [PATCH 4/7] chat: the document door: a text is read into the fold
+Subject: [PATCH 4/8] chat: the document door: a text is read into the fold
  paragraph by paragraph, never routed
 
 turn() sent paragraphs holding a quoted question to answering (3 of 8 read in the test text, 9 of the
@@ -813,7 +813,7 @@ index 74f900d..067764e 100644
 From 2fc331a7f1df287afd4f8fcc2788d54812008966 Mon Sep 17 00:00:00 2001
 From: Claude <noreply@anthropic.com>
 Date: Wed, 25 Nov 2026 22:23:02 +0000
-Subject: [PATCH 5/7] chat: a quotation is a frame: who holds the words, never
+Subject: [PATCH 5/8] chat: a quotation is a frame: who holds the words, never
  the narrator's assertion
 
 quote-frames.js: per-language declared boundary tables (a language with none is a typed gap), continuing and
@@ -1133,7 +1133,7 @@ index 067764e..4b0deba 100644
 From 24d1dab151093f6880031b6c106b14e507ac3b56 Mon Sep 17 00:00:00 2001
 From: Claude <noreply@anthropic.com>
 Date: Wed, 25 Nov 2026 22:30:53 +0000
-Subject: [PATCH 6/7] quote-frames: a codec registers its own table; marks the
+Subject: [PATCH 6/8] quote-frames: a codec registers its own table; marks the
  table does not know are a typed gap that lists them
 
 Found by running Genesis in 65 languages: 35 editions mark no quotation at all, 25 mark them and had no table,
@@ -1263,7 +1263,7 @@ index 907586f..ef01f76 100644
 From 4e9ff854b9a6c4670a64a8b93c1300c1ed0b24c0 Mon Sep 17 00:00:00 2001
 From: Claude <noreply@anthropic.com>
 Date: Thu, 26 Nov 2026 01:39:47 +0000
-Subject: [PATCH 7/7] chat: the mark-free speech layer: reported speech from a
+Subject: [PATCH 7/8] chat: the mark-free speech layer: reported speech from a
  verb of saying, no quotation marks needed
 
 speech-frames.js reads UD rows (codec-neutral) and decides by position, not by tree (the parser inverts unmarked speech:
@@ -1571,6 +1571,370 @@ index 4b0deba..0074b7f 100644
    "scripts": {
 -    "test": "node native/scripts/check-reading-hygiene.mjs && node native/scripts/check-no-legacy-submodule.mjs && node --test native/the-fold/essay-fold-falsify.test.mjs native/the-fold/pipeline-run-falsify.test.mjs native/the-fold/parameter-induction-falsify.test.mjs native/the-fold/referents-falsify.test.mjs native/the-fold/ground-replay-falsify.test.mjs native/the-fold/constitution.test.mjs native/the-fold/span-drift.test.mjs native/the-fold/standing-cube.test.mjs native/the-fold/step-fold.test.mjs native/the-fold/surf-types.test.mjs native/the-fold/openness.test.mjs box-governor.test.mjs opencode-longform.test.mjs opencode-gather.test.mjs opencode-gather-reason.test.mjs opencode-gather-gate.test.mjs opencode-gather-senses.test.mjs opencode-gather-identity.test.mjs opencode-gather-voids.test.mjs opencode-gather-typos.test.mjs native/adapters/text/ud-parser.test.mjs native/kernel/eot-claim-match.test.mjs native/adapters/text/figure-binding.test.mjs native/adapters/text/non-personal.test.mjs native/adapters/text/reading-referents.test.mjs native/the-fold/declension-wiring.test.mjs native/adapters/text/ledger-opinion.test.mjs native/adapters/text/folded-card.test.mjs native/adapters/text/form-usage.test.mjs native/organs/relation-defs.test.mjs native/organs/encode.test.mjs native/adapters/text/grammar-ud-codec.test.mjs native/organs/greenberg.test.mjs native/adapters/text/ud-tokenize.test.mjs native/adapters/text/grammar-ud.test.mjs native/adapters/text/atom-world.test.mjs native/kernel/stage-identity.test.mjs native/adapters/text/corpus-exclusion.test.mjs native/organs/read-page.test.mjs native/kernel/stage-sense.test.mjs native/organs/coref-person.test.mjs native/organs/recipient-role.test.mjs native/the-fold/weft-atoms.test.mjs native/the-fold/weft-identity.test.mjs native/adapters/text/figure-period.en.test.mjs opencode-shift.test.mjs opencode-workplan-acts.test.mjs opencode-workplan-e2e-falsify.test.mjs opencode-workplan-live-e2e.test.mjs native/organs/code-form.test.mjs native/organs/web.test.mjs native/tests/entity-profile.test.js native/conformance/block-profile.test.mjs tests/opencode-cube.test.mjs native/kernel/identity-cancel.test.mjs native/kernel/reader-identity.test.mjs native/the-fold/reader-log.test.mjs native/the-fold/cancel-identity.test.mjs native/the-fold/arrangement-features.test.mjs native/kernel/attach-prior.test.mjs native/adapters/text/pronoun-gaps.test.mjs native/adapters/text/pronoun-presence.test.mjs native/tests/same-for.test.js native/tests/respects.test.js native/adapters/text/pronoun-presence-chosen.test.mjs native/adapters/text/clause-attach.test.mjs native/kernel/attend.test.mjs native/organs/thoughts.test.mjs native/the-fold/read-process-pronouns.test.mjs native/adapters/text/pronoun-registers.test.mjs native/the-fold/language-names.test.mjs native/tests/reading-baseline.test.mjs native/tests/one-door.test.mjs native/tests/pharos-gate.test.mjs native/adapters/text/pronoun-registers-san.test.mjs native/adapters/text/sanskrit-sandhi.test.mjs native/the-fold/read-san.test.mjs native/adapters/text/grc-reading.test.mjs native/tests/name-prior.test.mjs native/tests/priors-home.test.mjs native/tests/canonical-docs.test.mjs native/tests/language-competency.test.mjs native/tests/apoha.test.mjs native/tests/wikidata-name-giver.test.mjs native/tests/case-marked-clauses.test.mjs native/tests/vector-library.test.mjs native/tests/pos-smell.test.mjs native/tests/nest-from-read.test.mjs native/adapters/text/karaka-total.test.mjs native/adapters/text/gender-from-rows.test.mjs native/adapters/text/referents-in-order.test.mjs native/tests/weave-referents.test.mjs native/chat/thread.test.mjs native/chat/ingest.test.mjs native/chat/quote-frames.test.mjs native/kernel/trail-rules.test.mjs native/adapters/text/text-mereology.test.mjs native/tests/place-grain.test.mjs native/tests/chat-register.test.mjs",
 +    "test": "node native/scripts/check-reading-hygiene.mjs && node native/scripts/check-no-legacy-submodule.mjs && node --test native/the-fold/essay-fold-falsify.test.mjs native/the-fold/pipeline-run-falsify.test.mjs native/the-fold/parameter-induction-falsify.test.mjs native/the-fold/referents-falsify.test.mjs native/the-fold/ground-replay-falsify.test.mjs native/the-fold/constitution.test.mjs native/the-fold/span-drift.test.mjs native/the-fold/standing-cube.test.mjs native/the-fold/step-fold.test.mjs native/the-fold/surf-types.test.mjs native/the-fold/openness.test.mjs box-governor.test.mjs opencode-longform.test.mjs opencode-gather.test.mjs opencode-gather-reason.test.mjs opencode-gather-gate.test.mjs opencode-gather-senses.test.mjs opencode-gather-identity.test.mjs opencode-gather-voids.test.mjs opencode-gather-typos.test.mjs native/adapters/text/ud-parser.test.mjs native/kernel/eot-claim-match.test.mjs native/adapters/text/figure-binding.test.mjs native/adapters/text/non-personal.test.mjs native/adapters/text/reading-referents.test.mjs native/the-fold/declension-wiring.test.mjs native/adapters/text/ledger-opinion.test.mjs native/adapters/text/folded-card.test.mjs native/adapters/text/form-usage.test.mjs native/organs/relation-defs.test.mjs native/organs/encode.test.mjs native/adapters/text/grammar-ud-codec.test.mjs native/organs/greenberg.test.mjs native/adapters/text/ud-tokenize.test.mjs native/adapters/text/grammar-ud.test.mjs native/adapters/text/atom-world.test.mjs native/kernel/stage-identity.test.mjs native/adapters/text/corpus-exclusion.test.mjs native/organs/read-page.test.mjs native/kernel/stage-sense.test.mjs native/organs/coref-person.test.mjs native/organs/recipient-role.test.mjs native/the-fold/weft-atoms.test.mjs native/the-fold/weft-identity.test.mjs native/adapters/text/figure-period.en.test.mjs opencode-shift.test.mjs opencode-workplan-acts.test.mjs opencode-workplan-e2e-falsify.test.mjs opencode-workplan-live-e2e.test.mjs native/organs/code-form.test.mjs native/organs/web.test.mjs native/tests/entity-profile.test.js native/conformance/block-profile.test.mjs tests/opencode-cube.test.mjs native/kernel/identity-cancel.test.mjs native/kernel/reader-identity.test.mjs native/the-fold/reader-log.test.mjs native/the-fold/cancel-identity.test.mjs native/the-fold/arrangement-features.test.mjs native/kernel/attach-prior.test.mjs native/adapters/text/pronoun-gaps.test.mjs native/adapters/text/pronoun-presence.test.mjs native/tests/same-for.test.js native/tests/respects.test.js native/adapters/text/pronoun-presence-chosen.test.mjs native/adapters/text/clause-attach.test.mjs native/kernel/attend.test.mjs native/organs/thoughts.test.mjs native/the-fold/read-process-pronouns.test.mjs native/adapters/text/pronoun-registers.test.mjs native/the-fold/language-names.test.mjs native/tests/reading-baseline.test.mjs native/tests/one-door.test.mjs native/tests/pharos-gate.test.mjs native/adapters/text/pronoun-registers-san.test.mjs native/adapters/text/sanskrit-sandhi.test.mjs native/the-fold/read-san.test.mjs native/adapters/text/grc-reading.test.mjs native/tests/name-prior.test.mjs native/tests/priors-home.test.mjs native/tests/canonical-docs.test.mjs native/tests/language-competency.test.mjs native/tests/apoha.test.mjs native/tests/wikidata-name-giver.test.mjs native/tests/case-marked-clauses.test.mjs native/tests/vector-library.test.mjs native/tests/pos-smell.test.mjs native/tests/nest-from-read.test.mjs native/adapters/text/karaka-total.test.mjs native/adapters/text/gender-from-rows.test.mjs native/adapters/text/referents-in-order.test.mjs native/tests/weave-referents.test.mjs native/chat/thread.test.mjs native/chat/ingest.test.mjs native/chat/quote-frames.test.mjs native/chat/speech-frames.test.mjs native/kernel/trail-rules.test.mjs native/adapters/text/text-mereology.test.mjs native/tests/place-grain.test.mjs native/tests/chat-register.test.mjs",
+     "test:code": "node --test native/the-fold/code-loop.test.mjs native/the-fold/void-loop.test.mjs native/the-fold/void-spec-falsify.test.mjs native/the-fold/tool-call-physics.test.mjs native/the-fold/direct-bridge.test.mjs",
+     "sync": "node scripts/sync.mjs",
+     "sync:check": "node scripts/sync.mjs --check",
+-- 
+2.43.0
+
+
+From 8f0010a179622390974f48f2e75a93994704615d Mon Sep 17 00:00:00 2001
+From: Claude <noreply@anthropic.com>
+Date: Thu, 26 Nov 2026 01:47:52 +0000
+Subject: [PATCH 8/8] frames: one layer, two doors; the canonical reader now
+ says who holds the words
+
+The quote and speech layers move from chat/ to adapters/text/ (beside speakers.js) so the canonical reader does not import a surface.
+frames-layer.js is the one implementation; chat/ingest.mjs and the new the-fold/read-framed.mjs (readDocument rows:true + frames) both call it.
+Language must be declared (a missing or unheld language is a typed gap, never English). Aligning the doors found and fixed two bugs:
+a quotation that closed in the PREVIOUS paragraph was taken for the tag of the next paragraph's speech verb; and a quotation that continues into the
+next paragraph swallowed the narration after its last mark (a paragraph break now ends every open quotation, typed as continuing).
+Proof (native/tests/read-framed.test.mjs, 7 tests): 17 of 17 hand-labelled verbs through the canonical door; chat and canonical doors agree on 17 of 17;
+Genesis oracle through the canonical door: P 87% R 80% (fresh), P 88% R 86% (other); clause tree agrees with the position rule on 73 of its 80 speech sentences.
+
+Co-Authored-By: Claude Sonnet 5.5 <noreply@anthropic.com>
+Claude-Session: https://claude.ai/code/session_01AP2eRC5CScKTs8ZE4Wpdoe
+---
+ native/adapters/text/frames-layer.js          | 44 ++++++++++++
+ .../{chat => adapters/text}/quote-frames.js   |  5 +-
+ .../text}/quote-frames.test.mjs               |  2 +-
+ .../{chat => adapters/text}/speech-frames.js  |  8 +++
+ .../text}/speech-frames.test.mjs              |  2 +-
+ native/chat/ingest.mjs                        | 35 +++-------
+ native/tests/read-framed.test.mjs             | 70 +++++++++++++++++++
+ native/the-fold/read-framed.mjs               | 49 +++++++++++++
+ package.json                                  |  2 +-
+ 9 files changed, 186 insertions(+), 31 deletions(-)
+ create mode 100644 native/adapters/text/frames-layer.js
+ rename native/{chat => adapters/text}/quote-frames.js (91%)
+ rename native/{chat => adapters/text}/quote-frames.test.mjs (96%)
+ rename native/{chat => adapters/text}/speech-frames.js (93%)
+ rename native/{chat => adapters/text}/speech-frames.test.mjs (97%)
+ create mode 100644 native/tests/read-framed.test.mjs
+ create mode 100644 native/the-fold/read-framed.mjs
+
+diff --git a/native/adapters/text/frames-layer.js b/native/adapters/text/frames-layer.js
+new file mode 100644
+index 0000000..9069802
+--- /dev/null
++++ b/native/adapters/text/frames-layer.js
+@@ -0,0 +1,44 @@
++// adapters/text/frames-layer.js — THE FRAMES LAYER, ONE IMPLEMENTATION: who holds the words a verb sits in.
++//
++// Two front doors call this and nothing else decides a frame: the canonical reader (the-fold/read-framed.mjs, over a readDocument entry) and the chat (chat/ingest.mjs, over its own thread). A frame is marked by two independent
++// layers that agree on one shape: quote-frames.js (quotation marks, per-language declared tables) and speech-frames.js (a verb of saying, no marks needed, speech verbs from a prior). Neither reads a word list; neither guesses:
++// a language with no table, a dash dialogue, or a missing prior is a typed gap and the frame is UNKNOWN (null), never narration.
++//
++// frameVerbs({ text, sentences, targets, names, lang, speech }) -> { frames, speech: [{ order, a, b, holder, mode }], gap }
++//   text       the string the sentence offsets are expressed in (a paragraph for the chat, the whole document for the canonical reader)
++//   sentences  [{ order, offset, rows }]  offset = where the sentence starts in `text`; each row's start/end are the SENTENCE's own
++//   targets    [{ order, row, form, kriya }]  the verbs to frame (the caller chooses which rows count)
++//   names      the known names (the cast's surfaces), only to name the holder of a quotation from its tag
++//   speech     { isSpeech, gap } from speech-frames.js::speechVerbFromActPrior (a non-English language passes a gap)
++// frame: { order, form, kriya, framed (inside quotation marks: true/false/null), holder, via, depth, reported (inside reported speech: true/false/null), reportedBy, reportedHead, mode }
++import { quoteSpans, speakerOfSpan, innermostAt, dashDialogue } from "./quote-frames.js";
++import { speechFrames, heldAt } from "./speech-frames.js";
++
++// the quotations that can be the TAG of this sentence's speech verb: those overlapping the sentence, or closing within a few characters before it IN THE SAME PARAGRAPH (the splitter may cut "“Hello.” said Pierre." after the quote).
++// One that closed in an earlier paragraph is not a tag: found by running the canonical door over a whole document (the chat door, one paragraph at a time, never saw it).
++const quotesNear = (spans, s, text) => { const end = s.offset + Math.max(0, ...s.rows.map((r) => r.end)); return spans.filter((q) => (q.close >= s.offset && q.open <= end) || (q.close < s.offset && s.offset - q.close <= 4 && !text.slice(q.close + 1, s.offset).includes("\n"))); };
++
++export function frameVerbs({ text, sentences, targets, names, lang = "eng", speech }) {
++  const { spans, gap: spanGap } = quoteSpans(text, lang), noTable = spanGap?.gap === "no_quote_table" ? spanGap : null;
++  const sentByOrder = new Map(sentences.map((s) => [s.order, s])), perOrder = new Map(), speechOut = [], frames = [], dashed = new Map();
++  const paragraphStart = (pos) => { const i = text.lastIndexOf("\n\n", pos); return i < 0 ? 0 : i + 2; };
++  for (const t of targets) {
++    const s = sentByOrder.get(t.order); if (!s || !t.row) continue;
++    const pStart = paragraphStart(s.offset), dash = dashed.has(pStart) ? dashed.get(pStart) : (dashed.set(pStart, dashDialogue(text.slice(pStart), lang)), dashed.get(pStart)), gap = dash ? { gap: "dash_dialogue_not_read" } : noTable;
++    if (!perOrder.has(t.order)) {
++      // the mark-free layer, per sentence, on the sentence's own rows; a quotation abutting the speech verb is that quotation's tag and is left to the mark layer
++      const frs = speech.gap ? [] : speechFrames(s.rows, speech.isSpeech, { quotes: quotesNear(spans, s, text).map((q) => ({ open: q.open - s.offset, close: q.close - s.offset, depth: q.depth })) });
++      perOrder.set(t.order, frs); for (const x of frs) speechOut.push({ order: t.order, a: s.offset + x.known[0], b: s.offset + x.known[1], holder: x.holder, mode: x.mode });
++    }
++    const held = speech.gap ? null : heldAt(perOrder.get(t.order), t.row.start);
++    const rep = speech.gap || dash ? { reported: null, reportedBy: null, reportedHead: null, mode: null } : held ? { reported: held.unknown ? null : true, reportedBy: held.holder?.text ?? null, reportedHead: held.holder?.head ?? null, mode: held.mode } : { reported: false, reportedBy: null, reportedHead: null, mode: null };
++    const base = { order: t.order, form: t.form, kriya: t.kriya };
++    if (gap) { frames.push({ ...base, framed: null, holder: null, via: gap.gap, depth: 0, ...rep }); continue; }
++    const pos = s.offset + t.row.start, q = innermostAt(spans, pos);
++    if (!q) { frames.push({ ...base, framed: false, holder: null, via: null, depth: 0, ...rep }); continue; }
++    const top = spans.findIndex((x) => x.depth === 0 && x.open <= q.open && x.close >= q.close), h = speakerOfSpan(text, spans, top < 0 ? 0 : top, names, lang);
++    frames.push({ ...base, framed: true, holder: h.holder, via: h.via, depth: q.depth, ...rep });
++  }
++  const gaps = [...(spanGap ? [spanGap] : [])]; if (sentences.some((s) => dashDialogue(text.slice(paragraphStart(s.offset)), lang))) gaps.push({ gap: "dash_dialogue_not_read" });
++  return { frames, speech: speechOut, gap: noTable ?? null, gaps };
++}
+diff --git a/native/chat/quote-frames.js b/native/adapters/text/quote-frames.js
+similarity index 91%
+rename from native/chat/quote-frames.js
+rename to native/adapters/text/quote-frames.js
+index 62b9d78..5e65ef3 100644
+--- a/native/chat/quote-frames.js
++++ b/native/adapters/text/quote-frames.js
+@@ -45,13 +45,16 @@ export function quoteSpans(text, lang = "eng") {
+   const opens = new Map(T.pairs.map(([o, c]) => [o, c])), closes = new Set(T.pairs.map(([, c]) => c)), toggles = new Set(T.toggle);
+   const stack = [], spans = [], gaps = []; const s = String(text ?? "");
+   const close = (o, i) => spans.push({ open: o.open, close: i, inner: [o.open + 1, i], depth: stack.length });
++  let paraStart = 0;   // where the current paragraph begins: a closer with no opener closes a quotation that began earlier IN THIS PARAGRAPH'S frame, never one from a paragraph before
+   for (let i = 0; i < s.length; i++) {
+     const c = s[i], top = stack[stack.length - 1];
++    // a paragraph break ends every open quotation here (the convention is that a speech that goes on reopens in the next paragraph without the last having closed): typed as continuing, so narration after the final mark is not swallowed
++    if (c === "\n" && s[i + 1] === "\n") { while (stack.length) { const o = stack.pop(); spans.push({ open: o.open, close: i, inner: [o.open + 1, i], depth: stack.length, continues: true }); gaps.push({ gap: "quotation_continues", at: o.open }); } while (s[i + 1] === "\n") i++; paraStart = i + 1; continue; }
+     if (toggles.has(c)) { if (top && top.mark === c) close(stack.pop(), i); else stack.push({ open: i, mark: c, closer: c }); continue; }
+     if (opens.has(c) && !(closes.has(c) && top && top.closer === c)) { stack.push({ open: i, mark: c, closer: opens.get(c) }); continue; }
+     if (closes.has(c)) {
+       if (top && top.closer === c) close(stack.pop(), i);
+-      else { spans.push({ open: -1, close: i, inner: [0, i], depth: 0, continued: true }); gaps.push({ gap: "quotation_continued", at: i }); }
++      else { spans.push({ open: paraStart - 1, close: i, inner: [paraStart, i], depth: 0, continued: true }); gaps.push({ gap: "quotation_continued", at: i }); }
+     }
+   }
+   while (stack.length) { const o = stack.pop(); spans.push({ open: o.open, close: s.length, inner: [o.open + 1, s.length], depth: stack.length, continues: true }); gaps.push({ gap: "quotation_continues", at: o.open }); }
+diff --git a/native/chat/quote-frames.test.mjs b/native/adapters/text/quote-frames.test.mjs
+similarity index 96%
+rename from native/chat/quote-frames.test.mjs
+rename to native/adapters/text/quote-frames.test.mjs
+index ef01f76..2808d4d 100644
+--- a/native/chat/quote-frames.test.mjs
++++ b/native/adapters/text/quote-frames.test.mjs
+@@ -46,7 +46,7 @@ function pick(h) { return { holder: h.holder, via: h.via }; }
+ 
+ // ── on a thread: which verbs are framed, against a hand-labelled gold (pg1342 chapter I, paragraphs 1 to 8; labelled from the text, not from the output) ──
+ let mk = null, ingestDocument = null, askFramed = null, why = null;
+-try { const { makeThread } = await import("./thread.mjs"); ({ ingestDocument, askFramed } = await import("./ingest.mjs")); mk = () => makeThread({ hl: "http://127.0.0.1:1", know: null, codeRouter: null, now: () => new Date("2026-11-25T14:00:00") }); await mk(); } catch (e) { why = String(e?.message ?? e).slice(0, 100); if (String(e?.message).includes("ingest.mjs")) throw e; }
++try { const { makeThread } = await import("../../chat/thread.mjs"); ({ ingestDocument, askFramed } = await import("../../chat/ingest.mjs")); mk = () => makeThread({ hl: "http://127.0.0.1:1", know: null, codeRouter: null, now: () => new Date("2026-11-25T14:00:00") }); await mk(); } catch (e) { why = String(e?.message ?? e).slice(0, 100); if (String(e?.message).includes("ingest.mjs")) throw e; }
+ const T = { skip: mk ? false : `no reader here: ${why}` };
+ const CH1 = [
+   "“My dear Mr. Bennet,” said his lady to him one day, “have you heard that\nNetherfield Park is let at last?”", "Mr. Bennet replied that he had not.",
+diff --git a/native/chat/speech-frames.js b/native/adapters/text/speech-frames.js
+similarity index 93%
+rename from native/chat/speech-frames.js
+rename to native/adapters/text/speech-frames.js
+index 8ca8e94..9b2474d 100644
+--- a/native/chat/speech-frames.js
++++ b/native/adapters/text/speech-frames.js
+@@ -72,3 +72,11 @@ export function speechVerbFromActPrior(prior) {
+     const cls = e.classes ?? []; return cls.length > 0 && cls.filter(comm).length * 2 >= cls.length;
+   } };
+ }
++
++// the act prior as Zenodotus holds it, found as a sibling of this repo (ACT_PRIOR overrides); null when absent, and the caller says so (speechVerbFromActPrior(null) is the typed gap)
++import fs from "node:fs";
++let ACT_CACHE;
++export const loadActPrior = (file = process.env.ACT_PRIOR || new URL("../../../../Zenodotus/derived-priors/act-priors/act-prior-en.json", import.meta.url).pathname) => {
++  if (file === ACT_CACHE?.file) return ACT_CACHE.value;
++  let value = null; try { value = JSON.parse(fs.readFileSync(file, "utf8")); } catch { value = null; } ACT_CACHE = { file, value }; return value;
++};
+diff --git a/native/chat/speech-frames.test.mjs b/native/adapters/text/speech-frames.test.mjs
+similarity index 97%
+rename from native/chat/speech-frames.test.mjs
+rename to native/adapters/text/speech-frames.test.mjs
+index 66ac0b5..67a6a6a 100644
+--- a/native/chat/speech-frames.test.mjs
++++ b/native/adapters/text/speech-frames.test.mjs
+@@ -55,7 +55,7 @@ test("speech verbs come from the act prior's communication classes (VerbNet 37.x
+ 
+ // ── on a thread, over real KJV Genesis (no quotation marks anywhere), hand-labelled from the verses: `reported` is true inside what was said, false for narration, null where the text cannot say ──
+ let mk = null, ingestDocument = null, askFramed = null, why = null;
+-try { const { makeThread } = await import("./thread.mjs"); ({ ingestDocument, askFramed } = await import("./ingest.mjs")); mk = () => makeThread({ hl: "http://127.0.0.1:1", know: null, codeRouter: null, now: () => new Date("2026-11-26T10:00:00") }); await mk(); } catch (e) { why = String(e?.message ?? e).slice(0, 100); }
++try { const { makeThread } = await import("../../chat/thread.mjs"); ({ ingestDocument, askFramed } = await import("../../chat/ingest.mjs")); mk = () => makeThread({ hl: "http://127.0.0.1:1", know: null, codeRouter: null, now: () => new Date("2026-11-26T10:00:00") }); await mk(); } catch (e) { why = String(e?.message ?? e).slice(0, 100); }
+ const T = { skip: mk ? false : `no reader here: ${why}` };
+ const KJV = ["And God said, Let there be light: and there was light.", "And the LORD God said unto the woman, What is this that thou hast done?", "And the woman said, The serpent beguiled me, and I did eat.", "Now the serpent was more subtil than any beast of the field which the LORD God had made.", "Mr. Bennet replied that he had not.", "“Hello,” said Pierre, and he left.", "And he said unto the woman, Yea, hath God said, Ye shall not eat of every tree of the garden?"];
+ // [paragraph, verb form, reported, holder]
+diff --git a/native/chat/ingest.mjs b/native/chat/ingest.mjs
+index 96be151..f67540f 100644
+--- a/native/chat/ingest.mjs
++++ b/native/chat/ingest.mjs
+@@ -13,11 +13,8 @@
+ // saying happened; askFramed() says whose words an answer is. Direct quotation only: reported speech inside a quotation is a second frame, not read yet.
+ //
+ // ingestDocument(thread, text, { onRead, lang }) -> { paragraphs, read, sentences, facts, setAside: [{ text, why }], frames: [{ order, form, kriya, framed, holder, via, depth }], quoteGaps, gap }
+-import { quoteSpans, speakerOfSpan, innermostAt, dashDialogue } from "./quote-frames.js";
+-import { speechFrames, heldAt, speechVerbFromActPrior } from "./speech-frames.js";
+-import fs from "node:fs";
+-const ACT_PRIOR_FILE = process.env.ACT_PRIOR || new URL("../../../Zenodotus/derived-priors/act-priors/act-prior-en.json", import.meta.url).pathname;
+-let ACT_CACHE; const loadActPrior = () => (ACT_CACHE !== undefined ? ACT_CACHE : (ACT_CACHE = (() => { try { return JSON.parse(fs.readFileSync(ACT_PRIOR_FILE, "utf8")); } catch { return null; } })()));
++import { speechVerbFromActPrior, loadActPrior } from "../adapters/text/speech-frames.js";
++import { frameVerbs } from "../adapters/text/frames-layer.js";
+ const SPEECH = new WeakMap();   // thread -> [{ order, a, b, holder, mode }]: where in the thread text reported speech lies (known part only)
+ const STORE = new WeakMap();   // thread -> frames, so a question asked later can say whose words an answer is
+ const paragraphsOf = (text) => {
+@@ -51,30 +48,14 @@ export async function ingestDocument(thread, text, { onRead = null, lang = "eng"
+   return res;
+ }
+ 
+-/** the frames of one just-read paragraph: for each verb the chat found, is it inside a quotation, and whose */
++/** the frames of one just-read paragraph: for each verb the chat found, is it inside a quotation or inside reported speech, and whose. The decision is frames-layer.js, shared with the canonical reader. */
+ function framesOf(thread, p, r, lang, speech) {
+-  const S = thread.engine.S, base0 = quoteSpans(p, lang), spans = base0.spans, dash = dashDialogue(p, lang);
+-  const gap = dash ? { gap: "dash_dialogue_not_read" } : base0.gap && base0.gap.gap === "no_quote_table" ? base0.gap : null, base = S.text.length - p.length, orders = new Set((r.facts ?? []).map((f) => f.order));
++  const S = thread.engine.S, base = S.text.length - p.length, orders = new Set((r.facts ?? []).map((f) => f.order));
+   const names = (S.read?.cast?.referents ?? []).filter((b) => b.kind === "name").map((b) => b.forms?.[0]?.[0]).filter(Boolean);
+-  const out = [], speechOut = [], perOrder = new Map();
+-  for (const f of S.frames) {
+-    if (!orders.has(f.order)) continue;
+-    const rows = S.rowsOf.get(f.order)?.rows ?? [], row = rows.find((x) => x.form === f.form), off = S.read.sentences.find((s) => s.order === f.order)?.offset;
+-    if (!row || off == null) continue;
+-    // the mark-free layer, per sentence, on the sentence's own rows (offsets are the sentence's); a quotation abutting the speech verb is that quotation's tag and is left to the mark layer
+-    const sOff = off - base;
+-    if (!perOrder.has(f.order)) {
+-      const frs = speech.gap ? [] : speechFrames(rows, speech.isSpeech, { quotes: spans.map((q) => ({ open: q.open - sOff, close: q.close - sOff, depth: q.depth })) });
+-      perOrder.set(f.order, frs); for (const x of frs) speechOut.push({ order: f.order, a: base + sOff + x.known[0], b: base + sOff + x.known[1], holder: x.holder, mode: x.mode });
+-    }
+-    const held = speech.gap ? null : heldAt(perOrder.get(f.order), row.start), rep = speech.gap || dash ? { reported: null, reportedBy: null, reportedHead: null, mode: null } : held ? { reported: held.unknown ? null : true, reportedBy: held.holder?.text ?? null, reportedHead: held.holder?.head ?? null, mode: held.mode } : { reported: false, reportedBy: null, reportedHead: null, mode: null };
+-    if (gap) { out.push({ order: f.order, form: f.form, kriya: f.kriya, framed: null, holder: null, via: gap.gap, depth: 0, ...rep }); continue; }
+-    const pos = off + row.start - base, q = innermostAt(spans, pos);
+-    if (!q) { out.push({ order: f.order, form: f.form, kriya: f.kriya, framed: false, holder: null, via: null, depth: 0, ...rep }); continue; }
+-    const top = spans.findIndex((x) => x.depth === 0 && x.open <= q.open && x.close >= q.close), h = speakerOfSpan(p, spans, top < 0 ? 0 : top, names, lang);
+-    out.push({ order: f.order, form: f.form, kriya: f.kriya, framed: true, holder: h.holder, via: h.via, depth: q.depth, ...rep });
+-  }
+-  return { frames: out, gap, speech: speechOut };
++  const sentences = [...orders].map((order) => ({ order, offset: (S.read.sentences.find((s) => s.order === order)?.offset ?? base) - base, rows: S.rowsOf.get(order)?.rows ?? [] }));
++  const targets = S.frames.filter((f) => orders.has(f.order)).map((f) => ({ order: f.order, row: (S.rowsOf.get(f.order)?.rows ?? []).find((x) => x.form === f.form), form: f.form, kriya: f.kriya }));
++  const out = frameVerbs({ text: p, sentences, targets, names, lang, speech });
++  return { frames: out.frames, gap: out.gaps.find((x) => x.gap === "dash_dialogue_not_read" || x.gap === "no_quote_table") ?? null, speech: out.speech.map((x) => ({ ...x, a: x.a + base, b: x.b + base })) };
+ }
+ 
+ /** askFramed(thread, question) -> the thread's own reply, plus { framed, holder }: an answer drawn wholly from inside a quotation says whose words they are; a mixed or narrated one is left as it was */
+diff --git a/native/tests/read-framed.test.mjs b/native/tests/read-framed.test.mjs
+new file mode 100644
+index 0000000..a1b5656
+--- /dev/null
++++ b/native/tests/read-framed.test.mjs
+@@ -0,0 +1,70 @@
++// tests/read-framed.test.mjs — THE PROOF that the canonical reader and the chat are one system for frames: the same layer, two doors, hand-labelled gold, a regression for each defect the alignment found, and a measured parity.
++// Needs the reader's priors (KHORA_PRIORS_DIR), the pharos clone (PHAROS_HOME) and the act prior (Zenodotus beside khora); skips without them, saying why.
++import test from "node:test"; import assert from "node:assert/strict";
++let readFramed = null, why = null, ingestDocument = null, mkThread = null;
++try {
++  ({ readFramed } = await import("../the-fold/read-framed.mjs")); ({ ingestDocument } = await import("../chat/ingest.mjs"));
++  const { makeThread } = await import("../chat/thread.mjs"); mkThread = () => makeThread({ hl: "http://127.0.0.1:1", know: null, codeRouter: null, now: () => new Date("2026-11-26T10:00:00") });
++  await readFramed("Mr. Bennet made no answer. ".repeat(10), { language: "eng" });
++} catch (e) { why = String(e?.message ?? e).slice(0, 140); readFramed = null; }
++const T = { skip: readFramed ? false : `no canonical reader here: ${why}` };
++
++// passages with their hand labels. Each is a paragraph; the whole document is read ONCE through the canonical door.
++// gold: [form, framed (inside quotation marks), reported (inside what a speech verb reported; null = unknown), head of the holder of the report]
++const PASSAGES = [
++  { t: "“My dear Mr. Bennet,” said his lady to him one day, “have you heard that Netherfield Park is let at last?”", g: [["said", false, false, null], ["heard", true, false, null]] },
++  { t: "Mr. Bennet replied that he had not.", g: [["replied", false, false, null], ["had", false, true, "Bennet"]] },
++  { t: "“But it is,” returned she; “for Mrs. Long has just been here, and she told me all about it.”", g: [["returned", false, false, null], ["told", true, false, null]] },
++  { t: "“Hello,” said Pierre, and he left.", g: [["said", false, false, null], ["left", false, false, null]] },
++  { t: "And God said, Let there be light: and there was light.", g: [["said", false, false, null], ["be", false, true, "God"], ["was", false, null, "God"]] },
++  { t: "And the LORD God said unto the woman, What is this that thou hast done?", g: [["said", false, false, null], ["done", false, true, "LORD"]] },
++  { t: "And the woman said, The serpent beguiled me, and I did eat.", g: [["said", false, false, null], ["beguiled", false, true, "woman"], ["eat", false, null, "woman"]] },
++  { t: "Now the serpent was more subtil than any beast of the field which the LORD God had made.", g: [["made", false, false, null]] },
++];
++const DOC = PASSAGES.map((p) => p.t).join("\n\n"), starts = []; { let at = 0; for (const p of PASSAGES) { starts.push(at); at += p.t.length + 2; } }
++const passageOf = (offset) => starts.filter((s) => s <= offset).length - 1;
++const framesByPassage = (w) => { const out = PASSAGES.map(() => []); for (const f of w.frames.frames) out[passageOf(w.parse.find((p) => p.order === f.order).offset)].push(f); return out; };
++
++test("the language must be declared: none, or one the reader does not hold, is a typed gap and no frames (never an English reading)", T, async () => {
++  const a = await readFramed("Mr. Bennet made no answer. ".repeat(10), {}); assert.equal(a.frames.frames.length, 0); assert.equal(a.frames.gaps[0].gap, "language_not_declared");
++  const b = await readFramed("Mr. Bennet made no answer. ".repeat(10), { language: "xxx" }); assert.equal(b.frames.frames.length, 0); assert.equal(b.frames.gaps[0].gap, "language_not_held");
++});
++
++test("GOLD through the canonical door: 8 passages, quotation marks and no marks, every labelled verb framed and reported exactly as hand-labelled", T, async () => {
++  const w = await readFramed(DOC, { language: "eng" }); const by = framesByPassage(w), wrong = [], miss = []; let n = 0;
++  PASSAGES.forEach((p, pi) => { for (const [form, framed, reported, head] of p.g) { n++; const f = by[pi].find((x) => x.form === form); if (!f) { miss.push(`${pi}:${form}`); continue; } if (f.framed !== framed || f.reported !== reported || (head && f.reportedHead !== head)) wrong.push(`${pi}:${form} framed=${f.framed} reported=${f.reported} head=${f.reportedHead} want ${framed}/${reported}/${head}`); } });
++  console.log(`# canonical gold: ${n - miss.length} of ${n} verbs found; wrong ${wrong.length}; not found ${miss.join(",") || "-"}`);
++  assert.deepEqual(wrong, [], wrong.join(" | ")); assert.deepEqual(miss, [], `not found: ${miss}`);
++});
++
++test("REGRESSION found by aligning the doors: a quotation that closed in the PREVIOUS paragraph is not the tag of this paragraph's speech verb ('replied that he had not' must still be reported)", T, async () => {
++  const w = await readFramed(DOC, { language: "eng" }), had = framesByPassage(w)[1].find((x) => x.form === "had");
++  assert.equal(had.reported, true); assert.equal(had.mode, "indirect"); assert.equal(had.reportedHead, "Bennet");
++});
++
++test("TRAP: narration is never framed or reported, and a marked quotation's tag does not make the narration after it speech", T, async () => {
++  const w = await readFramed(DOC, { language: "eng" }), by = framesByPassage(w);
++  for (const f of by[7]) { assert.equal(f.framed, false); assert.equal(f.reported, false); }
++  assert.equal(by[3].find((x) => x.form === "left").reported, false);
++});
++
++test("a quotation that continues into the next paragraph (the English convention: the next opens again without the last closing) keeps its verbs framed across the break, and says so", T, async () => {
++  const doc = "“I went to the market and I bought the bread that morning, and the baker told me about the fire in the old mill.\n\n“Then I walked home and I ate the bread and I slept.” Pierre laughed at the story and told nobody.";
++  const w = await readFramed(doc + " " + "Mr. Bennet made no answer. ".repeat(4), { language: "eng" }), f = (form) => w.frames.frames.filter((x) => x.form === form);
++  assert.ok(f("went").every((x) => x.framed === true) && f("walked").every((x) => x.framed === true), "verbs on both sides of the paragraph break are inside the quotation");
++  assert.ok(w.frames.gaps.some((g) => g.gap === "quotation_continues" || g.gap === "quotation_continued"), JSON.stringify(w.frames.gaps));
++  assert.ok(f("laughed").every((x) => x.framed === false), "narration after the closing mark is not framed");
++});
++
++test("PARITY: the chat door and the canonical door, one layer, agree on every labelled verb; the overall agreement is measured", T, async () => {
++  const w = await readFramed(DOC, { language: "eng" }), canon = framesByPassage(w), th = await mkThread(), r = await ingestDocument(th, DOC);
++  let both = 0, agree = 0, disagree = [];
++  PASSAGES.forEach((p, pi) => { for (const [form] of p.g) { const a = canon[pi].find((x) => x.form === form), b = r.frames.find((x) => x.para === pi && x.form === form); if (!a || !b) continue; both++; if (a.framed === b.framed && a.reported === b.reported) agree++; else disagree.push(`${pi}:${form} canon ${a.framed}/${a.reported} chat ${b.framed}/${b.reported}`); } });
++  console.log(`# parity on labelled verbs: ${agree} of ${both} agree${disagree.length ? "; differ: " + disagree.join(" | ") : ""}`);
++  assert.ok(both >= 10, `too few verbs found by both doors: ${both}`); assert.deepEqual(disagree, [], disagree.join(" | "));
++});
++
++test("the clause tree is an independent witness: the canonical clause tree and the position rule are compared, never merged (counts only)", T, async () => {
++  const w = await readFramed(DOC, { language: "eng" }), c = w.frames.crossCheck; assert.ok(c && typeof c.both === "number", JSON.stringify(c)); assert.equal(c.onlyTree, 0, "every sentence the tree calls speech is one the layer also reports: " + JSON.stringify(c));
++  console.log(`# clause tree v. position rule on reported speech: layer ${c.reportedByLayer}, tree ${c.speechComplementByTree}, both ${c.both}, only layer ${c.onlyLayer}, only tree ${c.onlyTree}`);
++});
+diff --git a/native/the-fold/read-framed.mjs b/native/the-fold/read-framed.mjs
+new file mode 100644
+index 0000000..04b0c38
+--- /dev/null
++++ b/native/the-fold/read-framed.mjs
+@@ -0,0 +1,49 @@
++// the-fold/read-framed.mjs — THE CANONICAL READ, WITH ITS FRAMES: one door that reads a document and says, for every verb, who holds the words it sits in.
++//
++// It adds no reader. It calls the canonical front door (reading.js::readDocument, rows: true: the language decision, the priors, the cut, the cast, the UD parse, the clause tree, the pharos write) and then runs the ONE
++// frames layer (adapters/text/frames-layer.js) over the entry's own parse rows, sentences and cast. The chat's ingest door (chat/ingest.mjs) calls the same layer, so the two doors cannot disagree about a frame except
++// through the rows they were handed (native/tests/read-framed.test.mjs measures exactly that).
++//
++// THE LANGUAGE IS DECLARED, never defaulted: no `language` is a typed gap and no frames; a language the reader does not hold (it fell back to default priors) is a typed gap and no frames. A language with no quote table or
++// no speech-verb prior says so and its frames are unknown (null), never narration.
++//
++// readFramed(text, { language, actPrior, ...readDocumentOptions }) -> the canonical entry + entry.frames = { schema: "Frames@1", lang, frames, speech, gaps, crossCheck }
++import { readDocument } from "../reading.js";
++import { frameVerbs } from "../adapters/text/frames-layer.js";
++import { speechVerbFromActPrior, loadActPrior } from "../adapters/text/speech-frames.js";
++
++export const FRAMES_SCHEMA = "Frames@1";
++const norm = (t) => String(t ?? "").split("\r\n").join("\n").split("\r").join("\n");
++
++export async function readFramed(text, { language, actPrior, ...opts } = {}) {
++  const T = norm(text);
++  if (!language) { const entry = await readDocument(T, { rows: true, ...opts }); entry.frames = { schema: FRAMES_SCHEMA, lang: null, frames: [], speech: [], gaps: [{ gap: "language_not_declared", how: "pass language (a stem such as eng): the frames layer never reads a language it was not told" }], crossCheck: null }; return entry; }
++  const entry = await readDocument(T, { language, rows: true, ...opts }), stem = entry.language?.stem ?? null, held = (entry.gaps ?? []).map((g) => g.gap ?? g);
++  const fail = (gap) => { entry.frames = { schema: FRAMES_SCHEMA, lang: stem, frames: [], speech: [], gaps: [gap], crossCheck: null }; return entry; };
++  if (!stem || held.includes("unknown_language") || held.includes("language_default")) return fail({ gap: "language_not_held", declared: language, read_as: stem, how: "the reader fell back to default priors; frames are not read for a language it does not hold" });
++  if (!Array.isArray(entry.parse) || !entry.parse.length) return fail({ gap: "no_parse_rows", how: "the language has no UD codec filed (reading.js::rowsOfFor): frames need rows" });
++  // the canonical entry's sentence offsets are into the normalised text; if they do not line up the layer refuses rather than frame the wrong span
++  const bad = entry.parse.filter((p) => T.slice(p.offset, p.offset + p.text.length) !== p.text).length;
++  if (bad) return fail({ gap: "offsets_not_aligned", sentences: bad, of: entry.parse.length });
++  const speech = stem === "eng" ? speechVerbFromActPrior(actPrior === undefined ? loadActPrior() : actPrior) : { isSpeech: () => false, gap: { gap: "no_speech_verbs_for_language", lang: stem } };
++  const sentences = entry.parse.map((p) => ({ order: p.order, offset: p.offset, rows: p.rows ?? [] }));
++  const targets = entry.parse.flatMap((p) => (p.rows ?? []).filter((r) => r.upos === "VERB").map((r) => ({ order: p.order, row: r, form: r.form, kriya: String(r.lemma ?? r.form).toLowerCase() })));
++  const names = [...new Set((entry.cast ?? []).flatMap((c) => [c.surface, ...(c.allSurfaces ?? [])]).filter(Boolean))];
++  const out = frameVerbs({ text: T, sentences, targets, names, lang: stem, speech }), gaps = [...out.gaps]; if (speech.gap) gaps.push(speech.gap);
++  entry.frames = { schema: FRAMES_SCHEMA, lang: stem, frames: out.frames, speech: out.speech, gaps, crossCheck: clauseTreeAgreement(entry, out.frames, speech) };
++  return entry;
++}
++
++/**
++ * An INDEPENDENT check of the speech layer against the canonical clause tree: a sentence the position rule calls reported speech (direct or indirect) should also hold, in the clause tree, a complement clause under a
++ * speech verb. The two read the same text by different means (position over rows; the dependency attachment), and the tree is only as good as the parser: it sees the complement when the parser happened to attach it.
++ * Returns counts, never a verdict: where they disagree is information about one of them.
++ */
++export function clauseTreeAgreement(entry, frames, speech) {
++  if (!Array.isArray(entry.clauses) || !speech?.isSpeech) return { gap: "no_clause_tree", how: "the clause tree is English or case-marked only (read-quality.mjs)" };
++  const byId = new Map(entry.clauses.map((c) => [c.id, c])), sentOf = (c) => String(c.id).split(".")[0];
++  const treeSentences = new Set(entry.clauses.filter((c) => c.relation === "complement" && byId.get(c.parent) && speech.isSpeech(String(byId.get(c.parent).predicate?.lemma ?? "").toLowerCase())).map(sentOf));
++  const layerSentences = new Set(frames.filter((f) => f.reported === true).map((f) => `s${f.order}`));
++  const both = [...layerSentences].filter((s) => treeSentences.has(s)).length;
++  return { reportedByLayer: layerSentences.size, speechComplementByTree: treeSentences.size, both, onlyLayer: layerSentences.size - both, onlyTree: treeSentences.size - both };
++}
+diff --git a/package.json b/package.json
+index 0074b7f..7fbbf1d 100644
+--- a/package.json
++++ b/package.json
+@@ -4,7 +4,7 @@
+   "description": "EOReader 7 now has a native canonical recursive-reading kernel.",
+   "main": "kernel.js",
+   "scripts": {
+-    "test": "node native/scripts/check-reading-hygiene.mjs && node native/scripts/check-no-legacy-submodule.mjs && node --test native/the-fold/essay-fold-falsify.test.mjs native/the-fold/pipeline-run-falsify.test.mjs native/the-fold/parameter-induction-falsify.test.mjs native/the-fold/referents-falsify.test.mjs native/the-fold/ground-replay-falsify.test.mjs native/the-fold/constitution.test.mjs native/the-fold/span-drift.test.mjs native/the-fold/standing-cube.test.mjs native/the-fold/step-fold.test.mjs native/the-fold/surf-types.test.mjs native/the-fold/openness.test.mjs box-governor.test.mjs opencode-longform.test.mjs opencode-gather.test.mjs opencode-gather-reason.test.mjs opencode-gather-gate.test.mjs opencode-gather-senses.test.mjs opencode-gather-identity.test.mjs opencode-gather-voids.test.mjs opencode-gather-typos.test.mjs native/adapters/text/ud-parser.test.mjs native/kernel/eot-claim-match.test.mjs native/adapters/text/figure-binding.test.mjs native/adapters/text/non-personal.test.mjs native/adapters/text/reading-referents.test.mjs native/the-fold/declension-wiring.test.mjs native/adapters/text/ledger-opinion.test.mjs native/adapters/text/folded-card.test.mjs native/adapters/text/form-usage.test.mjs native/organs/relation-defs.test.mjs native/organs/encode.test.mjs native/adapters/text/grammar-ud-codec.test.mjs native/organs/greenberg.test.mjs native/adapters/text/ud-tokenize.test.mjs native/adapters/text/grammar-ud.test.mjs native/adapters/text/atom-world.test.mjs native/kernel/stage-identity.test.mjs native/adapters/text/corpus-exclusion.test.mjs native/organs/read-page.test.mjs native/kernel/stage-sense.test.mjs native/organs/coref-person.test.mjs native/organs/recipient-role.test.mjs native/the-fold/weft-atoms.test.mjs native/the-fold/weft-identity.test.mjs native/adapters/text/figure-period.en.test.mjs opencode-shift.test.mjs opencode-workplan-acts.test.mjs opencode-workplan-e2e-falsify.test.mjs opencode-workplan-live-e2e.test.mjs native/organs/code-form.test.mjs native/organs/web.test.mjs native/tests/entity-profile.test.js native/conformance/block-profile.test.mjs tests/opencode-cube.test.mjs native/kernel/identity-cancel.test.mjs native/kernel/reader-identity.test.mjs native/the-fold/reader-log.test.mjs native/the-fold/cancel-identity.test.mjs native/the-fold/arrangement-features.test.mjs native/kernel/attach-prior.test.mjs native/adapters/text/pronoun-gaps.test.mjs native/adapters/text/pronoun-presence.test.mjs native/tests/same-for.test.js native/tests/respects.test.js native/adapters/text/pronoun-presence-chosen.test.mjs native/adapters/text/clause-attach.test.mjs native/kernel/attend.test.mjs native/organs/thoughts.test.mjs native/the-fold/read-process-pronouns.test.mjs native/adapters/text/pronoun-registers.test.mjs native/the-fold/language-names.test.mjs native/tests/reading-baseline.test.mjs native/tests/one-door.test.mjs native/tests/pharos-gate.test.mjs native/adapters/text/pronoun-registers-san.test.mjs native/adapters/text/sanskrit-sandhi.test.mjs native/the-fold/read-san.test.mjs native/adapters/text/grc-reading.test.mjs native/tests/name-prior.test.mjs native/tests/priors-home.test.mjs native/tests/canonical-docs.test.mjs native/tests/language-competency.test.mjs native/tests/apoha.test.mjs native/tests/wikidata-name-giver.test.mjs native/tests/case-marked-clauses.test.mjs native/tests/vector-library.test.mjs native/tests/pos-smell.test.mjs native/tests/nest-from-read.test.mjs native/adapters/text/karaka-total.test.mjs native/adapters/text/gender-from-rows.test.mjs native/adapters/text/referents-in-order.test.mjs native/tests/weave-referents.test.mjs native/chat/thread.test.mjs native/chat/ingest.test.mjs native/chat/quote-frames.test.mjs native/chat/speech-frames.test.mjs native/kernel/trail-rules.test.mjs native/adapters/text/text-mereology.test.mjs native/tests/place-grain.test.mjs native/tests/chat-register.test.mjs",
++    "test": "node native/scripts/check-reading-hygiene.mjs && node native/scripts/check-no-legacy-submodule.mjs && node --test native/the-fold/essay-fold-falsify.test.mjs native/the-fold/pipeline-run-falsify.test.mjs native/the-fold/parameter-induction-falsify.test.mjs native/the-fold/referents-falsify.test.mjs native/the-fold/ground-replay-falsify.test.mjs native/the-fold/constitution.test.mjs native/the-fold/span-drift.test.mjs native/the-fold/standing-cube.test.mjs native/the-fold/step-fold.test.mjs native/the-fold/surf-types.test.mjs native/the-fold/openness.test.mjs box-governor.test.mjs opencode-longform.test.mjs opencode-gather.test.mjs opencode-gather-reason.test.mjs opencode-gather-gate.test.mjs opencode-gather-senses.test.mjs opencode-gather-identity.test.mjs opencode-gather-voids.test.mjs opencode-gather-typos.test.mjs native/adapters/text/ud-parser.test.mjs native/kernel/eot-claim-match.test.mjs native/adapters/text/figure-binding.test.mjs native/adapters/text/non-personal.test.mjs native/adapters/text/reading-referents.test.mjs native/the-fold/declension-wiring.test.mjs native/adapters/text/ledger-opinion.test.mjs native/adapters/text/folded-card.test.mjs native/adapters/text/form-usage.test.mjs native/organs/relation-defs.test.mjs native/organs/encode.test.mjs native/adapters/text/grammar-ud-codec.test.mjs native/organs/greenberg.test.mjs native/adapters/text/ud-tokenize.test.mjs native/adapters/text/grammar-ud.test.mjs native/adapters/text/atom-world.test.mjs native/kernel/stage-identity.test.mjs native/adapters/text/corpus-exclusion.test.mjs native/organs/read-page.test.mjs native/kernel/stage-sense.test.mjs native/organs/coref-person.test.mjs native/organs/recipient-role.test.mjs native/the-fold/weft-atoms.test.mjs native/the-fold/weft-identity.test.mjs native/adapters/text/figure-period.en.test.mjs opencode-shift.test.mjs opencode-workplan-acts.test.mjs opencode-workplan-e2e-falsify.test.mjs opencode-workplan-live-e2e.test.mjs native/organs/code-form.test.mjs native/organs/web.test.mjs native/tests/entity-profile.test.js native/conformance/block-profile.test.mjs tests/opencode-cube.test.mjs native/kernel/identity-cancel.test.mjs native/kernel/reader-identity.test.mjs native/the-fold/reader-log.test.mjs native/the-fold/cancel-identity.test.mjs native/the-fold/arrangement-features.test.mjs native/kernel/attach-prior.test.mjs native/adapters/text/pronoun-gaps.test.mjs native/adapters/text/pronoun-presence.test.mjs native/tests/same-for.test.js native/tests/respects.test.js native/adapters/text/pronoun-presence-chosen.test.mjs native/adapters/text/clause-attach.test.mjs native/kernel/attend.test.mjs native/organs/thoughts.test.mjs native/the-fold/read-process-pronouns.test.mjs native/adapters/text/pronoun-registers.test.mjs native/the-fold/language-names.test.mjs native/tests/reading-baseline.test.mjs native/tests/one-door.test.mjs native/tests/pharos-gate.test.mjs native/adapters/text/pronoun-registers-san.test.mjs native/adapters/text/sanskrit-sandhi.test.mjs native/the-fold/read-san.test.mjs native/adapters/text/grc-reading.test.mjs native/tests/name-prior.test.mjs native/tests/priors-home.test.mjs native/tests/canonical-docs.test.mjs native/tests/language-competency.test.mjs native/tests/apoha.test.mjs native/tests/wikidata-name-giver.test.mjs native/tests/case-marked-clauses.test.mjs native/tests/vector-library.test.mjs native/tests/pos-smell.test.mjs native/tests/nest-from-read.test.mjs native/adapters/text/karaka-total.test.mjs native/adapters/text/gender-from-rows.test.mjs native/adapters/text/referents-in-order.test.mjs native/tests/weave-referents.test.mjs native/chat/thread.test.mjs native/chat/ingest.test.mjs native/adapters/text/quote-frames.test.mjs native/adapters/text/speech-frames.test.mjs native/tests/read-framed.test.mjs native/kernel/trail-rules.test.mjs native/adapters/text/text-mereology.test.mjs native/tests/place-grain.test.mjs native/tests/chat-register.test.mjs",
      "test:code": "node --test native/the-fold/code-loop.test.mjs native/the-fold/void-loop.test.mjs native/the-fold/void-spec-falsify.test.mjs native/the-fold/tool-call-physics.test.mjs native/the-fold/direct-bridge.test.mjs",
      "sync": "node scripts/sync.mjs",
      "sync:check": "node scripts/sync.mjs --check",

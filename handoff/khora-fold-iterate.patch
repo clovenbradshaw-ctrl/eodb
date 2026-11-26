@@ -3831,7 +3831,7 @@ index 444bfb37..59046792 100644
 From 97eb1c634d68dd4f0a9d392cd0e05e1a8abfc613 Mon Sep 17 00:00:00 2001
 From: Claude <noreply@anthropic.com>
 Date: Thu, 26 Nov 2026 22:20:24 +0000
-Subject: [PATCH 1/3] the whole reading is written into the pharos: text-codec,
+Subject: [PATCH 1/4] the whole reading is written into the pharos: text-codec,
  text-layers, text-quotes, text-frames, text-gap (khora writes Existence and
  Structure; Janus and Penelope read by kind)
 
@@ -4041,7 +4041,7 @@ index 3ed0acd8..9fb8e9fc 100644
 From c524b0e75463d63e685d2df897538ac1fe9f1a04 Mon Sep 17 00:00:00 2001
 From: Claude <noreply@anthropic.com>
 Date: Thu, 26 Nov 2026 23:20:15 +0000
-Subject: [PATCH 2/3] codec-fold: a bits model option (vocab | constant),
+Subject: [PATCH 2/4] codec-fold: a bits model option (vocab | constant),
  tested and NOT adopted: constant pricing fixes one pcm-over-eng case and
  loses one Genesis edition; the todo test carries the measurement
 
@@ -4107,7 +4107,7 @@ index 525d9aa3..f65f03a9 100644
 From ee06b6c6aa40b6234c9f8723b8743f2287868e1f Mon Sep 17 00:00:00 2001
 From: Claude <noreply@anthropic.com>
 Date: Thu, 26 Nov 2026 23:23:50 +0000
-Subject: [PATCH 3/3] khora reads back verdicts left at Interpretation cells,
+Subject: [PATCH 3/4] khora reads back verdicts left at Interpretation cells,
  by cell and kind (frame-verdict, quote-verdict); the nomination is never
  edited
 
@@ -4241,6 +4241,108 @@ index 9fb8e9fc..e4e00d04 100644
    { id: "L8", rule: "NO SILENT DROP: every paragraph is read or reported with its reason.", status: "built", evidence: "chat/ingest.mjs setAside" },
    { id: "L10", rule: "A CODEC CARRIES ITS CONVENTIONS: the quote table (and, when built, the prosification rules) is part of the codec, as its form table and order parameters are; the codec default is the prior and the edition's own marks are the evidence (the variant wins, the default fills in what marks cannot show); no evidence and no default is a typed gap.", status: "quote table built (codecQuotes, carried on foldCodec and read by readFramed); prosification rules not built; the janus codec file (UDGrammar@1) does not yet carry a `quotes` field", evidence: "adapters/text/quote-frames.js::codecQuotes; scripts/measure-quote-infer.mjs; scripts/measure-codec-quotes.mjs" },
    { id: "L9", rule: "CODECS ARE CONTINUOUS: a language is a point in a continuum of tables and priors loaded when needed, so a new language lowers surprise instead of switching a branch.", status: "first piece built (R1); the continuity of tables across related languages is not", evidence: "related languages already explain each other (Norwegian under Danish reaches 0.76 to 0.80 coverage)" },
+-- 
+2.43.0
+
+
+From d5139b5652472b64e7b01849cf7a62255c86f609 Mon Sep 17 00:00:00 2001
+From: Claude <noreply@anthropic.com>
+Date: Thu, 26 Nov 2026 23:29:01 +0000
+Subject: [PATCH 4/4] verdicts: order is causal (the pharos heads, the writer's
+ light cone at submission), not the clock; concurrent disagreeing verdicts are
+ a typed conflict
+
+Co-Authored-By: Claude Sonnet 5.5 <noreply@anthropic.com>
+Claude-Session: https://claude.ai/code/session_01AP2eRC5CScKTs8ZE4Wpdoe
+---
+ native/the-fold/pharos-verdicts.mjs      | 25 ++++++++++++++++--------
+ native/the-fold/pharos-verdicts.test.mjs | 24 +++++++++++++++++++++--
+ 2 files changed, 39 insertions(+), 10 deletions(-)
+
+diff --git a/native/the-fold/pharos-verdicts.mjs b/native/the-fold/pharos-verdicts.mjs
+index 0decb479..50c30d62 100644
+--- a/native/the-fold/pharos-verdicts.mjs
++++ b/native/the-fold/pharos-verdicts.mjs
+@@ -6,8 +6,11 @@
+ //   frame-verdict  e.g. EVA·Figure              frames:<sha16>#<index>    { index, reported: true|false|null }   [the text-frames entry]
+ //   quote-verdict  e.g. DEF·Figure              quotes:<sha16>#<index>    { index, quotation: true|false }       [the text-quotes entry]
+ //
+-// These two kinds are PROPOSALS (no other repo declares them yet): whoever writes them declares them, and khora reads whichever exist. The latest entry at an address wins (a revision is a newer entry of the same kind at the same address;
+-// pharos fixes a kind's cell, so a revision does not change cell); a RETRACTED verdict stops counting (the pharos skips it); a verdict at a cell outside Interpretation, or `of` an entry that is no longer the current nomination, is NOT applied and is a typed gap.
++// These two kinds are PROPOSALS (no other repo declares them yet): whoever writes them declares them, and khora reads whichever exist.
++// ORDER IS CAUSAL, NOT THE CLOCK (owner, 2026-11-26: "the writing order is less important than the dependency order and what the light cone was of the writer at submission"). Every entry records what its writer had SEEN when it was
++// submitted (`seen`, `of`); a verdict REVISES another exactly when the other is in its light cone, whatever the timestamps say. The live verdicts at an address are the pharos's causal HEADS (lib heads: entries that no other live
++// entry has seen). One head is the verdict. Several heads that AGREE are the verdict. Several heads that DISAGREE are writers who never saw each other: that is a typed gap `verdict_conflict` (the ids and the values), the nomination
++// stands, and nothing is picked by timestamp. A RETRACTED verdict stops counting (the pharos skips it); a verdict at a cell outside Interpretation, or `of` an entry that is no longer the current nomination, is NOT applied and is a typed gap.
+ // The nomination is never edited: each frame keeps its own `framed`/`reported`, and gains `effective` ({ reported, source: "verdict" | "nomination" }) and `judged` (the verdict's id and cell, or null).
+ import { pathToFileURL } from "node:url";
+ import { pharosLib, sha16 } from "./pharos-reading.mjs";
+@@ -21,12 +24,18 @@ export async function readVerdicts(text, { log = process.env.PHAROS_LOG ?? "fold
+   const nom = (kind, addr) => (P.fold(h, { kind, addr }).entries ?? []).at(-1) ?? null, fr = nom("text-frames", `frames:${sha}`), qu = nom("text-quotes", `quotes:${sha}`);
+   const verdicts = (kind, target, addrBase) => {
+     const by = new Map(); if (!target) return by;
+-    for (const e of P.current(h, { kind }) ?? []) {
+-      if (!String(e.addr ?? "").startsWith(`${addrBase}#`)) continue;
+-      if (!INTERPRETATION.test(e.cell)) { gaps.push({ gap: "verdict_not_interpretation", id: e.id, cell: e.cell, how: "a verdict is a definition, judgement or revision: DEF, EVA or REC" }); continue; }
+-      if (!(e.of ?? []).includes(target.id)) { gaps.push({ gap: "verdict_of_other_entry", id: e.id, how: "the verdict is about a nomination that is no longer the current one" }); continue; }
+-      const i = Number(e.body?.index); if (!Number.isInteger(i)) { gaps.push({ gap: "verdict_no_index", id: e.id }); continue; }
+-      by.set(i, e);
++    const live = new Map(); for (const e of P.recent(h, { kinds: [kind] }) ?? []) if (String(e.addr ?? "").startsWith(`${addrBase}#`)) live.set(e.id, e);   // the pharos skips retracted entries
++    const pairs = new Set([...live.values()].map((e) => `${e.addr}\u0000${e.cell}`)), heads = new Map();                                                  // addr -> [head entries over every cell]
++    for (const pair of pairs) { const [addr, cell] = pair.split("\u0000"); for (const id of P.heads(h, addr, cell)) if (live.has(id)) (heads.get(addr) ?? heads.set(addr, []).get(addr)).push(live.get(id)); }
++    for (const [addr, hs] of heads) {
++      const ok = []; for (const e of hs) {
++        if (!INTERPRETATION.test(e.cell)) { gaps.push({ gap: "verdict_not_interpretation", id: e.id, cell: e.cell, how: "a verdict is a definition, judgement or revision: DEF, EVA or REC" }); continue; }
++        if (!(e.of ?? []).includes(target.id)) { gaps.push({ gap: "verdict_of_other_entry", id: e.id, how: "the verdict is about a nomination that is no longer the current one" }); continue; }
++        const i = Number(e.body?.index); if (!Number.isInteger(i)) { gaps.push({ gap: "verdict_no_index", id: e.id }); continue; } ok.push([i, e]);
++      }
++      const vals = new Set(ok.map(([, e]) => JSON.stringify(kind === FRAME_VERDICT ? e.body.reported : e.body.quotation)));
++      if (vals.size > 1) { gaps.push({ gap: "verdict_conflict", addr, ids: ok.map(([, e]) => e.id).sort(), values: [...vals].sort(), how: "causal heads that disagree: the writers had not seen each other; no verdict is applied and none is chosen by timestamp" }); continue; }
++      if (ok.length) by.set(ok[0][0], ok.map(([, e]) => e).sort((x, y) => (x.id < y.id ? -1 : 1))[0]);
+     }
+     return by;
+   };
+diff --git a/native/the-fold/pharos-verdicts.test.mjs b/native/the-fold/pharos-verdicts.test.mjs
+index 4eae26bc..14c46308 100644
+--- a/native/the-fold/pharos-verdicts.test.mjs
++++ b/native/the-fold/pharos-verdicts.test.mjs
+@@ -24,10 +24,9 @@ test("a verdict at an Interpretation cell overrides the nomination for that fram
+ test("a newer verdict at the same address REVISES the older; a retraction puts the nomination back", { skip }, async () => {
+   const { d, P, pen, sha, fid } = await setup(), i = (await readVerdicts(DOC, { log: "t", dir: d })).frames.findIndex((f) => f.reported === true);
+   P.weave(pen, { cell: "EVA·Figure", kind: "frame-verdict", addr: `frames:${sha}#${i}`, body: { index: i, reported: false }, of: [fid] });
+-  await new Promise((r) => setTimeout(r, 15));   // pharos orders entries by their timestamp: two verdicts in one millisecond have no defined order, which is pharos's rule, not khora's
+   const rev = P.weave(pen, { cell: "EVA·Figure", kind: "frame-verdict", addr: `frames:${sha}#${i}`, body: { index: i, reported: true }, of: [fid] }); let r = await readVerdicts(DOC, { log: "t", dir: d });
+   assert.equal(r.frames[i].effective.reported, true); assert.equal(r.frames[i].judged.id, rev.id); assert.equal(r.frames[i].judged.cell, "EVA·Figure");
+-  await new Promise((r) => setTimeout(r, 15)); P.weave(pen, { cell: "NUL·Figure", kind: "retract", addr: `retract:${rev.id}`, body: {}, of: [rev.id] }); r = await readVerdicts(DOC, { log: "t", dir: d });
++  P.weave(pen, { cell: "NUL·Figure", kind: "retract", addr: `retract:${rev.id}`, body: {}, of: [rev.id] }); r = await readVerdicts(DOC, { log: "t", dir: d });
+   assert.notEqual(r.frames[i].judged?.id, rev.id, "a retracted verdict stops counting");
+ });
+ test("a verdict kind declared OUTSIDE Interpretation is NOT applied (a verdict is a definition or a judgement), and one about a superseded nomination is NOT applied: both are typed gaps", { skip }, async () => {
+@@ -40,3 +39,24 @@ test("a quote verdict says a span is, or is not, a quotation; with none it is un
+   const { d, P, pen, sha, qid } = await setup(); let r = await readVerdicts(DOC, { log: "t", dir: d }); assert.ok(r.quotes.length >= 2); assert.ok(r.quotes.every((q) => q.quotation === null));
+   P.weave(pen, { cell: "DEF·Figure", kind: "quote-verdict", addr: `quotes:${sha}#0`, body: { index: 0, quotation: false }, of: [qid] }); r = await readVerdicts(DOC, { log: "t", dir: d }); assert.equal(r.quotes[0].quotation, false); assert.equal(r.quotes[1].quotation, null);
+ });
++
++test("ORDER IS CAUSAL: a verdict that has the earlier one in its light cone revises it even when written in the same millisecond", { skip }, async () => {
++  const { d, P, pen, sha, fid } = await setup(), i = (await readVerdicts(DOC, { log: "t", dir: d })).frames.findIndex((f) => f.reported === true);
++  const a = P.weave(pen, { cell: "EVA·Figure", kind: "frame-verdict", addr: `frames:${sha}#${i}`, body: { index: i, reported: false }, of: [fid] }), b = P.weave(pen, { cell: "EVA·Figure", kind: "frame-verdict", addr: `frames:${sha}#${i}`, body: { index: i, reported: true }, of: [fid, a.id] });
++  const r = await readVerdicts(DOC, { log: "t", dir: d }); assert.equal(r.frames[i].effective.reported, true); assert.equal(r.frames[i].judged.id, b.id); assert.deepEqual(r.gaps, []);
++});
++// two replicas of one log (each has seen the nomination and nothing of the other) each weave a verdict; their logs are merged into a third directory
++async function concurrent(values) {
++  const { d, P, sha, fid } = await setup(), i = (await readVerdicts(DOC, { log: "t", dir: d })).frames.findIndex((f) => f.reported === true), tmp = (tag) => fs.mkdtempSync(path.join(os.tmpdir(), `kverd-${tag}-`));
++  const replica = (tag) => { const dir = tmp(tag); for (const f of fs.readdirSync(d)) fs.copyFileSync(path.join(d, f), path.join(dir, f)); return P.open("t", { dir, writer: `replica-${tag}`, frame: false }); };
++  const merged = P.open("t", { dir: tmp("merged"), writer: "merger", frame: false }); for (const f of fs.readdirSync(d)) fs.copyFileSync(path.join(d, f), path.join(merged.dir, f));
++  values.forEach((val, k) => { const h = replica(String(k)); P.weave(h, { cell: "EVA·Figure", kind: "frame-verdict", addr: `frames:${sha}#${i}`, body: { index: i, reported: val }, of: [fid] }); P.merge(merged, h); });
++  return { r: await readVerdicts(DOC, { log: "t", dir: merged.dir }), i };
++}
++test("CONCURRENT verdicts that disagree (two writers who had not seen each other) are a typed conflict: none is applied, none is picked by timestamp", { skip }, async () => {
++  const { r, i } = await concurrent([false, true]); assert.deepEqual(r.gaps.map((g) => g.gap), ["verdict_conflict"]); assert.deepEqual(r.gaps[0].values, ["false", "true"]);
++  assert.equal(r.frames[i].effective.source, "nomination", "the nomination stands"); assert.equal(r.frames[i].judged, null);
++});
++test("CONCURRENT verdicts that AGREE are not a conflict: the value stands", { skip }, async () => {
++  const { r, i } = await concurrent([false, false]); assert.deepEqual(r.gaps.filter((g) => g.gap === "verdict_conflict"), []); assert.equal(r.frames[i].effective.reported, false); assert.equal(r.frames[i].effective.source, "verdict");
++});
 -- 
 2.43.0
 

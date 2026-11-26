@@ -1,7 +1,7 @@
 From 2fbfb29fc41dbf1776461b68b80baf48b7b3806f Mon Sep 17 00:00:00 2001
 From: Michael Lacy <michaeltlacy@gmail.com>
 Date: Mon, 23 Nov 2026 22:50:29 -0600
-Subject: [PATCH 1/8] exemplar-pool: the smell in the kernel's names, portable,
+Subject: [PATCH 1/9] exemplar-pool: the smell in the kernel's names, portable,
  and loud about gaps
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -175,7 +175,7 @@ index 1bf727e..8e90d0e 100644
 From 3542c86799553d0edc346231f074e186fedd90bf Mon Sep 17 00:00:00 2001
 From: Michael Lacy <michaeltlacy@gmail.com>
 Date: Tue, 24 Nov 2026 13:53:01 -0600
-Subject: [PATCH 2/8] formicary: the user-bound pattern layer: per-user trails
+Subject: [PATCH 2/9] formicary: the user-bound pattern layer: per-user trails
  over the scholia's addresses, with the measured power-law fade
 
 organs/formicary.mjs: one colony per user (own file), trails laid only on a verified use over addresses of the corpus and the scholia (doc:<sha256>[#k], lemma:<lang>:<word>), heads are marks never text, order() is a permutation of its candidates (earned, untried as given, dead), alarms forget, the user can forgetAll, marks mirror to a caller's log with the user named.
@@ -446,7 +446,7 @@ index 40b80d3..4bfb91b 100644
 From 01a0543ea2cc45738f9783d777e963743bb899e9 Mon Sep 17 00:00:00 2001
 From: Claude <noreply@anthropic.com>
 Date: Wed, 25 Nov 2026 17:59:10 +0000
-Subject: [PATCH 3/8] trail-rules: a trail becomes a rule only past a seeded
+Subject: [PATCH 3/9] trail-rules: a trail becomes a rule only past a seeded
  null on a held-out third; the rules about rules as data
 
 Pure kernel module (promoteRoute, promoteHead, ruleEntry, META_RULES). 10 tests, including a
@@ -671,7 +671,7 @@ index 91bad73..74f900d 100644
 From 16b778d4708061bdf9108b4b0c11a2243efe84d4 Mon Sep 17 00:00:00 2001
 From: Claude <noreply@anthropic.com>
 Date: Wed, 25 Nov 2026 18:28:12 +0000
-Subject: [PATCH 4/8] chat: the document door: a text is read into the fold
+Subject: [PATCH 4/9] chat: the document door: a text is read into the fold
  paragraph by paragraph, never routed
 
 turn() sent paragraphs holding a quoted question to answering (3 of 8 read in the test text, 9 of the
@@ -813,7 +813,7 @@ index 74f900d..067764e 100644
 From 2fc331a7f1df287afd4f8fcc2788d54812008966 Mon Sep 17 00:00:00 2001
 From: Claude <noreply@anthropic.com>
 Date: Wed, 25 Nov 2026 22:23:02 +0000
-Subject: [PATCH 5/8] chat: a quotation is a frame: who holds the words, never
+Subject: [PATCH 5/9] chat: a quotation is a frame: who holds the words, never
  the narrator's assertion
 
 quote-frames.js: per-language declared boundary tables (a language with none is a typed gap), continuing and
@@ -1133,7 +1133,7 @@ index 067764e..4b0deba 100644
 From 24d1dab151093f6880031b6c106b14e507ac3b56 Mon Sep 17 00:00:00 2001
 From: Claude <noreply@anthropic.com>
 Date: Wed, 25 Nov 2026 22:30:53 +0000
-Subject: [PATCH 6/8] quote-frames: a codec registers its own table; marks the
+Subject: [PATCH 6/9] quote-frames: a codec registers its own table; marks the
  table does not know are a typed gap that lists them
 
 Found by running Genesis in 65 languages: 35 editions mark no quotation at all, 25 mark them and had no table,
@@ -1263,7 +1263,7 @@ index 907586f..ef01f76 100644
 From 4e9ff854b9a6c4670a64a8b93c1300c1ed0b24c0 Mon Sep 17 00:00:00 2001
 From: Claude <noreply@anthropic.com>
 Date: Thu, 26 Nov 2026 01:39:47 +0000
-Subject: [PATCH 7/8] chat: the mark-free speech layer: reported speech from a
+Subject: [PATCH 7/9] chat: the mark-free speech layer: reported speech from a
  verb of saying, no quotation marks needed
 
 speech-frames.js reads UD rows (codec-neutral) and decides by position, not by tree (the parser inverts unmarked speech:
@@ -1581,7 +1581,7 @@ index 4b0deba..0074b7f 100644
 From 8f0010a179622390974f48f2e75a93994704615d Mon Sep 17 00:00:00 2001
 From: Claude <noreply@anthropic.com>
 Date: Thu, 26 Nov 2026 01:47:52 +0000
-Subject: [PATCH 8/8] frames: one layer, two doors; the canonical reader now
+Subject: [PATCH 8/9] frames: one layer, two doors; the canonical reader now
  says who holds the words
 
 The quote and speech layers move from chat/ to adapters/text/ (beside speakers.js) so the canonical reader does not import a surface.
@@ -1935,6 +1935,164 @@ index 0074b7f..7fbbf1d 100644
    "scripts": {
 -    "test": "node native/scripts/check-reading-hygiene.mjs && node native/scripts/check-no-legacy-submodule.mjs && node --test native/the-fold/essay-fold-falsify.test.mjs native/the-fold/pipeline-run-falsify.test.mjs native/the-fold/parameter-induction-falsify.test.mjs native/the-fold/referents-falsify.test.mjs native/the-fold/ground-replay-falsify.test.mjs native/the-fold/constitution.test.mjs native/the-fold/span-drift.test.mjs native/the-fold/standing-cube.test.mjs native/the-fold/step-fold.test.mjs native/the-fold/surf-types.test.mjs native/the-fold/openness.test.mjs box-governor.test.mjs opencode-longform.test.mjs opencode-gather.test.mjs opencode-gather-reason.test.mjs opencode-gather-gate.test.mjs opencode-gather-senses.test.mjs opencode-gather-identity.test.mjs opencode-gather-voids.test.mjs opencode-gather-typos.test.mjs native/adapters/text/ud-parser.test.mjs native/kernel/eot-claim-match.test.mjs native/adapters/text/figure-binding.test.mjs native/adapters/text/non-personal.test.mjs native/adapters/text/reading-referents.test.mjs native/the-fold/declension-wiring.test.mjs native/adapters/text/ledger-opinion.test.mjs native/adapters/text/folded-card.test.mjs native/adapters/text/form-usage.test.mjs native/organs/relation-defs.test.mjs native/organs/encode.test.mjs native/adapters/text/grammar-ud-codec.test.mjs native/organs/greenberg.test.mjs native/adapters/text/ud-tokenize.test.mjs native/adapters/text/grammar-ud.test.mjs native/adapters/text/atom-world.test.mjs native/kernel/stage-identity.test.mjs native/adapters/text/corpus-exclusion.test.mjs native/organs/read-page.test.mjs native/kernel/stage-sense.test.mjs native/organs/coref-person.test.mjs native/organs/recipient-role.test.mjs native/the-fold/weft-atoms.test.mjs native/the-fold/weft-identity.test.mjs native/adapters/text/figure-period.en.test.mjs opencode-shift.test.mjs opencode-workplan-acts.test.mjs opencode-workplan-e2e-falsify.test.mjs opencode-workplan-live-e2e.test.mjs native/organs/code-form.test.mjs native/organs/web.test.mjs native/tests/entity-profile.test.js native/conformance/block-profile.test.mjs tests/opencode-cube.test.mjs native/kernel/identity-cancel.test.mjs native/kernel/reader-identity.test.mjs native/the-fold/reader-log.test.mjs native/the-fold/cancel-identity.test.mjs native/the-fold/arrangement-features.test.mjs native/kernel/attach-prior.test.mjs native/adapters/text/pronoun-gaps.test.mjs native/adapters/text/pronoun-presence.test.mjs native/tests/same-for.test.js native/tests/respects.test.js native/adapters/text/pronoun-presence-chosen.test.mjs native/adapters/text/clause-attach.test.mjs native/kernel/attend.test.mjs native/organs/thoughts.test.mjs native/the-fold/read-process-pronouns.test.mjs native/adapters/text/pronoun-registers.test.mjs native/the-fold/language-names.test.mjs native/tests/reading-baseline.test.mjs native/tests/one-door.test.mjs native/tests/pharos-gate.test.mjs native/adapters/text/pronoun-registers-san.test.mjs native/adapters/text/sanskrit-sandhi.test.mjs native/the-fold/read-san.test.mjs native/adapters/text/grc-reading.test.mjs native/tests/name-prior.test.mjs native/tests/priors-home.test.mjs native/tests/canonical-docs.test.mjs native/tests/language-competency.test.mjs native/tests/apoha.test.mjs native/tests/wikidata-name-giver.test.mjs native/tests/case-marked-clauses.test.mjs native/tests/vector-library.test.mjs native/tests/pos-smell.test.mjs native/tests/nest-from-read.test.mjs native/adapters/text/karaka-total.test.mjs native/adapters/text/gender-from-rows.test.mjs native/adapters/text/referents-in-order.test.mjs native/tests/weave-referents.test.mjs native/chat/thread.test.mjs native/chat/ingest.test.mjs native/chat/quote-frames.test.mjs native/chat/speech-frames.test.mjs native/kernel/trail-rules.test.mjs native/adapters/text/text-mereology.test.mjs native/tests/place-grain.test.mjs native/tests/chat-register.test.mjs",
 +    "test": "node native/scripts/check-reading-hygiene.mjs && node native/scripts/check-no-legacy-submodule.mjs && node --test native/the-fold/essay-fold-falsify.test.mjs native/the-fold/pipeline-run-falsify.test.mjs native/the-fold/parameter-induction-falsify.test.mjs native/the-fold/referents-falsify.test.mjs native/the-fold/ground-replay-falsify.test.mjs native/the-fold/constitution.test.mjs native/the-fold/span-drift.test.mjs native/the-fold/standing-cube.test.mjs native/the-fold/step-fold.test.mjs native/the-fold/surf-types.test.mjs native/the-fold/openness.test.mjs box-governor.test.mjs opencode-longform.test.mjs opencode-gather.test.mjs opencode-gather-reason.test.mjs opencode-gather-gate.test.mjs opencode-gather-senses.test.mjs opencode-gather-identity.test.mjs opencode-gather-voids.test.mjs opencode-gather-typos.test.mjs native/adapters/text/ud-parser.test.mjs native/kernel/eot-claim-match.test.mjs native/adapters/text/figure-binding.test.mjs native/adapters/text/non-personal.test.mjs native/adapters/text/reading-referents.test.mjs native/the-fold/declension-wiring.test.mjs native/adapters/text/ledger-opinion.test.mjs native/adapters/text/folded-card.test.mjs native/adapters/text/form-usage.test.mjs native/organs/relation-defs.test.mjs native/organs/encode.test.mjs native/adapters/text/grammar-ud-codec.test.mjs native/organs/greenberg.test.mjs native/adapters/text/ud-tokenize.test.mjs native/adapters/text/grammar-ud.test.mjs native/adapters/text/atom-world.test.mjs native/kernel/stage-identity.test.mjs native/adapters/text/corpus-exclusion.test.mjs native/organs/read-page.test.mjs native/kernel/stage-sense.test.mjs native/organs/coref-person.test.mjs native/organs/recipient-role.test.mjs native/the-fold/weft-atoms.test.mjs native/the-fold/weft-identity.test.mjs native/adapters/text/figure-period.en.test.mjs opencode-shift.test.mjs opencode-workplan-acts.test.mjs opencode-workplan-e2e-falsify.test.mjs opencode-workplan-live-e2e.test.mjs native/organs/code-form.test.mjs native/organs/web.test.mjs native/tests/entity-profile.test.js native/conformance/block-profile.test.mjs tests/opencode-cube.test.mjs native/kernel/identity-cancel.test.mjs native/kernel/reader-identity.test.mjs native/the-fold/reader-log.test.mjs native/the-fold/cancel-identity.test.mjs native/the-fold/arrangement-features.test.mjs native/kernel/attach-prior.test.mjs native/adapters/text/pronoun-gaps.test.mjs native/adapters/text/pronoun-presence.test.mjs native/tests/same-for.test.js native/tests/respects.test.js native/adapters/text/pronoun-presence-chosen.test.mjs native/adapters/text/clause-attach.test.mjs native/kernel/attend.test.mjs native/organs/thoughts.test.mjs native/the-fold/read-process-pronouns.test.mjs native/adapters/text/pronoun-registers.test.mjs native/the-fold/language-names.test.mjs native/tests/reading-baseline.test.mjs native/tests/one-door.test.mjs native/tests/pharos-gate.test.mjs native/adapters/text/pronoun-registers-san.test.mjs native/adapters/text/sanskrit-sandhi.test.mjs native/the-fold/read-san.test.mjs native/adapters/text/grc-reading.test.mjs native/tests/name-prior.test.mjs native/tests/priors-home.test.mjs native/tests/canonical-docs.test.mjs native/tests/language-competency.test.mjs native/tests/apoha.test.mjs native/tests/wikidata-name-giver.test.mjs native/tests/case-marked-clauses.test.mjs native/tests/vector-library.test.mjs native/tests/pos-smell.test.mjs native/tests/nest-from-read.test.mjs native/adapters/text/karaka-total.test.mjs native/adapters/text/gender-from-rows.test.mjs native/adapters/text/referents-in-order.test.mjs native/tests/weave-referents.test.mjs native/chat/thread.test.mjs native/chat/ingest.test.mjs native/adapters/text/quote-frames.test.mjs native/adapters/text/speech-frames.test.mjs native/tests/read-framed.test.mjs native/kernel/trail-rules.test.mjs native/adapters/text/text-mereology.test.mjs native/tests/place-grain.test.mjs native/tests/chat-register.test.mjs",
+     "test:code": "node --test native/the-fold/code-loop.test.mjs native/the-fold/void-loop.test.mjs native/the-fold/void-spec-falsify.test.mjs native/the-fold/tool-call-physics.test.mjs native/the-fold/direct-bridge.test.mjs",
+     "sync": "node scripts/sync.mjs",
+     "sync:check": "node scripts/sync.mjs --check",
+-- 
+2.43.0
+
+
+From 1ec779f62aa1ef047f4e2aac9e5434fb09134c99 Mon Sep 17 00:00:00 2001
+From: Claude <noreply@anthropic.com>
+Date: Thu, 26 Nov 2026 03:16:54 +0000
+Subject: [PATCH 9/9] name-smell: does a surface smell like a name? measured
+ from the text's casing, the POS prior and the parser's tag in context; no
+ list
+
+Both cast builders take capitalised sentence-openers and common words for names, each differently (71 agree, 8 only canonical, 18 only chat on 5 texts).
+The rule: a closed-class word is never a name; a word also lowercase in the text is a common word; a name is capitalised away from a sentence start;
+the parser's contextual tag can only remove a name; all-caps tokens are their own word. Gating both builders with it: name agreement Jaccard 0.73 -> 0.95,
+all 12 junk words kept out, but only 3 of 6 eye-labelled real names admitted (Cush and Manasseh mis-tagged by the parser, On vetoed as an adposition).
+Not wired into either builder. 11 tests. The pinned emergent-smell was tried first and is the wrong instrument (671 word types, knew none of 22 real names).
+
+Co-Authored-By: Claude Sonnet 5.5 <noreply@anthropic.com>
+Claude-Session: https://claude.ai/code/session_01AP2eRC5CScKTs8ZE4Wpdoe
+---
+ native/adapters/text/name-smell.js       | 51 ++++++++++++++++++++++
+ native/adapters/text/name-smell.test.mjs | 55 ++++++++++++++++++++++++
+ package.json                             |  2 +-
+ 3 files changed, 107 insertions(+), 1 deletion(-)
+ create mode 100644 native/adapters/text/name-smell.js
+ create mode 100644 native/adapters/text/name-smell.test.mjs
+
+diff --git a/native/adapters/text/name-smell.js b/native/adapters/text/name-smell.js
+new file mode 100644
+index 0000000..deef039
+--- /dev/null
++++ b/native/adapters/text/name-smell.js
+@@ -0,0 +1,51 @@
++// adapters/text/name-smell.js — DOES A SURFACE SMELL LIKE A NAME? Measured, never listed.
++//
++// WHY. The canonical reader and the chat each decide who is in the cast by capitalisation, and each fails differently on the same text (measured 2026-11-26, 71 names agreed, 8 only canonical, 18 only chat):
++// sentence-openers ("Yea", "Hast", "Shalt", "Wherefore", "See", "Shed") are taken for names, and so are capitalised common words ("Day", "Seas", "Heaven", "Man"). The pinned emergent smell was tried and is the
++// wrong instrument here: its vocabulary is 671 word types and it knew none of 22 real names.
++//
++// THE RULE, three measured things and no word list:
++//   1. A word the reader's PART-OF-SPEECH PRIOR knows only as a closed class (pronoun, auxiliary, determiner, adposition, conjunction, particle, interjection, number, symbol) is never a name ("I", "I’m", "And").
++//      The closed classes are the UD universal taxonomy, not a language's words; an open class (noun, verb, adjective) is NOT vetoed, because "Kitty" and "Rose" are nouns too.
++//   2. A word that also occurs LOWERCASE in the same text is a common word ("Day": "the day went"; "Man": "the man"; "Heaven", "Earth", "Seas").
++//   3. A name is capitalised somewhere that is NOT a sentence start. Capitalised only because it opens a sentence is UNKNOWN, never a name; so is a word the text never uses.
++// A title with its name is judged on the name ("Mrs. Long" by "Long"); a bare dotted abbreviation ("Mr.") is not a being. The prior is optional: without it the verdict still stands and carries a typed gap.
++// KNOWN LIMITS: a person whose name is also a common word the same text uses ("Rose" and "rose") is lost; a name only ever seen at sentence starts is unknown; judged per text, so it needs a text long enough to show a word both ways.
++// nameSmell({ surface, text, sentenceStarts, pos }) -> { verdict: "name"|"not_name"|"unknown", why, capMid, capInitial, lower, prior?, priorGap? }
++//   sentenceStarts  Set of character offsets where a sentence starts: the READER's own (entry.parse[].offset); sentenceStartsOf() is a naive fallback that knows no abbreviation
++//   pos             the part-of-speech prior's forms: lowercase form -> { UPOS: count } (janus/priors/pos-eng.json)
++//   posAt           optional Map(character offset -> UPOS): the READER's own tag for the token in context (entry.parse rows). It can only REMOVE a name: a capital after a comma that opens an unmarked speech
++//                   ("said unto them, Shed no blood") looks mid-sentence by position, and the parser tags it VERB. All-caps tokens ("LORD") are their own word, so the lowercase test does not apply to them.
++export const NAME_SMELL_SCHEMA = "NameSmell@1";
++const CLOSED = new Set(["PRON", "AUX", "DET", "ADP", "CCONJ", "SCONJ", "PART", "INTJ", "PUNCT", "NUM", "SYM"]);
++const OPENING = "“«„‘\"'(";
++const isLetter = (c) => c !== undefined && c.toLowerCase() !== c.toUpperCase();
++
++/** a naive fallback: the start, each paragraph start, and the first non-space after . ! ? (no abbreviation knowledge: pass the reader's own offsets when there are any) */
++export function sentenceStartsOf(text) {
++  const t = String(text ?? ""), out = new Set([0]);
++  for (let i = 0; i < t.length; i++) {
++    if (t[i] === "\n" && t[i + 1] === "\n") { let j = i + 2; while (t[j] === "\n" || t[j] === " ") j++; out.add(j); }
++    if (".!?".includes(t[i]) && (t[i + 1] === " " || t[i + 1] === "\n" || OPENING.includes(t[i + 1] ?? ""))) { let j = i + 1; while (t[j] === " " || t[j] === "\n") j++; out.add(j); }
++  }
++  return out;
++}
++const occurrences = (t, w) => { const at = []; let i = t.indexOf(w); while (i >= 0) { if (!isLetter(t[i - 1]) && !isLetter(t[i + w.length])) at.push(i); i = t.indexOf(w, i + 1); } return at; };
++
++export function nameSmell({ surface, text, sentenceStarts, pos, posAt }) {
++  const T = String(text ?? ""), words = String(surface ?? "").trim().split(" ").filter(Boolean), head = words[words.length - 1] ?? "", out = (verdict, why, x = {}) => ({ schema: NAME_SMELL_SCHEMA, surface, head, verdict, why, capMid: 0, capInitial: 0, lower: 0, ...x });
++  if (!head) return out("unknown", "no surface");
++  if (head.endsWith(".")) return out("not_name", "a dotted abbreviation is not a being");
++  if (head === head.toLowerCase()) return out("not_name", "not capitalised");
++  const lw = head.toLowerCase(), e = pos ? pos[lw] : undefined, priorGap = pos ? null : "no_pos_prior";
++  let prior; if (e) { const top = Object.entries(e).sort((a, b) => b[1] - a[1])[0]; prior = { top: top[0], n: Object.values(e).reduce((a, b) => a + b, 0) }; }
++  const starts = sentenceStarts ?? sentenceStartsOf(T), at = occurrences(T, head), isInitial = (i) => starts.has(i) || (OPENING.includes(T[i - 1] ?? "") && starts.has(i - 1));
++  const capInitial = at.filter(isInitial).length, capMid = at.length - capInitial, lower = occurrences(T, lw).length, ev = { capMid, capInitial, lower, ...(prior ? { prior } : {}), ...(priorGap ? { priorGap } : {}) };
++  if (prior && CLOSED.has(prior.top)) return out("not_name", `the prior knows it as ${prior.top}, a closed class`, ev);
++  const allCaps = head.length > 1 && head === head.toUpperCase();
++  if (lower > 0 && !allCaps) return out("not_name", `it also occurs lowercase in the text (${lower}×): a common word`, ev);
++  if (capMid >= 1 && posAt) { const tags = at.filter((i) => !isInitial(i)).map((i) => posAt.get(i)).filter(Boolean); if (tags.length && !tags.some((u) => u === "PROPN" || u === "X")) { const top = [...new Set(tags)].join("/"); return out("not_name", `the parser tags it ${top} in context (${tags.length}×), never a proper noun`, { ...ev, tags }); } }
++  if (capMid >= 1) return out("name", `capitalised away from a sentence start (${capMid}×) and never lowercase`, ev);
++  if (capInitial >= 1) return out("unknown", "capitalised only where a sentence begins", ev);
++  return out("unknown", "not in the text", ev);
++}
+diff --git a/native/adapters/text/name-smell.test.mjs b/native/adapters/text/name-smell.test.mjs
+new file mode 100644
+index 0000000..b17027e
+--- /dev/null
++++ b/native/adapters/text/name-smell.test.mjs
+@@ -0,0 +1,55 @@
++// adapters/text/name-smell.test.mjs — does a surface SMELL like a name? Measured from the text's own casing and the reader's part-of-speech prior; no word list, no typed threshold.
++// Written before the module; each test says what would falsify it.
++import test from "node:test"; import assert from "node:assert/strict";
++import { nameSmell, sentenceStartsOf } from "./name-smell.js";
++
++// a prior in the shape of janus/priors/pos-eng.json forms: lowercase form -> { UPOS: count }
++const POS = { i: { PRON: 900 }, "i’m": { PRON: 40 }, and: { CCONJ: 999 }, the: { DET: 999 }, day: { NOUN: 170, PROPN: 8 }, man: { NOUN: 36 }, see: { VERB: 205 }, yea: { INTJ: 3 }, kitty: { NOUN: 3, PROPN: 2 }, bennet: undefined, hast: undefined, shalt: undefined, wherefore: undefined };
++const text = "Kitty coughed. Day came and the day went. Yea, said Bennet. See the man and the man saw Kitty. I think Bennet knew. Hast thou eaten? Shalt thou go? Wherefore did Mrs. Long call Bennet? Bennet saw Long.";
++const S = sentenceStartsOf(text);
++const v = (surface, o = {}) => nameSmell({ surface, text, sentenceStarts: S, pos: POS, ...o });
++
++test("a surface capitalised away from a sentence start and never lowercase is a name, even when the prior has never seen it", () => {
++  const r = v("Bennet"); assert.equal(r.verdict, "name"); assert.ok(r.capMid >= 1); assert.equal(r.lower, 0);
++});
++test("an open-class word the prior knows as a noun is still a name when the text capitalises it everywhere ('Kitty')", () => { assert.equal(v("Kitty").verdict, "name"); });
++test("a word that also occurs lowercase in the same text is a common word, not a name ('Day', 'Man')", () => {
++  assert.equal(v("Day").verdict, "not_name"); assert.match(v("Day").why, /lowercase/); assert.equal(nameSmell({ surface: "Man", text: "Man was made. The man left.", sentenceStarts: sentenceStartsOf("Man was made. The man left."), pos: POS }).verdict, "not_name");
++});
++test("TRAP: a word capitalised ONLY because it opens a sentence is unknown, never a name ('Yea', 'Hast', 'Shalt', 'Wherefore', 'See')", () => {
++  for (const w of ["Yea", "Hast", "Shalt", "Wherefore", "See"]) { const r = v(w); assert.notEqual(r.verdict, "name", w); }
++  assert.equal(v("Hast").verdict, "unknown"); assert.equal(v("Wherefore").verdict, "unknown");
++});
++test("TRAP: a closed-class word the prior knows (a pronoun, a conjunction) is never a name, however it is capitalised ('I', 'I’m', 'And')", () => {
++  const t = "Then I went. And I saw. Bennet said I’m here. I stayed.", s = sentenceStartsOf(t);
++  for (const w of ["I", "And", "I’m"]) assert.equal(nameSmell({ surface: w, text: t, sentenceStarts: s, pos: POS }).verdict, "not_name", w);
++});
++test("a title with its name is judged on the name: 'Mrs. Long' by 'Long'; a bare dotted title is not a being ('Mr.')", () => {
++  assert.equal(v("Mrs. Long").verdict, "name");
++  assert.equal(nameSmell({ surface: "Mr.", text: "Mr. Bennet came. Mr. Bennet left.", sentenceStarts: sentenceStartsOf("Mr. Bennet came. Mr. Bennet left."), pos: POS }).verdict, "not_name");
++});
++test("a surface that is not in the text at all is unknown, never a name by default; no prior is a typed gap on the verdict, not a crash", () => {
++  assert.equal(v("Zebulun").verdict, "unknown");
++  const r = nameSmell({ surface: "Bennet", text, sentenceStarts: S, pos: null }); assert.equal(r.verdict, "name"); assert.equal(r.priorGap, "no_pos_prior");
++});
++test("the verdict carries its evidence, so a reader can see why", () => { const r = v("Bennet"); assert.ok("capMid" in r && "capInitial" in r && "lower" in r && "why" in r); });
++
++// ── found by running it over both builders' casts on Genesis and Pride and Prejudice (2026-11-26) ──
++test("FOUND: an ALL-CAPS token is its own word: 'LORD' (the divine name) is not vetoed by the common word 'lord' in the same text", () => {
++  const t = "And the LORD said unto Pharaoh, my lord, I will go. The LORD spake. A lord of Egypt came.", s = sentenceStartsOf(t);
++  assert.equal(nameSmell({ surface: "LORD", text: t, sentenceStarts: s, pos: POS }).verdict, "name");
++  assert.equal(nameSmell({ surface: "Lord", text: "Then Lord Byron came. The lord left.", sentenceStarts: sentenceStartsOf("Then Lord Byron came. The lord left."), pos: POS }).verdict, "not_name", "title-case still meets the lowercase test");
++});
++test("FOUND: the reader's own tag for the token in context decides what position cannot: a capital after the comma that opens an unmarked speech ('said unto them, Shed no blood') is not a name when the parser tags it VERB", () => {
++  const t = "And Reuben said unto them, Shed no blood. Reuben went. And Judah said, Wherefore go we? Judah stayed.", s = sentenceStartsOf(t);
++  const at = (w, n = 0) => { let i = -1; for (let k = 0; k <= n; k++) i = t.indexOf(w, i + 1); return i; };
++  const posAt = new Map([[at("Reuben"), "PROPN"], [at("Shed"), "VERB"], [at("Reuben", 1), "PROPN"], [at("Judah"), "PROPN"], [at("Wherefore"), "ADV"], [at("Judah", 1), "PROPN"]]);
++  assert.equal(nameSmell({ surface: "Shed", text: t, sentenceStarts: s, pos: POS, posAt }).verdict, "not_name"); assert.match(nameSmell({ surface: "Shed", text: t, sentenceStarts: s, pos: POS, posAt }).why, /VERB in context/);
++  assert.equal(nameSmell({ surface: "Wherefore", text: t, sentenceStarts: s, pos: POS, posAt }).verdict, "not_name");
++  assert.equal(nameSmell({ surface: "Reuben", text: t, sentenceStarts: s, pos: POS, posAt }).verdict, "name");
++  assert.equal(nameSmell({ surface: "Shed", text: t, sentenceStarts: s, pos: POS }).verdict, "name", "without the contextual tags the verdict is the casing verdict, unchanged");
++});
++test("the contextual tag only ever REMOVES a name: a token the parser tags PROPN is not made a name by the tag alone (a sentence-initial one stays unknown)", () => {
++  const t = "Yea, said Bennet. Yea went on.", s = sentenceStartsOf(t); const posAt = new Map([[0, "PROPN"], [t.indexOf("Yea went"), "PROPN"]]);
++  assert.equal(nameSmell({ surface: "Yea", text: t, sentenceStarts: s, pos: { yea: undefined }, posAt }).verdict, "unknown");
++});
+diff --git a/package.json b/package.json
+index 7fbbf1d..135e2f2 100644
+--- a/package.json
++++ b/package.json
+@@ -4,7 +4,7 @@
+   "description": "EOReader 7 now has a native canonical recursive-reading kernel.",
+   "main": "kernel.js",
+   "scripts": {
+-    "test": "node native/scripts/check-reading-hygiene.mjs && node native/scripts/check-no-legacy-submodule.mjs && node --test native/the-fold/essay-fold-falsify.test.mjs native/the-fold/pipeline-run-falsify.test.mjs native/the-fold/parameter-induction-falsify.test.mjs native/the-fold/referents-falsify.test.mjs native/the-fold/ground-replay-falsify.test.mjs native/the-fold/constitution.test.mjs native/the-fold/span-drift.test.mjs native/the-fold/standing-cube.test.mjs native/the-fold/step-fold.test.mjs native/the-fold/surf-types.test.mjs native/the-fold/openness.test.mjs box-governor.test.mjs opencode-longform.test.mjs opencode-gather.test.mjs opencode-gather-reason.test.mjs opencode-gather-gate.test.mjs opencode-gather-senses.test.mjs opencode-gather-identity.test.mjs opencode-gather-voids.test.mjs opencode-gather-typos.test.mjs native/adapters/text/ud-parser.test.mjs native/kernel/eot-claim-match.test.mjs native/adapters/text/figure-binding.test.mjs native/adapters/text/non-personal.test.mjs native/adapters/text/reading-referents.test.mjs native/the-fold/declension-wiring.test.mjs native/adapters/text/ledger-opinion.test.mjs native/adapters/text/folded-card.test.mjs native/adapters/text/form-usage.test.mjs native/organs/relation-defs.test.mjs native/organs/encode.test.mjs native/adapters/text/grammar-ud-codec.test.mjs native/organs/greenberg.test.mjs native/adapters/text/ud-tokenize.test.mjs native/adapters/text/grammar-ud.test.mjs native/adapters/text/atom-world.test.mjs native/kernel/stage-identity.test.mjs native/adapters/text/corpus-exclusion.test.mjs native/organs/read-page.test.mjs native/kernel/stage-sense.test.mjs native/organs/coref-person.test.mjs native/organs/recipient-role.test.mjs native/the-fold/weft-atoms.test.mjs native/the-fold/weft-identity.test.mjs native/adapters/text/figure-period.en.test.mjs opencode-shift.test.mjs opencode-workplan-acts.test.mjs opencode-workplan-e2e-falsify.test.mjs opencode-workplan-live-e2e.test.mjs native/organs/code-form.test.mjs native/organs/web.test.mjs native/tests/entity-profile.test.js native/conformance/block-profile.test.mjs tests/opencode-cube.test.mjs native/kernel/identity-cancel.test.mjs native/kernel/reader-identity.test.mjs native/the-fold/reader-log.test.mjs native/the-fold/cancel-identity.test.mjs native/the-fold/arrangement-features.test.mjs native/kernel/attach-prior.test.mjs native/adapters/text/pronoun-gaps.test.mjs native/adapters/text/pronoun-presence.test.mjs native/tests/same-for.test.js native/tests/respects.test.js native/adapters/text/pronoun-presence-chosen.test.mjs native/adapters/text/clause-attach.test.mjs native/kernel/attend.test.mjs native/organs/thoughts.test.mjs native/the-fold/read-process-pronouns.test.mjs native/adapters/text/pronoun-registers.test.mjs native/the-fold/language-names.test.mjs native/tests/reading-baseline.test.mjs native/tests/one-door.test.mjs native/tests/pharos-gate.test.mjs native/adapters/text/pronoun-registers-san.test.mjs native/adapters/text/sanskrit-sandhi.test.mjs native/the-fold/read-san.test.mjs native/adapters/text/grc-reading.test.mjs native/tests/name-prior.test.mjs native/tests/priors-home.test.mjs native/tests/canonical-docs.test.mjs native/tests/language-competency.test.mjs native/tests/apoha.test.mjs native/tests/wikidata-name-giver.test.mjs native/tests/case-marked-clauses.test.mjs native/tests/vector-library.test.mjs native/tests/pos-smell.test.mjs native/tests/nest-from-read.test.mjs native/adapters/text/karaka-total.test.mjs native/adapters/text/gender-from-rows.test.mjs native/adapters/text/referents-in-order.test.mjs native/tests/weave-referents.test.mjs native/chat/thread.test.mjs native/chat/ingest.test.mjs native/adapters/text/quote-frames.test.mjs native/adapters/text/speech-frames.test.mjs native/tests/read-framed.test.mjs native/kernel/trail-rules.test.mjs native/adapters/text/text-mereology.test.mjs native/tests/place-grain.test.mjs native/tests/chat-register.test.mjs",
++    "test": "node native/scripts/check-reading-hygiene.mjs && node native/scripts/check-no-legacy-submodule.mjs && node --test native/the-fold/essay-fold-falsify.test.mjs native/the-fold/pipeline-run-falsify.test.mjs native/the-fold/parameter-induction-falsify.test.mjs native/the-fold/referents-falsify.test.mjs native/the-fold/ground-replay-falsify.test.mjs native/the-fold/constitution.test.mjs native/the-fold/span-drift.test.mjs native/the-fold/standing-cube.test.mjs native/the-fold/step-fold.test.mjs native/the-fold/surf-types.test.mjs native/the-fold/openness.test.mjs box-governor.test.mjs opencode-longform.test.mjs opencode-gather.test.mjs opencode-gather-reason.test.mjs opencode-gather-gate.test.mjs opencode-gather-senses.test.mjs opencode-gather-identity.test.mjs opencode-gather-voids.test.mjs opencode-gather-typos.test.mjs native/adapters/text/ud-parser.test.mjs native/kernel/eot-claim-match.test.mjs native/adapters/text/figure-binding.test.mjs native/adapters/text/non-personal.test.mjs native/adapters/text/reading-referents.test.mjs native/the-fold/declension-wiring.test.mjs native/adapters/text/ledger-opinion.test.mjs native/adapters/text/folded-card.test.mjs native/adapters/text/form-usage.test.mjs native/organs/relation-defs.test.mjs native/organs/encode.test.mjs native/adapters/text/grammar-ud-codec.test.mjs native/organs/greenberg.test.mjs native/adapters/text/ud-tokenize.test.mjs native/adapters/text/grammar-ud.test.mjs native/adapters/text/atom-world.test.mjs native/kernel/stage-identity.test.mjs native/adapters/text/corpus-exclusion.test.mjs native/organs/read-page.test.mjs native/kernel/stage-sense.test.mjs native/organs/coref-person.test.mjs native/organs/recipient-role.test.mjs native/the-fold/weft-atoms.test.mjs native/the-fold/weft-identity.test.mjs native/adapters/text/figure-period.en.test.mjs opencode-shift.test.mjs opencode-workplan-acts.test.mjs opencode-workplan-e2e-falsify.test.mjs opencode-workplan-live-e2e.test.mjs native/organs/code-form.test.mjs native/organs/web.test.mjs native/tests/entity-profile.test.js native/conformance/block-profile.test.mjs tests/opencode-cube.test.mjs native/kernel/identity-cancel.test.mjs native/kernel/reader-identity.test.mjs native/the-fold/reader-log.test.mjs native/the-fold/cancel-identity.test.mjs native/the-fold/arrangement-features.test.mjs native/kernel/attach-prior.test.mjs native/adapters/text/pronoun-gaps.test.mjs native/adapters/text/pronoun-presence.test.mjs native/tests/same-for.test.js native/tests/respects.test.js native/adapters/text/pronoun-presence-chosen.test.mjs native/adapters/text/clause-attach.test.mjs native/kernel/attend.test.mjs native/organs/thoughts.test.mjs native/the-fold/read-process-pronouns.test.mjs native/adapters/text/pronoun-registers.test.mjs native/the-fold/language-names.test.mjs native/tests/reading-baseline.test.mjs native/tests/one-door.test.mjs native/tests/pharos-gate.test.mjs native/adapters/text/pronoun-registers-san.test.mjs native/adapters/text/sanskrit-sandhi.test.mjs native/the-fold/read-san.test.mjs native/adapters/text/grc-reading.test.mjs native/tests/name-prior.test.mjs native/tests/priors-home.test.mjs native/tests/canonical-docs.test.mjs native/tests/language-competency.test.mjs native/tests/apoha.test.mjs native/tests/wikidata-name-giver.test.mjs native/tests/case-marked-clauses.test.mjs native/tests/vector-library.test.mjs native/tests/pos-smell.test.mjs native/tests/nest-from-read.test.mjs native/adapters/text/karaka-total.test.mjs native/adapters/text/gender-from-rows.test.mjs native/adapters/text/referents-in-order.test.mjs native/tests/weave-referents.test.mjs native/chat/thread.test.mjs native/chat/ingest.test.mjs native/adapters/text/quote-frames.test.mjs native/adapters/text/speech-frames.test.mjs native/adapters/text/name-smell.test.mjs native/tests/read-framed.test.mjs native/kernel/trail-rules.test.mjs native/adapters/text/text-mereology.test.mjs native/tests/place-grain.test.mjs native/tests/chat-register.test.mjs",
      "test:code": "node --test native/the-fold/code-loop.test.mjs native/the-fold/void-loop.test.mjs native/the-fold/void-spec-falsify.test.mjs native/the-fold/tool-call-physics.test.mjs native/the-fold/direct-bridge.test.mjs",
      "sync": "node scripts/sync.mjs",
      "sync:check": "node scripts/sync.mjs --check",
